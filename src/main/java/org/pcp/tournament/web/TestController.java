@@ -13,7 +13,7 @@ import org.pcp.tournament.model.Mode;
 import org.pcp.tournament.model.Options;
 import org.pcp.tournament.model.Player;
 import org.pcp.tournament.model.Team;
-import org.pcp.tournament.model.Group;
+import org.pcp.tournament.model.TeamGroup;
 import org.pcp.tournament.model.Tournament;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,10 +107,10 @@ public class TestController {
     }
 
     private void buildGroups() {
-        List<Group> groups = new ArrayList<Group>();
+        List<TeamGroup> groups = new ArrayList<TeamGroup>();
         List<Team> teams = teamDao.findAll();
         for (int i =0 ; i < teams.size()/2;i++) {
-            Group group = new  Group("#"+i);            
+            TeamGroup group = new  TeamGroup("#"+i);            
             group.AddTeam(teams.get(i*2));
             group.AddTeam(teams.get(i*2+1));
             groupDao.save(group);
@@ -138,7 +138,7 @@ public class TestController {
         List<Options> optionsList = optionsDao.findAll();
         Options options = optionsList.get(1);
         options = optionsDao.findByMode(Mode.DOUBLE);
-        List<Group> groups = groupDao.findAll();
+        List<TeamGroup> groups = groupDao.findAll();
         tour.setOptions(options);
         tour.setPlayers(players);
         tour.setTeams(teams);

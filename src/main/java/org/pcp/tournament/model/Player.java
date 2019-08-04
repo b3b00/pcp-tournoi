@@ -74,4 +74,22 @@ public class Player {
     public String toString() {
         return getId()+" - "+getName()+" "+(getIsLicensed()?"X":"");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null) {
+            if (obj instanceof Player) {
+                Player p2 =(Player)obj;
+                return getName() == p2.getName() && getIsLicensed() == p2.getIsLicensed();
+
+            }            
+        }
+        return false;
+        
+    }
+
+    @Override
+    public int hashCode() {
+        return (getName()+getIsLicensed()).hashCode();
+    }
 }

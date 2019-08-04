@@ -1,15 +1,15 @@
 package org.pcp.tournament.dao;
 
 
-import org.pcp.tournament.model.Group;
+import org.pcp.tournament.model.TeamGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GroupDao extends JpaRepository<Group, Integer> {
+public interface GroupDao extends JpaRepository<TeamGroup, Integer> {
 
-    public Group findById(int id);
+    public TeamGroup findById(int id);
 
-    public Group findByName(String name);
+    public TeamGroup  findByName(String name);
     
 }

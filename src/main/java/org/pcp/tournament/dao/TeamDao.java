@@ -10,6 +10,4 @@ public interface TeamDao extends JpaRepository<Team, Integer> {
 
     public Player findById(int id);
 
-    // public Team findByPlayer1OrPlayer2(Player player);
-
 }

@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Group {
+public class TeamGroup {
 
     @Id
     @GeneratedValue
@@ -22,11 +22,11 @@ public class Group {
     private List<Team> teams;
 
 
-    public Group() {
+    public TeamGroup() {
 teams = new ArrayList<Team>();
     }
 
-    public Group(String name) {
+    public TeamGroup(String name) {
         teams = new ArrayList<Team>();
     }
 

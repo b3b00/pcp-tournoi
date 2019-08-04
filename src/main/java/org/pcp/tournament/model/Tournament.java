@@ -27,7 +27,7 @@ public class Tournament {
     private List<Team> teams;
 
     @OneToMany
-    private List<Group> groups;
+    private List<TeamGroup> groups;
 
 
     public Tournament() {
@@ -111,14 +111,14 @@ public class Tournament {
     /**
      * @return the groups
      */
-    public List<Group> getGroups() {
+    public List<TeamGroup> getGroups() {
         return groups;
     }
 
     /**
      * @param groups the groups to set
      */
-    public void setGroups(List<Group> groups) {
+    public void setGroups(List<TeamGroup> groups) {
         this.groups = groups;
     }
     
