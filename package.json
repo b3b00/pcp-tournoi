@@ -18,7 +18,6 @@
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "run-p  autobuild",
-    "start": "npm run build",
-    "start:dev": "sirv public --single --dev"
-  }
+    "start": "npm run build"
+    }
 }
