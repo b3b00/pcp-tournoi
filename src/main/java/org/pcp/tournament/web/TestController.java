@@ -118,9 +118,9 @@ public class TestController {
     }
 
     private void initModes( ) {
-        Options single = new Options(Mode.SINGLE,3,11);
+        Options single = new Options(Mode.SINGLE,3,11,true);
         optionsDao.save(single);
-        Options doubl = new Options(Mode.DOUBLE,1,50);
+        Options doubl = new Options(Mode.DOUBLE,1,50,true);
         optionsDao.save(doubl);
     }
 

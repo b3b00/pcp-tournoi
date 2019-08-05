@@ -3,7 +3,6 @@ package org.pcp.tournament.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Options {
@@ -18,10 +17,24 @@ public class Options {
 
     private int setLength;
 
+    private Boolean isPreset;
+
+    public Options() {
+        isPreset = false;
+    }
+
     public Options(Mode mode, int winningSets, int setLength) {
         setMode(mode);
         setWinningSets(winningSets);
+        setSetLength(setLength);       
+        setIsPreset(false); 
+    }
+
+    public Options(Mode mode, int winningSets, int setLength, Boolean isPreset) {
+        setMode(mode);
+        setWinningSets(winningSets);
         setSetLength(setLength);        
+        setIsPreset(isPreset);
     }
 
     /**
@@ -77,6 +90,20 @@ public class Options {
      */
     public void setSetLength(int setLength) {
         this.setLength = setLength;
+    }
+
+    /**
+     * @return the isPreset
+     */
+    public Boolean getIsPreset() {
+        return isPreset;
+    }
+
+    /**
+     * @param isPreset the isPreset to set
+     */
+    public void setIsPreset(Boolean isPreset) {
+        this.isPreset = isPreset;
     }
 
 }
