@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OptionsController {
 
-
     @Autowired
     OptionsDao optionsDao;
 
@@ -25,17 +24,22 @@ public class OptionsController {
 
     @GetMapping(value = "/options/preset")
     public List<Options> Preset() {
-        List<Options> options =  optionsDao.findAllByIsPreset(true);
+        List<Options> options = optionsDao.findAllByIsPreset(true);
         return options;
     }
 
-    @PostMapping(value="/tournament/options")
-    public void PostOptions(@RequestBody NameAndOptions nameAndOptions) {
-        Options options = optionsDao.save(nameAndOptions.getOptions());
-        Tournament tournament = new Tournament(nameAndOptions.getName());
-        tournament.setOptions(options);
-        tournamentDao.save(tournament);
-        ;
+    @PostMapping(value = "/tournament/options")
+    public int PostOptions(@RequestBody NameAndOptions nameAndOptions) {
+        try {
+            Options options = optionsDao.save(nameAndOptions.getOptions());
+            Tournament tournament = new Tournament(nameAndOptions.getName());
+            tournament.setOptions(options);
+            Tournament tour = tournamentDao.save(tournament);
+            return tour.getId();
+        } catch (Exception e) {
+            throw new InternalError(e.getMessage());
+
+        }
     }
 
 }

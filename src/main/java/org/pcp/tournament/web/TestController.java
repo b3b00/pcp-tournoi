@@ -93,8 +93,6 @@ public class TestController {
         int count = 2*6;
         buildPlayers(count);
 
-        List<Player> players = playerDao.findAll();
-
         buildTeams();
 
         List<Team> teams = teamDao.findAll();
@@ -107,7 +105,6 @@ public class TestController {
     }
 
     private void buildGroups() {
-        List<TeamGroup> groups = new ArrayList<TeamGroup>();
         List<Team> teams = teamDao.findAll();
         for (int i =0 ; i < teams.size()/2;i++) {
             TeamGroup group = new  TeamGroup("#"+i);            

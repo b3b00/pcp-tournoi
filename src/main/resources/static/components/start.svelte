@@ -10,6 +10,9 @@
 <script>
 
 import { onMount } from 'svelte';
+import { createEventDispatcher } from 'svelte';
+
+const dispatch = createEventDispatcher();
 
 let options = [];
 
@@ -48,8 +51,19 @@ function saveTournament() {
     method: "POST",
     body: JSON.stringify(data)
 })
-.then(function(res){ console.log(res) })
-.catch(function(res){ console.log(res) })
+.then(function(res){ 
+    res.json().then(
+        function(id) {
+            console.log(`new tournament id [${id}]`)
+            dispatch("done",{'tournamentId':id}) 
+        }
+    );
+    
+})
+.catch(function(res){ 
+    console.log("ERROR");
+    console.log(res);
+ })
 }
 
 onMount(async () => {
@@ -61,9 +75,10 @@ onMount(async () => {
         console.log(optionsByName);
 	});
 
+    
 </script>
 
-<div class="w3-panel w3-card startDialog" >z
+<div class="w3-panel w3-card startDialog" >
 <label for="name">Nom : </label>
 <input type="text" name = "name" id="name" class="w3-input" bind:value={tournamentName}/>
 

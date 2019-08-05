@@ -1,6 +1,5 @@
 package org.pcp.tournament.dao;
 
-import org.pcp.tournament.model.Options;
 import org.pcp.tournament.model.Tournament;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
