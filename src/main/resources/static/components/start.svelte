@@ -15,9 +15,15 @@ function changeMode() {
 
 <input type="radio" name="mode" on:change="{changeMode}" value="single"> Simple<br>
 <input type="radio" name="mode" on:change="{changeMode}" value="double"> Double<br>
+<br/>
 
 <label for="winningSets" >sets gagnants :</label>
 <input type="number" id="winningSets" placeholder="3" min="1" max="3"/>  
+<br/>
+
 <label for="setlength">nombre de points par sets</label> 
 <input type="number" id="setlength" placeholder="11" min="3" max="100"/>  
+<br/>
+
+<button>C'est parti...</button>
 
