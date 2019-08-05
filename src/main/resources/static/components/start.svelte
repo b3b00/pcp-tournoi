@@ -3,7 +3,7 @@
     div.startDialog {
                 width: 30%;
                 margin: auto;
-                background-color: aqua;
+               /* background-color: aqua;*/
     }
 </style>
 
@@ -18,7 +18,7 @@ let optionsByName = [];
 let tournamentName = "";
 
 
-let tournamentOption = {
+let tournamentOptions = {
     mode:"SINGLE",
     winningSets:3,
     setLength:11
@@ -27,11 +27,29 @@ let tournamentOption = {
 function changeMode() {
     var modeNode = document.getElementsByName("mode");
     
-    var newMode = optionsByName[tournamentOption.mode];
-    tournamentOption.winningSets = newMode.winningSets;
-    tournamentOption.setLength = newMode.setLength;
+    var newMode = optionsByName[tournamentOptions.mode];
+    tournamentOptions.winningSets = newMode.winningSets;
+    tournamentOptions.setLength = newMode.setLength;
 
 
+}
+
+function saveTournament() {
+    var data = {
+        "name" : tournamentName,
+        "options" : tournamentOptions
+    };
+    fetch("/tournament/options/",
+{
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: "POST",
+    body: JSON.stringify(data)
+})
+.then(function(res){ console.log(res) })
+.catch(function(res){ console.log(res) })
 }
 
 onMount(async () => {
@@ -51,18 +69,18 @@ onMount(async () => {
 
 <label>Mode :</label>
 {#each options as option, y}
-<input class="w3-radio" type="radio" name="mode" on:change="{changeMode}" bind:group={tournamentOption.mode} value="{option.mode}">{option.mode}<br>
+<input class="w3-radio" type="radio" name="mode" on:change="{changeMode}" bind:group={tournamentOptions.mode} value="{option.mode}">{option.mode}<br>
 {/each}
 <br/>
 
 <label for="winningSets" >sets gagnants :</label>
-<input class="w3-input" type="number" id="winningSets" placeholder="3" min="1" max="3" bind:value={tournamentOption.winningSets}/>  
+<input class="w3-input" type="number" id="winningSets" placeholder="3" min="1" max="3" bind:value={tournamentOptions.winningSets}/>  
 <br/>
 
 <label for="setlength">nombre de points par sets</label> 
-<input class="w3-input" type="number" id="setlength" placeholder="11" min="3" max="100" bind:value={tournamentOption.setLength}/>  
+<input class="w3-input" type="number" id="setlength" placeholder="11" min="3" max="100" bind:value={tournamentOptions.setLength}/>  
 <br/>
 
-<button>C'est parti...</button>
+<button on:click={saveTournament} >C'est parti...</button>
 </div>
 

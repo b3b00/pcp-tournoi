@@ -5,6 +5,7 @@ import java.util.List;
 import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.Options;
+import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.dto.NameAndOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,11 @@ public class OptionsController {
 
     @PostMapping(value="/tournament/options")
     public void PostOptions(@RequestBody NameAndOptions nameAndOptions) {
-
+        Options options = optionsDao.save(nameAndOptions.getOptions());
+        Tournament tournament = new Tournament(nameAndOptions.getName());
+        tournament.setOptions(options);
+        tournamentDao.save(tournament);
+        ;
     }
 
 }
