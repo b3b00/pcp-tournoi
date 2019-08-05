@@ -18,7 +18,7 @@
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "run-p  autobuild",
-    "start": "sirv public --single",
+    "start": "run-p  build",
     "start:dev": "sirv public --single --dev"
   }
 }
