@@ -33,4 +33,7 @@ build/
 ### VS Code ###
 .vscode/
 
+
+### SVELTE ### 
 node_modules/
+bundle.*
