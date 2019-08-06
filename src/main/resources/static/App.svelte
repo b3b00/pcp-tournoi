@@ -27,7 +27,7 @@ const states = {
 
 {:else if (state == states.PLAYERS)}
 
-	<Players/>
+	<Players tournamentId={tournamentId}/>
 
 {:else if (state == states.GROUPS)}
 

@@ -1,1 +1,28 @@
-<p>more to come later...</p>
+<script>
+
+import { onMount } from 'svelte';
+import { createEventDispatcher } from 'svelte';
+import {player} from './player.svelte';
+
+const dispatch = createEventDispatcher();
+
+let players = [];
+export let tournamentId = -1;
+
+onMount(async () => {
+		const res = await fetch(`/tournament/${tournamentId}/players`);
+        players = await res.json();        
+        console.log(players);
+	});
+
+</script>
+
+<ul>
+{#each players as p}
+<li class="w3-bar">
+    <player {...p} tournamentId={tournamentId}/>
+</li>
+
+{/each}
+
+</ul>

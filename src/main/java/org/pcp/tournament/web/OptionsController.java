@@ -2,7 +2,10 @@ package org.pcp.tournament.web;
 
 import java.util.List;
 
+import org.pcp.tournament.DataLoader;
 import org.pcp.tournament.dao.OptionsDao;
+import org.pcp.tournament.dao.PlayerDao;
+import org.pcp.tournament.dao.TeamDao;
 import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.Options;
 import org.pcp.tournament.model.Tournament;
@@ -22,11 +25,23 @@ public class OptionsController {
     @Autowired
     TournamentDao tournamentDao;
 
+    @Autowired
+    PlayerDao playerDao;
+
+    @Autowired
+    TeamDao teamDao;
+
+    @Autowired
+    DataLoader dataLoader;
+
     @GetMapping(value = "/options/preset")
     public List<Options> Preset() {
         List<Options> options = optionsDao.findAllByIsPreset(true);
         return options;
     }
+
+
+   
 
     @PostMapping(value = "/tournament/options")
     public int PostOptions(@RequestBody NameAndOptions nameAndOptions) {
@@ -35,7 +50,15 @@ public class OptionsController {
             Tournament tournament = new Tournament(nameAndOptions.getName());
             tournament.setOptions(options);
             Tournament tour = tournamentDao.save(tournament);
+            dataLoader.buildPlayers(16);
+            tour.addPlayers(playerDao.findAll());
+            dataLoader.buildTeams();
+            tour.addTeams(teamDao.findAll());
+            tournamentDao.save(tour);
+
+            
             return tour.getId();
+
         } catch (Exception e) {
             throw new InternalError(e.getMessage());
 

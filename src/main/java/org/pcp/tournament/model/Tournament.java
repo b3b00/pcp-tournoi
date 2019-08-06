@@ -86,12 +86,27 @@ public class Tournament {
     public List<Player> getPlayers() {
         return players;
     }
+   
 
     /**
      * @param players the players to set
      */
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public void addPlayer(Player player) {
+        if (this.players == null) {
+            this.players = new ArrayList<Player>();
+        }
+        this.players.add(player);
+    }
+
+    public void addPlayers(List<Player>players) {
+        if (this.players == null) {
+            this.players = new ArrayList<Player>();
+        }
+        this.players.addAll(players);
     }
 
     /**
@@ -108,6 +123,20 @@ public class Tournament {
         this.teams = teams;
     }
 
+    public void addTeam(Team team) {
+        if (this.teams == null) {
+            this.teams = new ArrayList<Team>();
+        }
+        this.teams.add(team);
+    }
+
+    public void addTeams(List<Team>teams) {
+        if (this.teams == null) {
+            this.teams = new ArrayList<Team>();
+        }
+        this.teams.addAll(teams);
+    }
+
     /**
      * @return the groups
      */
@@ -122,5 +151,18 @@ public class Tournament {
         this.groups = groups;
     }
     
+    public void addGroup(TeamGroup group) {
+        if (this.groups == null) {
+            this.groups = new ArrayList<TeamGroup>();
+        }
+        this.groups.add(group);
+    }
+
+    public void addGroups(List<TeamGroup>groups) {
+        if (this.groups == null) {
+            this.groups = new ArrayList<TeamGroup>();
+        }
+        this.groups.addAll(groups);
+    }
 
 }
