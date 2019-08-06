@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.pcp</groupId>
-	<artifactId>tournament</artifactId>
+	<artifactId>pcp-tournoi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>tournament</name>
+	<name>pcp-tournoi</name>
 	<description>Gestion de tournois du PCP</description>
 
 	<properties>
