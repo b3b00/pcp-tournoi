@@ -9,33 +9,32 @@
     export let name;
     export let isLicensed;
     export let tournamentId;
+    export let isNewPlayer = false;
     let isLicensedClass = "";
 
-    function computeStyle() {
-        isLicensedClass = isLicensed ? "fa fa-check" : "fa";
+    function computeStyles() {
+        isLicensedClass = isLicensed ? "fa fa-check-square-o" : "fa fa-square-o";
     }
 
     onMount(async () => {
-        computeStyle();
+        computeStyles();
     }
     );
 
     function toggleLicensed() {
         isLicensed = !isLicensed;
-        computeStyle();
+        computeStyles();
     }
 
 </script>
 
     <td>
-    <!-- <label for="name">Nom : </label> -->
-    <input style="width:100%" type="text" name = "name" id="name"  bind:value={name}/><!--class="w3-input"-->
+    <input style="width:100%" type="text" name = "name" id="name"  bind:value={name}/>
 </td>
 <td on:click={() => {toggleLicensed();}} style="cursor: pointer;">
     <span style="font-size:24px;" 
     class={isLicensedClass}
-    > <!--on:click={() => {opentTournament(tournament.id);}}-->
-    &nbsp;&nbsp;&nbsp;</span>
+    > &nbsp;</span>
     
 </td>
 <td style="cursor: pointer;">

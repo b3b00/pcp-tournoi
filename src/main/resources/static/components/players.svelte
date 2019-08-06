@@ -21,6 +21,7 @@
     <th>licencié ?</th>
     <th>&nbsp;</th>
 </tr>
+<Player isNewPlayer="true" name="" id="" isLicensed="false"/>
 {#each players as p}
 <tr>
     <Player {...p} tournamentId={tournamentId}/>
