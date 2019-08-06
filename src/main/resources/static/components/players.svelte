@@ -15,13 +15,16 @@
         });
 
 </script>
-
-<ul>
+<table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
+<tr>
+    <th>nom</th>
+    <th>licencié ?</th>
+</tr>
 {#each players as p}
-<li class="w3-bar">
+<tr>
     <Player {...p} tournamentId={tournamentId}/>
-</li>
+</tr>
+
 
 {/each}
-
-</ul>
+</table>

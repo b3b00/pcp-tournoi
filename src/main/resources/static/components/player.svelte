@@ -12,11 +12,11 @@
 
 </script>
 
-<div>
-    <label for="name">Nom : </label>
-    <input type="text" name = "name" id="name" class="w3-input" bind:value={name}/>
-</div>
-<div>
-    <label for="licensed">Licencié ? </label>
-    <input type="checkbox" name = "isLicensed" id="isLicensed" class="w3-check" bind:value={isLicensed}/> -->
-</div>
+    <td>
+    <!-- <label for="name">Nom : </label> -->
+    <input style="width:100%" type="text" name = "name" id="name"  bind:value={name}/><!--class="w3-input"-->
+</td>
+<td>
+    <!-- <label for="licensed">Licencié ? </label> -->
+    <input type="checkbox" name = "isLicensed" id="isLicensed"  bind:value={isLicensed}/> <!--class="w3-check"-->
+</td>
