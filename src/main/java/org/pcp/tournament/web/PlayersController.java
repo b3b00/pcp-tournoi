@@ -2,13 +2,10 @@ package org.pcp.tournament.web;
 
 import java.util.List;
 
-import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TournamentDao;
-import org.pcp.tournament.model.Options;
 import org.pcp.tournament.model.Player;
 import org.pcp.tournament.model.Tournament;
-import org.pcp.tournament.model.dto.NameAndOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,21 +31,23 @@ public class PlayersController {
     }
 
     @PostMapping(value = "/tournament/{tournamentId}/players")
-    public void updatePlayer(@PathVariable int tournamentId, @RequestBody Player player) {
+    public Player updatePlayer(@PathVariable int tournamentId, @RequestBody Player player) {
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
             Player newPlayer = playersDao.save(player);
             tournament.getPlayers().add(player);
             tournamentDao.save(tournament);
+            return newPlayer;
         } catch (Exception e) {
             throw new InternalError(e.getMessage());
         }
     }
 
     @PutMapping(value = "/tournament/{tournamentId}/players")
-    public void addPlayer(@PathVariable int tournamentId, @RequestBody Player player) {
+    public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player) {
         try {            
-            Player newPlayer = playersDao.save(player);            
+            Player updatedPlayer = playersDao.save(player);            
+            return updatedPlayer;
         } catch (Exception e) {
             throw new InternalError(e.getMessage());
         }
