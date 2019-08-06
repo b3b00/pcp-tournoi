@@ -50,7 +50,7 @@ public class OptionsController {
             Tournament tournament = new Tournament(nameAndOptions.getName());
             tournament.setOptions(options);
             Tournament tour = tournamentDao.save(tournament);
-            dataLoader.buildPlayers(16);
+            dataLoader.buildPlayers(16,tour.getId());
             tour.addPlayers(playerDao.findAll());
             dataLoader.buildTeams();
             tour.addTeams(teamDao.findAll());

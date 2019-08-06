@@ -39,10 +39,10 @@ public class DataLoader {
         optionsDao.save(doubl);
     }
 
-    public void buildPlayers(int count) {
+    public void buildPlayers(int count,int id) {
         List<Player> players = new ArrayList<Player>();
             for (int i = 0; i < count; i++) {
-                Player player = new Player("player #" + i, i % 2 == 0);
+                Player player = new Player("player #" + i+" / "+id, i % 2 == 0);
                 players.add(player);
                 playerDao.save(player);
             }

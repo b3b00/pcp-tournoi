@@ -1,80 +1,126 @@
-
 <style>
     div.startDialog {
-                width: 30%;
-                margin: auto;
-               /* background-color: aqua;*/
+        width: 30%;
+        margin: auto;
+        /* background-color: aqua;*/
     }
 </style>
 
 <script>
 
-import { onMount } from 'svelte';
-import { createEventDispatcher } from 'svelte';
+    import { onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
+    import Select from 'svelte-select';
 
-const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-let options = [];
+    let options = [];
 
-let optionsByName = [];
+    let optionsByName = [];
 
-let tournamentName = "";
-
-
-let tournamentOptions = {
-    mode:"SINGLE",
-    winningSets:3,
-    setLength:11
-};
-
-function changeMode() {
-    var modeNode = document.getElementsByName("mode");
-    
-    var newMode = optionsByName[tournamentOptions.mode];
-    tournamentOptions.winningSets = newMode.winningSets;
-    tournamentOptions.setLength = newMode.setLength;
+    let tournamentName = "";
 
 
-}
-
-function saveTournament() {
-    var data = {
-        "name" : tournamentName,
-        "options" : tournamentOptions
+    let tournamentOptions = {
+        mode: "SINGLE",
+        winningSets: 3,
+        setLength: 11
     };
-    fetch("/tournament/options/",
-{
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: "POST",
-    body: JSON.stringify(data)
-})
-.then(function(res){ 
-    res.json().then(
-        function(id) {
-            dispatch("done",{'tournamentId':id}) 
-        }
-    );
-    
-})
-.catch(function(res){ 
-    console.log("ERROR");
-    console.log(res);
- })
-}
 
-onMount(async () => {
-		const res = await fetch(`/options/preset`);
+    let tournaments = [];
+
+    let tournamentsById = {};
+
+    let tournamentItems = [];
+
+    l
+
+    function changeMode() {
+        var modeNode = document.getElementsByName("mode");
+
+        var newMode = optionsByName[tournamentOptions.mode];
+        tournamentOptions.winningSets = newMode.winningSets;
+        tournamentOptions.setLength = newMode.setLength;
+
+
+    }
+
+    function saveTournament() {
+        var data = {
+            "name": tournamentName,
+            "options": tournamentOptions
+        };
+        fetch("/tournament/options/",
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(data)
+            })
+            .then(function (res) {
+                res.json().then(
+                    function (id) {
+                        dispatch("done", { 'tournamentId': id })
+                    }
+                );
+
+            })
+            .catch(function (res) {
+                console.log("ERROR");
+                console.log(res);
+            })
+    }
+
+    function openTournament (id) {
+        dispatch("done", { 'tournamentId': id })
+    }
+
+
+    async function fetchPresetOptions() {
+        const res = await fetch(`/options/preset`);
         options = await res.json();
         options.forEach(opt => {
             optionsByName[opt.mode] = opt;
         });
-	});
+    }
 
-    
+    async function fetchTournaments() {
+        const res = await fetch('/tournaments');
+        tournaments = await res.json();
+        tournaments.forEach(t => {
+            tournamentsById[t.id] = t;
+            tournamentItems.push({ "label": `${t.name}`, "value": `${t.id}` });
+        })
+        console.log(tournamentItems);
+
+    }
+
+    onMount(async () => {
+        fetchPresetOptions();
+        fetchTournaments();
+    });
+
+
 </script>
+
+
+<div class="w3-panel w3-card startDialog">
+
+
+    <ul class="w3-ul w3-border">
+        <li>
+            <h2>Names</h2>
+        </li>
+        {#each tournaments as tournament}
+                <li class="w3-bar" style="cursor: pointer;" on:click={() => {openTournament(tournament.id);}}> <!--on:click={() => {opentTournament(tournament.id);}}>-->
+                    {tournament.name}
+                </li>
+                
+                {/each}
+                </ul>
+</div>
 
 <div class="w3-panel w3-card startDialog" >
 <label for="name">Nom : </label>
@@ -96,4 +142,3 @@ onMount(async () => {
 
 <button on:click={saveTournament} >C'est parti...</button>
 </div>
-
