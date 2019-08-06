@@ -19,6 +19,7 @@
 <tr>
     <th>nom</th>
     <th>licencié ?</th>
+    <th>&nbsp;</th>
 </tr>
 {#each players as p}
 <tr>
