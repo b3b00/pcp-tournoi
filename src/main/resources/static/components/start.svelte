@@ -54,7 +54,6 @@ function saveTournament() {
 .then(function(res){ 
     res.json().then(
         function(id) {
-            console.log(`new tournament id [${id}]`)
             dispatch("done",{'tournamentId':id}) 
         }
     );
@@ -72,7 +71,6 @@ onMount(async () => {
         options.forEach(opt => {
             optionsByName[opt.mode] = opt;
         });
-        console.log(optionsByName);
 	});
 
     

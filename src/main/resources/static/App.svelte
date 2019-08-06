@@ -14,7 +14,6 @@ const states = {
 	let tournamentId = -1;
 
 	function onStartDone(data) {
-		console.log(data);
 		tournamentId = data.detail.tournamentId;
 		state="players";
 	}
