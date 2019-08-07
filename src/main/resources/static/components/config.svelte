@@ -14,17 +14,6 @@
 
     import Select from 'svelte-select';
 
-
-    // beforeUpdate(() => {
-	// 	if (tournamentId != -1) {
-    //     }
-	// });
-
-	// afterUpdate(() => {
-	// 	if (tournamentId != -1) {
-    //     }
-	// });
-
     const dispatch = createEventDispatcher();
 
     let options = [];
@@ -32,6 +21,8 @@
     let optionsByName = [];
 
     let tournamentName = "";
+
+    let tournamentId;
 
 
     let tournamentOptions = {
@@ -55,7 +46,38 @@
 
     }
 
+
+    function loadTournament(id) {
+        fetch(`/tournaments/${id}`,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "GET"
+            })
+            .then(function (res) {
+                res.json().then(
+                    function (tournament) {
+                        console.log(tournament);
+                        tournamentId = tournament.id;
+                        const opt = tournament.options;
+                        options = opt;
+                        tournamentName = tournament.name;
+                    }
+                );
+
+            })
+            .catch(function (res) {
+                console.log("ERROR");
+                console.log(res);
+            })
+    }
+
     function saveTournament() {
+        if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {
+            dispatch("done", { 'tournamentId': tournamentId })
+        }
         if (tournamentName.length === undefined || tournamentName == null || tournamentName.length == 0) {
             alert('Vous devez donner un nom au tournoi');
             return;
@@ -88,6 +110,8 @@
     }
 
     function openTournament (id) {
+        tournamentId = id;
+        tournament 
         dispatch("done", { 'tournamentId': id })
     }
 
@@ -116,6 +140,7 @@
         fetchTournaments();
     });
 
+    console.log('script is running...');
 
 </script>
 
@@ -128,7 +153,7 @@
             <h2>Names</h2>
         </li>
         {#each tournaments as tournament}
-                <li class="w3-bar" style="cursor: pointer;" on:click={() => {openTournament(tournament.id);}}> <!--on:click={() => {opentTournament(tournament.id);}}>-->
+                <li class="w3-bar" style="cursor: pointer;" on:click={() => {loadTournament(tournament.id);}}> <!--on:click={() => {opentTournament(tournament.id);}}>-->
                     {tournament.name}
                 </li>
                 

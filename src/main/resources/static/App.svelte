@@ -1,8 +1,9 @@
 <script>
 
 const states = {
-	START : "start",
+	CONFIG : "config",
 	PLAYERS : "players",
+	TEAMS : "teams",
 	GROUPS : "groups"
 }
 
@@ -11,26 +12,38 @@ const states = {
 	import Teams from './components/teams.svelte';
 	import Groups from './components/groups.svelte';
 		
-	let state="start";
+	let state=states.CONFIG;
 	let tournamentId = -1;
 
-	function onConfigDone(data) {
+	function onConfig(data) {
 		tournamentId = data.detail.tournamentId;
-		state="players";
+		state=states.CONFIG;
+	}
+
+	function onPlayers(data) {
+		tournamentId = data.detail.tournamentId;
+		state= states.PLAYERS;
+	}
+
+	function onTeams(data) {
+		tournamentId = data.detail.tournamentId;
+		state= states.TEAMS;
 	}
 
 </script>
 
-{#if (state == states.START) }
+{#if (state == states.CONFIG) }
 
-	<Config on:done="{onConfigDone}"/>
+	<Config on:done="{onPlayers}"/>
 
 {:else if (state == states.PLAYERS)}
 
-	<Players tournamentId={tournamentId}/>
+	<Players tournamentId={tournamentId} on:back={onConfig} on:next={onTeams}/>
 
 {:else if (state == states.TEAMS)}
 
-	<Teams/>
+	<Teams on:back={onPlayers}/>
 
+{:else}
+<p>unknwon state <strong>{state}</strong></p>
 {/if}

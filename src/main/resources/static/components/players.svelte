@@ -18,7 +18,21 @@
         players = await res.json();        
     }
 
+    function backtoconfig() {
+        dispatch("back", { 'tournamentId': tournamentId })
+    }
+
+    function toTeams() {
+        dispatch("next", { 'tournamentId': tournamentId })
+    }
+
+
+
 </script>
+<button on:click={backtoconfig} >back to config</button>
+<br/>
+<button on:click={toTeams} >teams</button>
+<br/>
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
 <tr>
     <th>nom</th>

@@ -20,4 +20,13 @@
         teams = await res.json();
     }
 
+    
+
+    function toPlayers() {
+        dispatch("back", { 'tournamentId': tournamentId })
+    }
+
+
+
 </script>
+<button on:click={toPlayers} >back to players</button>

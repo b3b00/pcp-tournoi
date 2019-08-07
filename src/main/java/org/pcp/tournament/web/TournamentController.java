@@ -12,6 +12,7 @@ import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,9 +37,15 @@ public class TournamentController {
     DataLoader dataLoader;
 
     @GetMapping(value = "/tournaments")
-    public List<Tournament> Preset() {
+    public List<Tournament> all() {
         List<Tournament> tournaments = tournamentDao.findAll();
         return tournaments;
+    }
+
+    @GetMapping(value = "/tournaments/{id}")
+    public Tournament getTournament(@PathVariable int id) {
+        Tournament tournament = tournamentDao.findById(id);
+        return tournament;
     }
 
     @GetMapping("/tournaments/deleteAll")
