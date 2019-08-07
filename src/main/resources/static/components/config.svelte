@@ -22,7 +22,9 @@
 
     let tournamentName = "";
 
-    let tournamentId;
+    let tournament = {}
+
+    export let tournamentId = -1;
 
 
     let tournamentOptions = {
@@ -43,9 +45,15 @@
         var newMode = optionsByName[tournamentOptions.mode];
         tournamentOptions.winningSets = newMode.winningSets;
         tournamentOptions.setLength = newMode.setLength;
+        tournamentOptions.id = newMode.id;
+        tournamentOptions.isPreset = newMode.isPreset;
 
     }
 
+    function unpreset() {
+        tournamentOptions.id = -1;
+        tournamentOptions.isPreset = false;
+    }
 
     function loadTournament(id) {
         fetch(`/tournaments/${id}`,
@@ -75,25 +83,30 @@
     }
 
     function saveTournament() {
-        if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {            
-            openTournament(tournamentId);
-            return;
-        }
+            
         if (tournamentName.length === undefined || tournamentName == null || tournamentName.length == 0) {
             alert('Vous devez donner un nom au tournoi');
             return;
         }
         var data = {
             "name": tournamentName,
-            "options": tournamentOptions
+            "options": tournamentOptions            
         };
-        fetch("/tournament/options/",
+        let uri = "/tournament/options/";
+        let httpMethod = "POST";
+        if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {       
+            uri = `/tournament/${tournamentId}/options/`
+            data.id= tournamentId;
+            httpMethod = "PUT";
+        }
+        console.log(data);
+        fetch(uri,
             {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                method: "POST",
+                method: httpMethod,
                 body: JSON.stringify(data)
             })
             .then(function (res) {
@@ -123,6 +136,7 @@
         options.forEach(opt => {
             optionsByName[opt.mode] = opt;
         });
+        tournamentOptions = optionsByName["SINGLE"];
     }
 
     async function fetchTournaments() {
@@ -136,9 +150,22 @@
 
     }
 
+    async function fetchTournament(id) {
+        const res = await fetch(`/tournaments/${id}`);
+        tournament = await res.json();
+        tournamentId = tournament.id;
+        tournamentName = tournament.name;
+        tournamentOptions = tournament.options;
+        console.log(tournament);
+
+    }
+
     onMount(async () => {
         fetchPresetOptions();
         fetchTournaments();
+        if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {
+            fetchTournament(tournamentId);
+        }
     });
 
     console.log('script is running...');
@@ -173,11 +200,11 @@
 <br/>
 
 <label for="winningSets" >sets gagnants :</label>
-<input class="w3-input" type="number" id="winningSets" placeholder="3" min="1" max="3" bind:value={tournamentOptions.winningSets}/>  
+<input class="w3-input" type="number" id="winningSets" placeholder="3" min="1" max="3" bind:value={tournamentOptions.winningSets} on:change={unpreset}/>  
 <br/>
 
 <label for="setlength">nombre de points par sets</label> 
-<input class="w3-input" type="number" id="setlength" placeholder="11" min="3" max="100" bind:value={tournamentOptions.setLength}/>  
+<input class="w3-input" type="number" id="setlength" placeholder="11" min="3" max="100" bind:value={tournamentOptions.setLength} on:change={unpreset}/>  
 <br/>
 
 <button on:click={saveTournament} >C'est parti...</button>

@@ -34,7 +34,7 @@ const states = {
 
 {#if (state == states.CONFIG) }
 
-	<Config on:done="{onPlayers}"/>
+	<Config on:done="{onPlayers}" tournamentId={tournamentId}/>
 
 {:else if (state == states.PLAYERS)}
 
