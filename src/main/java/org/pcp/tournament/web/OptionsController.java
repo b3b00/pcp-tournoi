@@ -34,9 +34,13 @@ public class OptionsController {
     @Autowired
     DataLoader dataLoader;
 
+
+
     @GetMapping(value = "/options/preset")
     public List<Options> Preset() {
+        dataLoader.loadOptions();
         List<Options> options = optionsDao.findAllByIsPreset(true);
+        
         return options;
     }
 
