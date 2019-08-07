@@ -33,8 +33,6 @@
 
     let tournamentItems = [];
 
-    l
-
     function changeMode() {
         var modeNode = document.getElementsByName("mode");
 
@@ -42,10 +40,13 @@
         tournamentOptions.winningSets = newMode.winningSets;
         tournamentOptions.setLength = newMode.setLength;
 
-
     }
 
     function saveTournament() {
+        if (tournamentName.length === undefined || tournamentName == null || tournamentName.length == 0) {
+            alert('Vous devez donner un nom au tournoi');
+            return;
+        }
         var data = {
             "name": tournamentName,
             "options": tournamentOptions

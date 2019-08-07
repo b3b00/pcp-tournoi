@@ -77,6 +77,25 @@ public class Team {
         this.player2 = player2;
     }
 
+    public Boolean containsPlayer(Player player) {
+        if (player != null) {
+        return this.player1.getId() == player.getId()  || 
+                this.player2.getId() == player.getId();
+        }
+        return false;
+    }
+
+    public void RemovePlayer(Player player) {
+        if (player != null) {
+            if (player.getId() == player1.getId()) {
+                player1 = null;
+            }
+            if (player.getId() == player2.getId()) {
+                player2 = null;
+            }
+        }
+    }
+
     @Override
     public String toString() {
         if (isDouble()) {

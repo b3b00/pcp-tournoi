@@ -12,8 +12,29 @@
     export let isNewPlayer = false;
     let isLicensedClass = "";
 
+    const save = "fa fa-check";
+    const nosave = "fa";
+
+    const cancel = "fa fa-close";
+    const nocancel = "fa";
+
+    const trash = "fa fa-trash";
+    const notrash = "fa";
+
+    const licensed = "fa fa-check-square-o";
+    const notlicensed = "fa fa-square-o";
+
+    let trashClass = "fa fa-trash";
+    let saveClass = "fa fa-check";
+    let cancelClass = "fa fa-close";
+
+    let edited = false;
+
     function computeStyles() {
-        isLicensedClass = isLicensed ? "fa fa-check-square-o" : "fa fa-square-o";
+        isLicensedClass = isLicensed ? licensed : notlicensed;
+        saveClass = edited  ? save : nosave;
+        cancelClass = edited  ? cancel : nocancel;
+        trashClass = isNewPlayer ? notrash : trash;
     }
 
     onMount(async () => {
@@ -23,13 +44,92 @@
 
     function toggleLicensed() {
         isLicensed = !isLicensed;
+        edited = true;
+        computeStyles();        
+    }
+
+    function onNameChange() {
+        edited = true;
         computeStyles();
     }
+
+    async function onSave() {
+        let data = {
+            "isLicensed" : isLicensed,
+            "name" : name         
+        }
+        if (!isNewPlayer) {
+            data["id"] = id;
+        }
+
+        let httpMethod = isNewPlayer ? "POST" : "PUT";
+        const res = await fetch(`/tournament/${tournamentId}/players`,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: httpMethod,
+                body: JSON.stringify(data)
+            })
+            .then(function (res) {
+                res.json().then(                    
+                    function () {
+                        name = "";
+                        isLicensed = false;
+                        edited = false;
+                        isNewPlayer = false;
+                        dispatch("change", { 'tournamentId': tournamentId })
+                    }
+                );
+
+            })
+            .catch(function (res) {
+                console.log("ERROR");
+                console.log(res);
+            });
+    }
+
+    async function onDelete() {
+        if (!isNewPlayer) {
+            const res = await fetch(`/tournament/${tournamentId}/players/${id}`,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "DELETE"
+            })
+            .then(function (res) {
+                
+                        name = "";
+                        isLicensed = false;
+                        edited = false;
+                        isNewPlayer = true;
+                        dispatch("change", { 'tournamentId': tournamentId })
+                    }
+                )
+            .catch(function (res) {
+                console.log("ERROR");
+                console.log(res);
+            });
+        }
+    }
+
+    async function onCancel() {
+        name = "";
+        isLicensed = false;
+        edited = false;
+        isNewPlayer = true;
+        const res = await fetch(`/tournament/${tournamentId}/players`);
+        players = await res.json();        
+    }
+
 
 </script>
 
     <td>
-    <input style="width:100%" type="text" name = "name" id="name"  bind:value={name}/>
+    <input style="width:100%" on:change={onNameChange} type="text" name = "name" id="name"  bind:value={name}/>
 </td>
 <td on:click={() => {toggleLicensed();}} style="cursor: pointer;">
     <span style="font-size:24px;" 
@@ -38,5 +138,13 @@
     
 </td>
 <td style="cursor: pointer;">
-        <span class="fa fa-trash" style="font-size:24px;">&nbsp;</span>
+        <span class={trashClass} on:click={onDelete} style="font-size:24px;">&nbsp;</span>
+</td>
+
+<td style="cursor: pointer;" on:click={onSave}>
+        <span class={saveClass} style="font-size:24px;">&nbsp;</span>
+</td>
+
+<td style="cursor: pointer;" on:click={onCancel}>
+        <span class={cancelClass} style="font-size:24px;">&nbsp;</span>
 </td>
