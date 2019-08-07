@@ -10,7 +10,20 @@
 
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
+    import { beforeUpdate, afterUpdate } from 'svelte';
+
     import Select from 'svelte-select';
+
+
+    // beforeUpdate(() => {
+	// 	if (tournamentId != -1) {
+    //     }
+	// });
+
+	// afterUpdate(() => {
+	// 	if (tournamentId != -1) {
+    //     }
+	// });
 
     const dispatch = createEventDispatcher();
 
