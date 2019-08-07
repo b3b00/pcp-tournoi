@@ -10,6 +10,13 @@
     export let isLicensed;
     export let tournamentId;
     export let isNewPlayer = false;
+    export let edited = false;
+
+    let idOrig;
+    let nameOrig;
+    let isLicensedOrig;
+    let isNewPlayerOrig; 
+
     let isLicensedClass = "";
 
     const save = "fa fa-check";
@@ -28,7 +35,7 @@
     let saveClass = "fa fa-check";
     let cancelClass = "fa fa-close";
 
-    let edited = false;
+    
 
     function computeStyles() {
         isLicensedClass = isLicensed ? licensed : notlicensed;
@@ -38,6 +45,10 @@
     }
 
     onMount(async () => {
+        idOrig = id;
+        nameOrig = name;
+        isLicensedOrig = isLicensed;
+        isNewPlayerOrig = isNewPlayer;
         computeStyles();
     }
     );
@@ -78,7 +89,10 @@
                         name = "";
                         isLicensed = false;
                         edited = false;
-                        isNewPlayer = false;
+                        // if (isNewPlayer) {
+                        // isNewPlayer = false;
+                        // }
+                        computeStyles();
                         dispatch("change", { 'tournamentId': tournamentId })
                     }
                 );
@@ -106,6 +120,7 @@
                         isLicensed = false;
                         edited = false;
                         isNewPlayer = true;
+                        computeStyles();
                         dispatch("change", { 'tournamentId': tournamentId })
                     }
                 )
@@ -117,12 +132,11 @@
     }
 
     async function onCancel() {
-        name = "";
-        isLicensed = false;
+        name = nameOrig;
+        isLicensed = isLicensedOrig;
         edited = false;
-        isNewPlayer = true;
-        const res = await fetch(`/tournament/${tournamentId}/players`);
-        players = await res.json();        
+        isNewPlayer = isNewPlayerOrig;
+        computeStyles();
     }
 
 

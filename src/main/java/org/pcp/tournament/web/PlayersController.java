@@ -41,7 +41,7 @@ public class PlayersController {
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
             Player newPlayer = playerDao.save(player);
-            tournament.getPlayers().add(player);
+            tournament.getPlayers().add(newPlayer);
             tournamentDao.save(tournament);
             return newPlayer;
         } catch (Exception e) {

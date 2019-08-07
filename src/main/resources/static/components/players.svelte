@@ -28,11 +28,11 @@
     <th>&nbsp;</th><!-- cancel -->
 </tr>
 <tr>
-<Player isNewPlayer="true" name="" id="" isLicensed="false" tournamentId={tournamentId} on:change={load}></Player>
+<Player isNewPlayer={true} name="" id="" isLicensed="false" tournamentId={tournamentId} on:change={load} edited={false}></Player>
 </tr>
 {#each players as p}
 <tr>
-    <Player {...p} tournamentId={tournamentId} on:change={load} isNewPlayer="false"/>
+    <Player {...p} tournamentId={tournamentId} on:change={load} isNewPlayer={false} edited={false}/>
 </tr>
 
 
