@@ -42,7 +42,7 @@ const states = {
 
 {:else if (state == states.TEAMS)}
 
-	<Teams on:back={onPlayers}/>
+	<Teams on:back={onPlayers} tournamentId={tournamentId}/>
 
 {:else}
 <p>unknwon state <strong>{state}</strong></p>

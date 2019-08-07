@@ -6,6 +6,7 @@
 
     const dispatch = createEventDispatcher();
 
+    let tournament = {};
     let players = [];
     export let tournamentId = -1;
 
@@ -14,8 +15,9 @@
         });
 
     async function load() {
-        const res = await fetch(`/tournament/${tournamentId}/players`);
-        players = await res.json();        
+        const res = await fetch(`/tournaments/${tournamentId}`);
+        tournament = await res.json();        
+        players = tournament.players;
     }
 
     function backtoconfig() {
@@ -30,9 +32,9 @@
 
 </script>
 <button on:click={backtoconfig} >back to config</button>
-<br/>
 <button on:click={toTeams} >teams</button>
 <br/>
+<p>{tournament.name} - {tournament.id}</p>
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
 <tr>
     <th>nom</th>

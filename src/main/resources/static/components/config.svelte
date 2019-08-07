@@ -62,7 +62,7 @@
                         console.log(tournament);
                         tournamentId = tournament.id;
                         const opt = tournament.options;
-                        options = opt;
+                        tournamentOptions = opt;                        
                         tournamentName = tournament.name;
                     }
                 );
@@ -75,8 +75,9 @@
     }
 
     function saveTournament() {
-        if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {
-            dispatch("done", { 'tournamentId': tournamentId })
+        if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {            
+            openTournament(tournamentId);
+            return;
         }
         if (tournamentName.length === undefined || tournamentName == null || tournamentName.length == 0) {
             alert('Vous devez donner un nom au tournoi');
@@ -98,7 +99,7 @@
             .then(function (res) {
                 res.json().then(
                     function (id) {
-                        dispatch("done", { 'tournamentId': id })
+                        openTournament(id);
                     }
                 );
 
@@ -109,7 +110,7 @@
             })
     }
 
-    function openTournament (id) {
+    async function openTournament (id) {
         tournamentId = id;
         tournament 
         dispatch("done", { 'tournamentId': id })
