@@ -7,10 +7,17 @@ const states = {
 	GROUPS : "groups"
 }
 
+
+	// layout
+	import Layout from './components/layout/Layout.svelte';
+
+	// screens
 	import Config from './components/config.svelte';
 	import Players from './components/players.svelte';
 	import Teams from './components/teams.svelte';
 	import Groups from './components/groups.svelte';
+
+	
 		
 	let state=states.CONFIG;
 	let tournamentId = -1;
@@ -30,20 +37,20 @@ const states = {
 		state= states.TEAMS;
 	}
 
+	function setTournament(data) {
+		tournamentId = data.detail.tournamentId;
+	}
+
 </script>
 
-{#if (state == states.CONFIG) }
-
-	<Config on:done="{onPlayers}" tournamentId={tournamentId}/>
-
-{:else if (state == states.PLAYERS)}
-
-	<Players tournamentId={tournamentId} on:back={onConfig} on:next={onTeams}/>
-
-{:else if (state == states.TEAMS)}
-
-	<Teams on:back={onPlayers} tournamentId={tournamentId}/>
-
-{:else}
-<p>unknwon state <strong>{state}</strong></p>
-{/if}
+<Layout on:one="{onConfig}" on:two="{onPlayers}" on:three="{onTeams}" tournamentId={tournamentId}>
+	{#if (state == states.CONFIG) }
+		<Config on:done="{onPlayers}" tournamentId={tournamentId} on:setTournament={setTournament}/>
+	{:else if (state == states.PLAYERS)}
+		<Players tournamentId={tournamentId} on:back={onConfig} on:next={onTeams}/>
+	{:else if (state == states.TEAMS)}
+		<Teams on:back={onPlayers} tournamentId={tournamentId}/>
+	{:else}
+		<p>unknwon state <strong>{state}</strong></p>
+	{/if}
+</Layout>

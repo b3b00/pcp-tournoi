@@ -20,20 +20,10 @@
         players = tournament.players;
     }
 
-    function backtoconfig() {
-        dispatch("back", { 'tournamentId': tournamentId })
-    }
-
-    function toTeams() {
-        dispatch("next", { 'tournamentId': tournamentId })
-    }
-
+ 
 
 
 </script>
-<button on:click={backtoconfig} >back to config</button>
-<button on:click={toTeams} >teams</button>
-<br/>
 <p>{tournament.name} - {tournament.id}</p>
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
 <tr>

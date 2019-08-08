@@ -10,7 +10,7 @@
 
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-    import { beforeUpdate, afterUpdate } from 'svelte';
+    import { beforeUpdate, afterUpdate } from 'svelte';    
 
     import Select from 'svelte-select';
 
@@ -72,6 +72,7 @@
                         const opt = tournament.options;
                         tournamentOptions = opt;                        
                         tournamentName = tournament.name;
+                        dispatch("setTournament", { 'tournamentId': id })
                     }
                 );
 
@@ -125,8 +126,8 @@
 
     async function openTournament (id) {
         tournamentId = id;
-        tournament 
-        dispatch("done", { 'tournamentId': id })
+        
+        dispatch("setTournament", { 'tournamentId': id })
     }
 
 
@@ -168,8 +169,6 @@
         }
     });
 
-    console.log('script is running...');
-
 </script>
 
 
@@ -208,4 +207,6 @@
 <br/>
 
 <button on:click={saveTournament} >C'est parti...</button>
+
+
 </div>

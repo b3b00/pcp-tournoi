@@ -74,10 +74,7 @@ public class OptionsController {
             if (tournament != null) {
                 tournament.setName(nameAndOptions.getName());
                 Options options = tournament.getOptions();
-                Options newOptions = nameAndOptions.getOptions();
-                // TODO : if current mode is preset
-                // if new is preset and != => set preset link
-                // if new is !preset => create new
+                Options newOptions = nameAndOptions.getOptions();                
                 if (options.getIsPreset()) {
                     if (newOptions.getIsPreset() && newOptions.getId() != options.getId()) {
                         newOptions = optionsDao.findById(newOptions.getId());                        
