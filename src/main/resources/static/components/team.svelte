@@ -7,6 +7,7 @@
     const dispatch = createEventDispatcher();
 
     let teams = [];
+
     export let tournamentId = -1;
 
     export let team = {};
@@ -15,9 +16,20 @@
         console.log(team);
     });
 
+    function unTeam(team, player) {
+        dispatch("unteam", { 'team':team,'player':player });
+    }
+
 </script>
 
-<ul class="w3-ul w3-border w3-card" style="width:30%">
-    <li class="w3-bar">{team.player1.name} {team.player1.isLicensed ? "X" : ""}</li>
-    <li class="w3-bar">{team.player2.name} {team.player2.isLicensed ? "X" : ""}</li>
+
+<ul class="w3-ul w3-border w3-card" >
+    <li class="w3-display-container">
+        {team.player1.name} {team.player1.isLicensed ? "X" : ""}
+        <span on:click="{() => {unTeam(team,team.player1)}}" class="w3-button w3-display-right">&times;</span>        
+    </li>
+    <li class="w3-display-container">
+        {team.player2.name} {team.player2.isLicensed ? "X" : ""}
+        <span on:click="{() => {unTeam(team,team.player1)}}" class="w3-button w3-display-right">&times;</span>
+    </li>
 </ul>

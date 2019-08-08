@@ -63,6 +63,11 @@
         console.log(tournament);
     }
 
+    function unTeam(data) {
+		let team = data.detail.team;
+        let player = data.detail.player;
+        console.log(`unteam player ${player.id}-${player.name} from team ${team.id}`);
+	}
 
 </script>
 <br/>
@@ -72,9 +77,20 @@
 
 
 {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
+<div class="w3-container w3-cell" style="width:50%">
+<ul class="w3-ul w3-border w3-card">
 {#each tournament.teams as team}
-<Team team={team}/>
+<li class="w3-display-container"><Team team={team} on:unteam={unTeam}/></li>
 {/each}
+</ul>
+</div>
+<!-- <div class="w3-container w3-cell" style="width:50%">
+    <ul class="w3-ul w3-border w3-card">
+        <li class="w3-display-container">other</li>
+        <li class="w3-display-container">content</li>
+    </ul>
+</div> -->
+
 {:else}
 <p>no teams</p>
 {/if}
