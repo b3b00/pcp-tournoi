@@ -127,6 +127,10 @@
         }
     }
 
+    function isTeamEmpty(team) {
+        return (team.player1 == null && team.player2 == null);
+    }
+
 </script>
 <br />
 <button on:click={random}>hasard total</button>
@@ -139,9 +143,12 @@
 <div class="w3-container w3-cell" style="width:75%">
 <ul class="w3-ul w3-border w3-card">
 {#each tournament.teams as team}
-<li class="w3-display-container">    
-    <Team team={team} on:unteam={onUnTeam}/>   
+
+{#if (!isTeamEmpty(team))}
+<li class="w3-display-container">        
+    <Team team={team} on:unteam={onUnTeam}/>       
 </li>
+{/if}
 {/each}
 </ul>
 </div>
@@ -149,7 +156,10 @@
     <ul class="w3-ul w3-border w3-card">
         <li class="w3-display-container">Joueurs</li>
         {#each unTeamedPlayers as player}
-        <li class="w3-display-container">{player.name}</li>
+        <li class="w3-display-container">
+            <input class="w3-check" type="checkbox"/>
+            {player.name}
+        </li>
         {/each}       
     </ul>
 </div>
