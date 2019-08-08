@@ -6,8 +6,8 @@
     //import Player from './player.svelte';
 
     const modes = {
-        RANDOM : "RANDOM",
-        MIX : "MIX"
+        RANDOM: "RANDOM",
+        MIX: "MIX"
     }
 
     const dispatch = createEventDispatcher();
@@ -15,14 +15,18 @@
     let teams = [];
     export let tournamentId = -1;
 
-    let tournament = {}; 
+    let unTeamedPlayers = [];
+
+    let teamed = [];
+
+    let tournament = {};
 
     onMount(async () => {
         tournament = {
-            id : tournamentId,
-            teams:[],
-            players:[]
-        } ;
+            id: tournamentId,
+            teams: [],
+            players: []
+        };
 
         if (tournamentId != -1) {
             await load();
@@ -34,12 +38,48 @@
 
     async function load() {
         const res = await fetch(`/tournaments/${tournamentId}`);
-        tournament = await res.json();         
-        console.log(`tournament ${tournamentId}`);
-        console.log(tournament);       
+        tournament = await res.json();
+        if (tournament !== undefined && tournament !== null) {
+            computeUnTeamedPlayers();
+        }
     }
 
-    
+    async function computeUnTeamedPlayers() {
+        unTeamedPlayers = [];
+        let teamed = [];
+        tournament.teams.forEach(t => {
+            if (t.player1 != null) {
+                teamed.push(t.player1);
+            }
+            if (t.player2 != null) {
+                teamed.push(t.player2);
+            }
+        })
+        //teamed = tournament.teams.map(t => [t.player1, t.player2]).reduce((a, b) => a.concat(b));
+        unTeamedPlayers = substract(tournament.players, teamed);
+        console.log("teamed : ");
+        console.log(teamed);
+        console.log("unteamed : ");
+        console.log(unTeamedPlayers)
+        console.log(" ");
+    }
+
+    function substract(a, b) {
+        // let res = [];
+        // a.forEach(x => {
+        //     if (!b.find(y => y.id == x.id)) {
+
+        //     }
+        // })     
+        let res = a.filter(aa => !b.find(bb => bb.id == aa.id));
+        console.log("substract");
+        console.log(a);
+        console.log(b);
+        console.log(res);
+        return res;
+    }
+
+
 
     async function random() {
         computeTeams(modes.RANDOM);
@@ -51,45 +91,80 @@
 
     async function computeTeams(mode) {
         const uri = `/tournaments/${tournamentId}/teams/create/${mode}`;
-        const res = await fetch(uri,{
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: "POST"
-            });
-        tournament = await res.json();   
+        const res = await fetch(uri, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST"
+        });
+        tournament = await res.json();
         console.log(`tournament ${tournamentId}`);
         console.log(tournament);
     }
 
-    function unTeam(data) {
-		let team = data.detail.team;
+    function onUnTeam(data) {
+        let team = data.detail.team;
         let player = data.detail.player;
-        console.log(`unteam player ${player.id}-${player.name} from team ${team.id}`);
-	}
+        unTeam(team, player);
+    }
+
+    function unTeam(team, player) {
+        if (team != null && player != null) {
+            console.log(`unteam player ${player.id}-${player.name} from team ${team.id}`);
+            tournament.teams.forEach(t => {
+                if (t != null) {
+                    if (t.player1 != null && t.player1.id == player.id) {
+                        t.player1 = null;
+                    }
+                    if (t.player2 != null && t.player2.id == player.id) {
+                        t.player2 = null;
+                    }
+                }
+            });
+            tournament.teams = tournament.teams;
+            computeUnTeamedPlayers();
+        }
+    }
 
 </script>
-<br/>
+<br />
 <button on:click={random}>hasard total</button>
 
 <button on:click={mix}>mixe</button>
 
 
 {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
-<div class="w3-container w3-cell" style="width:50%">
+<div>
+<div class="w3-container w3-cell" style="width:75%">
 <ul class="w3-ul w3-border w3-card">
 {#each tournament.teams as team}
-<li class="w3-display-container"><Team team={team} on:unteam={unTeam}/></li>
+<li class="w3-display-container">    
+    <Team team={team} on:unteam={onUnTeam}/>
+    <!-- <ul class="w3-ul w3-border w3-card" >
+        <li class="w3-display-container">
+            {team.player1.name} {team.player1.isLicensed ? "X" : ""}
+            <span on:click="{() => {unTeam(team,team.player1)}}" class="w3-button w3-display-right">&times;</span>        
+        </li>
+        <li class="w3-display-container">
+            {team.player2.name} {team.player2.isLicensed ? "X" : ""}
+            <span on:click="{() => {unTeam(team,team.player2)}}" class="w3-button w3-display-right">&times;</span>
+        </li>
+    </ul> -->
+</li>
 {/each}
 </ul>
 </div>
-<!-- <div class="w3-container w3-cell" style="width:50%">
+<div class="w3-container w3-cell" style="width:50%">
     <ul class="w3-ul w3-border w3-card">
-        <li class="w3-display-container">other</li>
-        <li class="w3-display-container">content</li>
+        {#each unTeamedPlayers as player}
+        <li class="w3-display-container">{player.name}</li>
+        {/each}
+        <!-- <li class="w3-display-container">other really long content that would enlarge the column</li>
+        <li class="w3-display-container">content way smaller</li> -->
     </ul>
-</div> -->
+</div>
+</div>
 
 {:else}
 <p>no teams</p>
