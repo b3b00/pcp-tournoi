@@ -19,8 +19,6 @@
     
 
     onMount(async () => {
-       
-        console.log(team);
     });
 
     function unTeam(team, player) {
@@ -39,13 +37,13 @@
 
     {#if (team.player1 != null)}
     <li class="w3-display-container">
-        {team.player1.name} {team.player1.isLicensed ? "X" : ""}
+        {team.player1.name} <span class={team.player1.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
         <span on:click="{() => {unTeam(team,team.player1)}}" class="w3-button w3-display-right">&times;</span>        
     </li>
     {/if}
     {#if (team.player2 != null)}
     <li class="w3-display-container">
-        {team.player2.name} {team.player2.isLicensed ? "X" : ""}
+        {team.player2.name} <span class={team.player2.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
         <span on:click="{() => {unTeam(team,team.player2)}}" class="w3-button w3-display-right">&times;</span>
     </li>
     {/if}

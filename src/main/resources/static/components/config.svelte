@@ -67,7 +67,6 @@
             .then(function (res) {
                 res.json().then(
                     function (tournament) {
-                        console.log(tournament);
                         tournamentId = tournament.id;
                         const opt = tournament.options;
                         tournamentOptions = opt;                        
@@ -78,8 +77,7 @@
 
             })
             .catch(function (res) {
-                console.log("ERROR");
-                console.log(res);
+                // TODO
             })
     }
 
@@ -100,7 +98,6 @@
             data.id= tournamentId;
             httpMethod = "PUT";
         }
-        console.log(data);
         fetch(uri,
             {
                 headers: {
@@ -119,8 +116,7 @@
 
             })
             .catch(function (res) {
-                console.log("ERROR");
-                console.log(res);
+                // TODO
             })
     }
 
@@ -147,8 +143,6 @@
             tournamentsById[t.id] = t;
             tournamentItems.push({ "label": `${t.name}`, "value": `${t.id}` });
         })
-        console.log(tournamentItems);
-
     }
 
     async function fetchTournament(id) {
@@ -157,8 +151,6 @@
         tournamentId = tournament.id;
         tournamentName = tournament.name;
         tournamentOptions = tournament.options;
-        console.log(tournament);
-
     }
 
     onMount(async () => {

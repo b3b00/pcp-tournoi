@@ -3,7 +3,6 @@
     import Team from './team.svelte';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-    //import Player from './player.svelte';
 
     const modes = {
         RANDOM: "RANDOM",
@@ -56,19 +55,10 @@
             }
         });
         unTeamedPlayers = substract(tournament.players, teamed);
-        console.log("teamed : ");
-        console.log(teamed);
-        console.log("unteamed : ");
-        console.log(unTeamedPlayers)
-        console.log(" ");
     }
 
     function substract(a, b) {    
         let res = a.filter(aa => !b.find(bb => bb.id == aa.id));
-        console.log("substract");
-        console.log(a);
-        console.log(b);
-        console.log(res);
         return res;
     }
 
@@ -106,8 +96,6 @@
         });
         tournament = await res.json();
         computeUnTeamedPlayers(); // for real
-        console.log(`tournament ${tournamentId}`);
-        console.log(tournament);
     }
 
     function onUnTeam(data) {
@@ -118,7 +106,6 @@
 
     async function unTeam(team, player) {
         if (team != null && player != null) {
-            console.log(`unteam player ${player.id}-${player.name} from team ${team.id}`);
             tournament.teams.forEach(async t => {
                 if (t != null) {
                     let found = false;
@@ -161,20 +148,7 @@
                 method: "POST"
             });
             tournament = await res.json();
-            computeUnTeamedPlayers();
-            // .then(function (res) {
-            //     res.json().then(
-            //         function (data) {
-            //             tournament = data;
-            //         }
-            //     );
-
-            // });
-
-            // .catch(function (res) {
-            //     console.log("ERROR");
-            //     console.log(res);
-            // })
+            computeUnTeamedPlayers();           
     }
 
     function isTeamEmpty(team) {
@@ -205,7 +179,6 @@
     function teamPlayers() {
         let selectedPlayers = unTeamedPlayers.filter(p => p.selected);
         if (selectedPlayers.length == 2) {
-            console.log(`création de l'équipe ${selectedPlayers[0].name} - ${selectedPlayers[1].name}` )
             createTeam(selectedPlayers[0],selectedPlayers[1]);
         }
         else {
@@ -305,8 +278,8 @@
     <ul class="w3-ul w3-border w3-card">
         <li class="w3-display-container">Joueurs</li>
         {#each unTeamedPlayers as player}
-        <li class="w3-display-container" on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
-            {player.name}
+        <li  on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
+            <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
         </li>
         {/each}       
     </ul>

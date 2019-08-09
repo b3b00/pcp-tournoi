@@ -102,8 +102,7 @@
                 );
             })
             .catch(function (res) {
-                console.log("ERROR");
-                console.log(res);
+                // TODO
             });
     }
 
@@ -128,8 +127,7 @@
                     }
                 )
             .catch(function (res) {
-                console.log("ERROR");
-                console.log(res);
+                // TODO
             });
         }
     }
