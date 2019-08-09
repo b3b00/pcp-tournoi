@@ -1,3 +1,13 @@
+<style>
+    button.hide {
+        display:none;
+        visibility:hidden;
+    }
+    input.hide {
+        display:none;
+        visibility:hidden;
+    }
+</style>
 <script>
 
     import { onMount } from 'svelte';
@@ -20,16 +30,14 @@
     let isLicensedClass = "";
 
     const save = "fa fa-check";
-    const nosave = "fa";
+    const nosave = "hide";
 
     const cancel = "fa fa-close";
-    const nocancel = "fa";
+    const nocancel = "hide";
 
     const trash = "fa fa-trash";
-    const notrash = "fa";
+    const notrash = "hide";
 
-    const licensed = "fa fa-check-square-o";
-    const notlicensed = "fa fa-square-o";
 
     let trashClass = "fa fa-trash";
     let saveClass = "fa fa-check";
@@ -140,20 +148,19 @@
     <td>
     <input style="width:100%" on:change={onNameChange} type="text" name = "name" id="name"  bind:value={name}/>
 </td>
-<td on:click={() => {toggleLicensed();}} style="cursor: pointer;">
-    <span style="font-size:24px;" 
-    class={isLicensedClass}
-    > &nbsp;</span>
+<td>
+    <input type="checkbox" style="font-size:24px;height:24px;"  on:click={() => {toggleLicensed();}}/>
+    
     
 </td>
-<td style="cursor: pointer;">
-        <span class={trashClass} on:click={onDelete} style="font-size:24px;">&nbsp;</span>
+<td>
+        <button class={trashClass} on:click={onDelete} style="font-size:24px;">&nbsp;</button>
 </td>
 
-<td style="cursor: pointer;" on:click={onSave}>
-        <span class={saveClass} style="font-size:24px;">&nbsp;</span>
+<td  >
+        <button class={saveClass} on:click={onSave} style="font-size:24px;">&nbsp;</button>
 </td>
 
-<td style="cursor: pointer;" on:click={onCancel}>
-        <span class={cancelClass} style="font-size:24px;">&nbsp;</span>
+<td style="cursor: pointer;" >
+        <button class={cancelClass} on:click={onCancel} style="font-size:24px;">&nbsp;</button>
 </td>
