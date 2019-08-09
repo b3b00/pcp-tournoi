@@ -149,9 +149,7 @@
     <input style="width:100%" on:change={onNameChange} type="text" name = "name" id="name"  bind:value={name}/>
 </td>
 <td>
-    <input type="checkbox" style="font-size:24px;height:24px;"  on:click={() => {toggleLicensed();}}/>
-    
-    
+    <input type="checkbox" style="font-size:24px;height:24px;" bind:checked={isLicensed} on:click={() => {toggleLicensed();}}/>
 </td>
 <td>
         <button class={trashClass} on:click={onDelete} style="font-size:24px;">&nbsp;</button>
