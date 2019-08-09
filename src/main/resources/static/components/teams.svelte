@@ -116,22 +116,46 @@
         unTeam(team, player);
     }
 
-    function unTeam(team, player) {
+    async function unTeam(team, player) {
         if (team != null && player != null) {
             console.log(`unteam player ${player.id}-${player.name} from team ${team.id}`);
-            tournament.teams.forEach(t => {
+            tournament.teams.forEach(async t => {
                 if (t != null) {
+                    let found = false;
                     if (t.player1 != null && t.player1.id == player.id) {
                         t.player1 = null;
+                        found = true;
                     }
                     if (t.player2 != null && t.player2.id == player.id) {
                         t.player2 = null;
+                        found = true;
+                    }
+                    if (found) {
+                        // TODO : save the team 
+                        // PUT /tournaments/{tournamentId}/teams/{teamId}
+
+                        const uri = `/tournaments/${tournamentId}/teams/${team.id}`;        
+                        const res = await fetch(uri, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            method: "PUT",
+                            body:JSON.stringify(t)
+                        });
+                        tournament = await res.json();
+                        computeUnTeamedPlayers(); 
                     }
                 }
             });
             tournament.teams = tournament.teams;
             computeUnTeamedPlayers();
         }
+    }
+
+    function team(player1, player2 ) {
+        // TODO : call endpoint to create a new team
+        // POST /tournaments/{tournamentId}/teams/player1/{player1Id}/player2/{player2Id}
     }
 
     function isTeamEmpty(team) {

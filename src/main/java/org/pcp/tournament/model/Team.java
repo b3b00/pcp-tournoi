@@ -35,6 +35,10 @@ public class Team {
         return !isSingle();
     }
 
+    public Boolean isEmpty() {
+        return player1 == null && player2 == null;
+    }
+
     /**
      * @return the id
      */
