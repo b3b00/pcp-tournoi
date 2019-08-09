@@ -74,7 +74,7 @@
         }
 
         let httpMethod = isNewPlayer ? "POST" : "PUT";
-        const res = await fetch(`/tournament/${tournamentId}/players`,
+        const res = fetch(`/tournament/${tournamentId}/players`,
             {
                 headers: {
                     'Accept': 'application/json',
@@ -82,21 +82,16 @@
                 },
                 method: httpMethod,
                 body: JSON.stringify(data)
-            })
-            .then(function (res) {
+            }).then(function (res) {
                 res.json().then(                    
-                    function () {
+                    function (data) {
                         name = "";
-                        isLicensed = false;
+                        isLicensed = data.isLicensed;
                         edited = false;
-                        // if (isNewPlayer) {
-                        // isNewPlayer = false;
-                        // }
                         computeStyles();
                         dispatch("change", { 'tournamentId': tournamentId })
                     }
                 );
-
             })
             .catch(function (res) {
                 console.log("ERROR");
