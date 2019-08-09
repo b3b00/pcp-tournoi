@@ -238,7 +238,14 @@
 
 
 </script>
-<br />
+
+{#if (tournament !== null && tournament !== undefined &&
+    tournament.options !== null && tournament.options !== undefined && 
+    tournament.options.mode == "DOUBLE")}
+<strong>{tournament.options.mode}</strong>
+<br/>
+<hr/>
+<br/>
 <button on:click={random}>hasard total</button>
 
 <button on:click={mix}>mixe</button>
@@ -287,5 +294,11 @@
 
 
 </div>
+
+{:else} 
+
+<hr/>
+<p>tournoi en simple, pas besoin d'équipes</p>
+{/if}
 
 
