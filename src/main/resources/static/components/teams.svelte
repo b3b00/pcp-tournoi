@@ -161,6 +161,7 @@
     function isTeamEmpty(team) {
         return (team.player1 == null && team.player2 == null);
     }
+    
 
 </script>
 <br />

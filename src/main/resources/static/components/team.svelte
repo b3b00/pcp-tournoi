@@ -1,8 +1,10 @@
+<style>    
+</style>
 <script>
 
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-    //import Player from './player.svelte';
+    import SelectableUL from './selectableUL.svelte';
 
     const dispatch = createEventDispatcher();
 
@@ -12,7 +14,12 @@
 
     export let team = {};
 
+    export let selected = false;
+
+    
+
     onMount(async () => {
+       
         console.log(team);
     });
 
@@ -20,10 +27,15 @@
         dispatch("unteam", { 'team':team,'player':player });
     }
 
+    function selectTeam(state) {
+        selected=state.detail.state;
+    }
 </script>
 
 {#if (team.player1 != null || team.player2 != null)}
-<ul class="w3-ul w3-border w3-card" >
+<SelectableUL on:selectionChanged={selectTeam} selected={selected} >
+<!-- <ul class="w3-ul w3-border w3-card" > -->
+
     {#if (team.player1 != null)}
     <li class="w3-display-container">
         {team.player1.name} {team.player1.isLicensed ? "X" : ""}
@@ -36,5 +48,6 @@
         <span on:click="{() => {unTeam(team,team.player2)}}" class="w3-button w3-display-right">&times;</span>
     </li>
     {/if}
-</ul>
+<!-- </ul> -->
+</SelectableUL>
 {/if}
