@@ -89,9 +89,21 @@
         computeTeams(modes.MIX);
     }
 
+    async function clear() {
+        const uri = `/tournaments/${tournamentId}/teams/delete`;        
+        await fetch(uri, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "DELETE"
+        });
+        tournament = await res.json();
+    }
+
     async function computeTeams(mode) {
-        const uri = `/tournaments/${tournamentId}/teams/create/${mode}`;
-        const res = await fetch(uri, {
+        const uri = `/tournaments/${tournamentId}/teams/create/${mode}`;        
+        await fetch(uri, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -99,6 +111,7 @@
             method: "POST"
         });
         tournament = await res.json();
+        computeUnTeamedPlayers(); // for real
         console.log(`tournament ${tournamentId}`);
         console.log(tournament);
     }
@@ -136,6 +149,8 @@
 <button on:click={random}>hasard total</button>
 
 <button on:click={mix}>mixe</button>
+
+<button on:click={clear}>tout supprimer</button>
 
 
 {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 

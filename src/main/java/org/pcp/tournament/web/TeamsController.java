@@ -14,6 +14,7 @@ import org.pcp.tournament.service.TeamStrategiesEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,35 @@ public class TeamsController {
         return teams;
     }
 
+    @DeleteMapping("/tournaments/{tournamentId}/teams/{teamID}/delete")
+    public ResponseEntity<?> clearTeam(@PathVariable int tournamentId, @PathVariable int teamId) {
+        Tournament tournament = tournamentDao.findById(tournamentId);
+        if (tournament != null) {
+            Team team = teamDao.findById(teamId);
+            if (team != null) {
+                tournament.getTeams().removeIf(t -> t.getId() == teamId);
+                tournament = tournamentDao.save(tournament);
+                teamDao.delete(team);
+                return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/tournaments/{tournamentId}/teams/delete")
+    public ResponseEntity<?> clearTeams(@PathVariable int tournamentId) {
+        Tournament tournament = tournamentDao.findById(tournamentId);
+        if (tournament != null) {
+            List<Team> teams = tournament.getTeams();
+            tournament.getTeams().clear();
+            tournament = tournamentDao.save(tournament);
+            for (Team team : teams) {
+                teamDao.delete(team);
+            }
+            return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+    }
     
     @PostMapping("/tournaments/{tournamentId}/teams/create/{mode}")
     public ResponseEntity<?> createTeams(@PathVariable int tournamentId, @PathVariable TeamStrategiesEnum mode) {
@@ -47,6 +77,9 @@ public class TeamsController {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             List<Player> players = tournament.getPlayers();
+            if (!tournament.getTeams().isEmpty()) {
+                clearTeams(tournamentId);                
+            }
             if (players.size() % 2 == 0) {
                 List<Team> teams = new ArrayList<Team>();
                 switch (mode) {
