@@ -29,7 +29,7 @@
         };
 
         if (tournamentId != -1) {
-            await load();
+            await load(); 
         }
 
     });
@@ -54,8 +54,7 @@
             if (t.player2 != null) {
                 teamed.push(t.player2);
             }
-        })
-        //teamed = tournament.teams.map(t => [t.player1, t.player2]).reduce((a, b) => a.concat(b));
+        });
         unTeamedPlayers = substract(tournament.players, teamed);
         console.log("teamed : ");
         console.log(teamed);
@@ -64,13 +63,7 @@
         console.log(" ");
     }
 
-    function substract(a, b) {
-        // let res = [];
-        // a.forEach(x => {
-        //     if (!b.find(y => y.id == x.id)) {
-
-        //     }
-        // })     
+    function substract(a, b) {    
         let res = a.filter(aa => !b.find(bb => bb.id == aa.id));
         console.log("substract");
         console.log(a);
@@ -91,7 +84,7 @@
 
     async function clear() {
         const uri = `/tournaments/${tournamentId}/teams/delete`;        
-        await fetch(uri, {
+        const res = await fetch(uri, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -99,11 +92,12 @@
             method: "DELETE"
         });
         tournament = await res.json();
+        computeUnTeamedPlayers();
     }
 
     async function computeTeams(mode) {
         const uri = `/tournaments/${tournamentId}/teams/create/${mode}`;        
-        await fetch(uri, {
+        const res = await fetch(uri, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -153,20 +147,27 @@
 <button on:click={clear}>tout supprimer</button>
 
 
-{#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
-<div>
-<div class="w3-container w3-cell" style="width:75%">
-<ul class="w3-ul w3-border w3-card">
-{#each tournament.teams as team}
 
-{#if (!isTeamEmpty(team))}
-<li class="w3-display-container">        
-    <Team team={team} on:unteam={onUnTeam}/>       
-</li>
+<div>
+
+<!-- équipes -->    
+<div class="w3-container w3-cell" style="width:75%">
+{#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
+    <ul class="w3-ul w3-border w3-card">
+    {#each tournament.teams as team}
+        {#if (!isTeamEmpty(team))}
+            <li class="w3-display-container">        
+                <Team team={team} on:unteam={onUnTeam}/>       
+            </li>
+        {/if}
+    {/each}
+    </ul>
+{:else}
+    <p>no teams</p>
 {/if}
-{/each}
-</ul>
 </div>
+
+<!-- joueurs non affectés -->
 <div class="w3-container w3-cell" style="width:50%">
     <ul class="w3-ul w3-border w3-card">
         <li class="w3-display-container">Joueurs</li>
@@ -178,8 +179,8 @@
         {/each}       
     </ul>
 </div>
+
+
 </div>
 
-{:else}
-<p>no teams</p>
-{/if}
+
