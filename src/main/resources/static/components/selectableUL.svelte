@@ -4,7 +4,7 @@
             font-size: 0.5em;
         }
         li.selected {
-            background-color: gray;            
+            background-color: lightgray;            
         }
         li.unselected {
             background-color: white;            

@@ -131,9 +131,6 @@
                         found = true;
                     }
                     if (found) {
-                        // TODO : save the team 
-                        // PUT /tournaments/{tournamentId}/teams/{teamId}
-
                         const uri = `/tournaments/${tournamentId}/teams/${team.id}`;        
                         const res = await fetch(uri, {
                             headers: {
@@ -153,15 +150,119 @@
         }
     }
 
-    function team(player1, player2 ) {
-        // TODO : call endpoint to create a new team
-        // POST /tournaments/{tournamentId}/teams/player1/{player1Id}/player2/{player2Id}
+    async function createTeam(player1, player2 ) {
+        const uri = `/tournaments/${tournament.id}/teams/player1/${player1.id}/player2/${player2.id}`;
+        const res = await fetch(uri,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST"
+            });
+            tournament = await res.json();
+            computeUnTeamedPlayers();
+            // .then(function (res) {
+            //     res.json().then(
+            //         function (data) {
+            //             tournament = data;
+            //         }
+            //     );
+
+            // });
+
+            // .catch(function (res) {
+            //     console.log("ERROR");
+            //     console.log(res);
+            // })
     }
 
     function isTeamEmpty(team) {
         return (team.player1 == null && team.player2 == null);
     }
     
+
+    function selectUnteamedPlayer(player) {
+        let realp = unTeamedPlayers.find(p => p.id == player.id);
+        realp.selected = !realp.selected;
+        unTeamedPlayers = unTeamedPlayers;
+    }
+
+    function selectTeam(team, data) {
+        team.selected = data.detail.state;
+        tournament.teams.forEach(t => {
+            if (t.id == team.id) {
+                t.selected = data.detail.detail.state;
+            }
+            else {
+                if (t.selected === undefined) {
+                    t.selected = false;
+                }
+            }
+        })
+    }
+
+    function teamPlayers() {
+        let selectedPlayers = unTeamedPlayers.filter(p => p.selected);
+        if (selectedPlayers.length == 2) {
+            console.log(`création de l'équipe ${selectedPlayers[0].name} - ${selectedPlayers[1].name}` )
+            createTeam(selectedPlayers[0],selectedPlayers[1]);
+        }
+        else {
+            alert("vous devez sélectionner 2 joueurs.");
+        }
+    }
+
+    function clearSelection() {
+        unTeamedPlayers.forEach(p => p.selected = false)
+        tournament.teams.forEach(t => t.selected=false);
+    }
+
+    async function buildTeam() {
+        let selectedPlayers = unTeamedPlayers.filter(p => p.selected);
+        let selectedTeams = tournament.teams.filter(t => t.selected);
+        if (selectedPlayers.length == 2) {
+            await teamPlayers();
+            clearSelection();
+            computeUnTeamedPlayers();
+            tournament = tournament;
+        }
+        else if (selectedPlayers.length == 1 && selectedTeams.length == 1) {
+            addPlayerToTeam();
+            clearSelection();
+            computeUnTeamedPlayers();
+        }
+        else {
+            alert(`vous devez sélectionner soit 
+                - soit 2 joueurs 
+                - soit 1 joueur et 1 équipe`);
+        }
+
+    }
+
+    async function addPlayerToTeam() {
+        let selectedPlayers = unTeamedPlayers.filter(p => p.selected);
+        let selectedTeams = tournament.teams.filter(t => t.selected);
+        if (selectedPlayers.length == 1 && selectedTeams.length == 1) {
+            const team = selectedTeams[0];
+            const player = selectedPlayers[0];
+            const uri = `/tournaments/${tournament.id}/teams/${team.id}/player/${player.id}`;
+            const res = await fetch(uri,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST"
+            });
+            tournament = await res.json();
+            computeUnTeamedPlayers();
+        }
+        else {
+            alert("vous devez sélectionner 1 joueur et 1 équipe.");
+        }
+    }
+
 
 </script>
 <br />
@@ -176,13 +277,13 @@
 <div>
 
 <!-- équipes -->    
-<div class="w3-container w3-cell" style="width:75%">
+<div class="w3-container w3-cell" style="width:60%">
 {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
     <ul class="w3-ul w3-border w3-card">
     {#each tournament.teams as team}
         {#if (!isTeamEmpty(team))}
             <li class="w3-display-container">        
-                <Team team={team} on:unteam={onUnTeam}/>       
+                <Team team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
             </li>
         {/if}
     {/each}
@@ -191,14 +292,20 @@
     <p>no teams</p>
 {/if}
 </div>
+<!-- action sur les équipes et joueurs -->
+<div class="w3-container w3-cell" style="width:10%">
+   
+    <button on:click={buildTeam} class="fa fa-arrow-left">        
+    </button>
+
+</div>
 
 <!-- joueurs non affectés -->
-<div class="w3-container w3-cell" style="width:50%">
+<div class="w3-container w3-cell" style="width:60%">
     <ul class="w3-ul w3-border w3-card">
         <li class="w3-display-container">Joueurs</li>
         {#each unTeamedPlayers as player}
-        <li class="w3-display-container">
-            <input class="w3-check" type="checkbox"/>
+        <li class="w3-display-container" on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
             {player.name}
         </li>
         {/each}       

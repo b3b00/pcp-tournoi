@@ -110,4 +110,13 @@ public class Team {
         }
     }
 
+	public void addPlayer(Player player) {
+        if (getPlayer1() == null) {
+            setPlayer1(player);
+        }
+        else if (getPlayer2() == null) {
+            setPlayer2(player);
+        }
+	}
+
 }

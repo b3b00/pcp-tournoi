@@ -2,6 +2,7 @@ package org.pcp.tournament.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TeamDao;
@@ -41,6 +42,50 @@ public class TeamsController {
         return teams;
     }
 
+    @PostMapping(value="/tournaments/{tournamentId}/teams/{teamId}/player/{playerId}")
+    public ResponseEntity<?> addPlayerToTeam(@PathVariable int tournamentId, @PathVariable int teamId,
+    @PathVariable int playerId) {
+        Tournament tournament = tournamentDao.findById(tournamentId);
+        if (tournament != null) {
+            Team team = teamDao.findById(teamId);
+            if (team != null) {
+                Player player = playerDao.findById(playerId);
+                if (player != null) {
+                    team.addPlayer(player);                    
+                    teamDao.save(team);                    
+                    tournament = tournamentDao.findById(tournamentId);
+                    return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+                }
+                return new ResponseEntity<String>("le joueur " + playerId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<String>("l'équipe " + teamId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/tournaments/{tournamentId}/teams/player1/{player1Id}/player2/{player2Id}")
+    public ResponseEntity<?> createTeam(@PathVariable int tournamentId, @PathVariable int player1Id,
+            @PathVariable int player2Id) {
+        Tournament tournament = tournamentDao.findById(tournamentId);
+        if (tournament != null) {
+            Player player1 = playerDao.findById(player1Id);
+            if (player1 != null) {
+                Player player2 = playerDao.findById(player2Id);
+                if (player2 != null) {
+                    Team team = new Team(player1, player2);
+                    teamDao.save(team);
+                    tournament.addTeam(team);
+                    tournament = tournamentDao.save(tournament);
+                    return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+                }
+                return new ResponseEntity<String>("le joueur " + player2Id + " n'existe pas.", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<String>("le joueur " + player1Id + " n'existe pas.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+
+    }
+
     @PutMapping(value = "/tournaments/{tournamentId}/teams/{teamId}")
     public ResponseEntity<?> updateTeam(@PathVariable int tournamentId, @PathVariable int teamId,
             @RequestBody Team team) {
@@ -48,7 +93,7 @@ public class TeamsController {
         if (tournament != null) {
             Team updatedTeam = teamDao.findById(teamId);
             if (team != null) {
-                updatedTeam.setPlayer1(team.getPlayer1());                
+                updatedTeam.setPlayer1(team.getPlayer1());
                 updatedTeam.setPlayer2(team.getPlayer2());
                 teamDao.save(updatedTeam);
 
@@ -85,11 +130,11 @@ public class TeamsController {
     public ResponseEntity<?> clearTeams(@PathVariable int tournamentId) {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
-            List<Team> teams = tournament.getTeams();
+            List<Integer> teams = tournament.getTeams().stream().map(t -> t.getId()).collect(Collectors.toList());
             tournament.getTeams().clear();
             tournament = tournamentDao.save(tournament);
-            for (Team team : teams) {
-                teamDao.delete(team);
+            for (int team : teams) {
+                teamDao.deleteById(team);
             }
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
         }

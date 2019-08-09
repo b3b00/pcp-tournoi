@@ -29,12 +29,13 @@
 
     function selectTeam(state) {
         selected=state.detail.state;
+        dispatch("selectionChanged",state);
     }
 </script>
 
 {#if (team.player1 != null || team.player2 != null)}
 <SelectableUL on:selectionChanged={selectTeam} selected={selected} >
-<!-- <ul class="w3-ul w3-border w3-card" > -->
+
 
     {#if (team.player1 != null)}
     <li class="w3-display-container">
@@ -48,6 +49,5 @@
         <span on:click="{() => {unTeam(team,team.player2)}}" class="w3-button w3-display-right">&times;</span>
     </li>
     {/if}
-<!-- </ul> -->
 </SelectableUL>
 {/if}
