@@ -242,7 +242,6 @@
 {#if (tournament !== null && tournament !== undefined &&
     tournament.options !== null && tournament.options !== undefined && 
     tournament.options.mode == "DOUBLE")}
-<strong>{tournament.options.mode}</strong>
 <br/>
 <hr/>
 <br/>
@@ -272,6 +271,7 @@
     <p>no teams</p>
 {/if}
 </div>
+{#if (unTeamedPlayers.length > 0)}
 <!-- action sur les équipes et joueurs -->
 <div class="w3-container w3-cell" style="width:10%">
    
@@ -281,9 +281,10 @@
 </div>
 
 <!-- joueurs non affectés -->
+
 <div class="w3-container w3-cell" style="width:60%">
     <ul class="w3-ul w3-border w3-card">
-        <li class="w3-display-container">Joueurs</li>
+        
         {#each unTeamedPlayers as player}
         <li  on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
             <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
@@ -291,6 +292,7 @@
         {/each}       
     </ul>
 </div>
+{/if}
 
 
 </div>
