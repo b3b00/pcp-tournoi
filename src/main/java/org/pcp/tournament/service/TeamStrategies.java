@@ -21,14 +21,19 @@ public class TeamStrategies {
     public static List<Team> pureRandom(List<Player> players, TeamDao teamDao) {
         Random rnd = new Random();
         List<Team> teams = new ArrayList<Team>();
+        
         int count = players.size();
+        List<Integer> playersIds = players.stream().map((Player p) -> p.getId()).collect(Collectors.toList());
         for (int i = 0; i< count / 2 ; i++) {
-            int f = rnd.nextInt(players.size());
-            Player p1 = players.get(f);
-            players.remove(f);
-            int s = rnd.nextInt(players.size());
-            Player p2 = players.get(s);
-            players.remove(s);
+            int f = rnd.nextInt(playersIds.size());
+            int p1Id = playersIds.get(f);            
+            playersIds.remove(f);
+            Player p1 = players.stream().filter(p -> p.getId() == p1Id).findFirst().get();
+
+            int s = rnd.nextInt(playersIds.size());
+            int p2Id = playersIds.get(s);
+            playersIds.remove(s);
+            Player p2 = players.stream().filter(p -> p.getId() == p2Id).findFirst().get();
 
             Team team = new Team(p1,p2);
 
