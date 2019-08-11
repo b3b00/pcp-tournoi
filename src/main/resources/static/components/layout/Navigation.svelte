@@ -19,10 +19,16 @@
 		dispatch("three", { 'tournamentId': tournamentId })
 	}
 	
+	function four() {
+		dispatch("four", { 'tournamentId': tournamentId })
+	}
 		
 	
 	</script>
 	<p style="display:inline">
-		<button on:click={one}>config</button><button on:click={two}>players</button><button on:click={three}>teams</button>
+		<button on:click={one}>configuration</button>
+		<button on:click={two}>joueurs</button>
+		<button on:click={three}>équipes</button>
+		<button on:click={four}>poules</button>
 	</p>
 	

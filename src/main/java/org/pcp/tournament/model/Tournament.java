@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,12 +28,21 @@ public class Tournament {
     private List<Team> teams;
 
     @OneToMany
-    private List<TeamGroup> groups;
+    private List<Group> groups;
 
+    private Date date;
 
     public Tournament() {
         players = new ArrayList<Player>();
         teams = new ArrayList<Team>();
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public Tournament(String name) {
@@ -140,27 +150,27 @@ public class Tournament {
     /**
      * @return the groups
      */
-    public List<TeamGroup> getGroups() {
+    public List<Group> getGroups() {
         return groups;
     }
 
     /**
      * @param groups the groups to set
      */
-    public void setGroups(List<TeamGroup> groups) {
+    public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
     
-    public void addGroup(TeamGroup group) {
+    public void addGroup(Group group) {
         if (this.groups == null) {
-            this.groups = new ArrayList<TeamGroup>();
+            this.groups = new ArrayList<Group>();
         }
         this.groups.add(group);
     }
 
-    public void addGroups(List<TeamGroup>groups) {
+    public void addGroups(List<Group>groups) {
         if (this.groups == null) {
-            this.groups = new ArrayList<TeamGroup>();
+            this.groups = new ArrayList<Group>();
         }
         this.groups.addAll(groups);
     }

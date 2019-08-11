@@ -7,9 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
-public class TeamGroup {
+@Table(name="team_table")
+public class Group {
 
     @Id
     @GeneratedValue
@@ -20,12 +22,14 @@ public class TeamGroup {
     @OneToMany
     private List<Team> teams;
 
+    
 
-    public TeamGroup() {
+
+    public Group() {
 teams = new ArrayList<Team>();
     }
 
-    public TeamGroup(String name) {
+    public Group(String name) {
         teams = new ArrayList<Team>();
     }
 
@@ -73,6 +77,18 @@ teams = new ArrayList<Team>();
      */
     public void setTeams(List<Team> teams) {
         this.teams = teams;
+    }
+
+    public int size() {
+        return teams.size();
+    }
+
+    public void addTeam(Team team) {
+        teams.add(team);
+    }
+
+    public void addTeams(List<Team> teams) {
+        teams.addAll(teams);
     }
 
     @Override

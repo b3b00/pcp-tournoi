@@ -35,9 +35,9 @@ public class DataLoader {
     public void loadOptions() {
         List<Options> options = optionsDao.findAllByIsPreset(true);
         if (options == null || options.isEmpty()) {
-            Options single = new Options(Mode.SINGLE,3,11,true);
+            Options single = new Options(Mode.SINGLE,"simple", 3,11,true);
             optionsDao.save(single);
-            Options doubl = new Options(Mode.DOUBLE,1,50,true);
+            Options doubl = new Options(Mode.DOUBLE,"double", 1,50,true);
             optionsDao.save(doubl);
         }
     }

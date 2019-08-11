@@ -7,11 +7,13 @@ import javax.persistence.Id;
 @Entity
 public class Options {
 
-    private Mode mode;
-
     @Id
     @GeneratedValue
     private int id;
+
+    private String label;
+
+    private Mode mode;
 
     private int winningSets;
 
@@ -23,18 +25,28 @@ public class Options {
         isPreset = false;
     }
 
-    public Options(Mode mode, int winningSets, int setLength) {
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public Options(Mode mode, String label, int winningSets, int setLength) {
         setMode(mode);
         setWinningSets(winningSets);
         setSetLength(setLength);       
         setIsPreset(false); 
+        setLabel("");
     }
 
-    public Options(Mode mode, int winningSets, int setLength, Boolean isPreset) {
+    public Options(Mode mode, String label, int winningSets, int setLength, Boolean isPreset) {
         setMode(mode);
         setWinningSets(winningSets);
         setSetLength(setLength);        
         setIsPreset(isPreset);
+        setLabel(label);
     }
 
     /**

@@ -24,6 +24,8 @@
 
     let tournament = {}
 
+    let tournamentDate = new Date();
+
     export let tournamentId = -1;
 
 
@@ -89,6 +91,7 @@
         }
         var data = {
             "name": tournamentName,
+            "date":tournamentDate,
             "options": tournamentOptions            
         };
         let uri = "/tournament/options/";
@@ -150,6 +153,7 @@
         tournament = await res.json();
         tournamentId = tournament.id;
         tournamentName = tournament.name;
+        tournamentDate = tournament.date;
         tournamentOptions = tournament.options;
     }
 
@@ -180,25 +184,45 @@
                 </ul>
 </div>
 
+
 <div class="w3-panel w3-card startDialog" >
-<label for="name">Nom : </label>
-<input type="text" name = "name" id="name" class="w3-input" bind:value={tournamentName}/>
+
+<div class="w3-row-padding">
+
+    <div class="w3-half">  
+    <label for="name">Nom : </label>
+    <input type="text" name = "name" id="name" class="w3-input" bind:value={tournamentName}/>
+    </div>
+
+
+    <div class="w3-half">
+    <label for="name">Date : </label>
+    <input type="date" name = "date" id="date" class="w3-input" bind:value={tournamentDate}/>
+    </div>
+</div>
 
 <label>Mode :</label>
 {#each options as option, y}
-<input class="w3-radio" type="radio" name="mode" on:change="{changeMode}" bind:group={tournamentOptions.mode} value="{option.mode}">{option.mode}<br>
+<input class="w3-radio" type="radio" name="mode" on:change="{changeMode}" bind:group={tournamentOptions.mode} value="{option.mode}">{option.label}<br>
 {/each}
 <br/>
 
+<div class="w3-row-padding">
+
+    <div class="w3-half">
 <label for="winningSets" >sets gagnants :</label>
 <input class="w3-input" type="number" id="winningSets" placeholder="3" min="1" max="3" bind:value={tournamentOptions.winningSets} on:change={unpreset}/>  
 <br/>
+    </div>
 
+<div class="w3-half">
 <label for="setlength">nombre de points par sets</label> 
 <input class="w3-input" type="number" id="setlength" placeholder="11" min="3" max="100" bind:value={tournamentOptions.setLength} on:change={unpreset}/>  
+</div>
+</div>
 <br/>
 
-<button on:click={saveTournament} >C'est parti...</button>
+<button on:click={saveTournament} >Enregistrer</button>
 
 
 </div>

@@ -3,6 +3,6 @@
 	export let tournamentId;
 </script>	
 <div>
-<Navigation on:one on:two on:three tournamentId={tournamentId}/>
+<Navigation on:one on:two on:three on:four tournamentId={tournamentId}/>
 <slot></slot>
 </div> 

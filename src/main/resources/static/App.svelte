@@ -37,19 +37,27 @@ const states = {
 		state= states.TEAMS;
 	}
 
+
+	function onGroups(data) {
+		tournamentId = data.detail.tournamentId;
+		state= states.GROUPS;
+	}
+
 	function setTournament(data) {
 		tournamentId = data.detail.tournamentId;
 	}
 
 </script>
 
-<Layout on:one="{onConfig}" on:two="{onPlayers}" on:three="{onTeams}" tournamentId={tournamentId}>
+<Layout on:one="{onConfig}" on:two="{onPlayers}" on:three="{onTeams}" on:four="{onGroups}" tournamentId={tournamentId}>
 	{#if (state == states.CONFIG) }
 		<Config on:done="{onPlayers}" tournamentId={tournamentId} on:setTournament={setTournament}/>
 	{:else if (state == states.PLAYERS)}
 		<Players tournamentId={tournamentId} on:back={onConfig} on:next={onTeams}/>
-	{:else if (state == states.TEAMS)}
-		<Teams on:back={onPlayers} tournamentId={tournamentId}/>
+	{:else if (state == states.TEAMS)}	
+		<Teams on:back={onPlayers} tournamentId={tournamentId} on:next={onGroups}/>
+	{:else if (state == states.GROUPS)}
+		<Groups on:back={onTeams} tournamentId={tournamentId} />
 	{:else}
 		<p>unknwon state <strong>{state}</strong></p>
 	{/if}
