@@ -17,6 +17,8 @@
 
     let groupNumber = 8;
 
+    let ungroupedTeams = []
+
     onMount(async () => {
         tournament = {
             id: tournamentId,
@@ -72,6 +74,50 @@
      function selectGroup(group, data) {
      }
 
+    async function computeUngroupedTeams() {
+        ungroupedTeams = [];
+        let grouped = [];
+        if (tournament.groups !== undefined && tournament.groups != null && tournament.groups.length > 0) {
+        tournament.groups.forEach(group => {
+            group.teams.forEach(t => {
+                grouped.push(t);
+            })
+        });
+        }        
+        unTeamedPlayers = substract(tournament.groups, grouped);
+    }
+
+    function substract(a, b) {    
+        let res = a.filter(aa => !b.find(bb => bb.id == aa.id));
+        return res;
+    }
+
+
+    async function createGroups() {
+        const uri = `/tournaments/${tournamentId}/groups/${groupNumber}`;        
+        const res = await fetch(uri, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST"
+        });
+        tournament = await res.json();
+        computeUngroupedTeams(); 
+    }
+
+    async function deleteGroups() {
+        const uri = `/tournaments/${tournamentId}/groups`;        
+        const res = await fetch(uri, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "DELETE"
+        });
+        tournament = await res.json();
+        computeUngroupedTeams(); 
+    }
     
 
 </script>
@@ -83,6 +129,9 @@
 
     <label for="name">Nombre de poules : </label>
     <input type="text" name = "number" id="number" class="w3-input" bind:value={groupNumber}/>
+    <button on:click={createGroups}>Générer les poules</button>
+    <button on:click={deleteGroups}>Supprimer toutes les poules</button>
+    
 
 </div>
 
@@ -99,4 +148,16 @@
 {:else}
     <p>no groups</p>
 {/if}
+</div>
+<!-- équipes non affectées -->
+
+<div class="w3-container w3-cell" style="width:60%">
+    <ul class="w3-ul w3-border w3-card">
+        
+        {#each ungroupedTeams as team}
+        <li  on:click={() => {}}> <!-- style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            -->
+            <span>{team.name}<span>
+        </li>
+        {/each}       
+    </ul>
 </div>

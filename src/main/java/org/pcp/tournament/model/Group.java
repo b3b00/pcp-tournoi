@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="team_table")
+@Table(name="group_table")
 public class Group {
 
     @Id
@@ -26,15 +26,12 @@ public class Group {
 
 
     public Group() {
-teams = new ArrayList<Team>();
-    }
-
-    public Group(String name) {
         teams = new ArrayList<Team>();
     }
 
-    public void AddTeam(Team team) {
-        teams.add(team);
+    public Group(String name) {
+        setName(name);
+        teams = new ArrayList<Team>();
     }
 
     /**
