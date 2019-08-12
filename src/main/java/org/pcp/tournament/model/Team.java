@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 public class Team {
@@ -17,6 +20,10 @@ public class Team {
 
     @OneToOne
     private Player player2;
+
+    @JsonInclude()
+    @Transient
+    private String name;
 
     public Team() {
         
@@ -81,6 +88,27 @@ public class Team {
         this.player2 = player2;
     }
 
+    /**
+     * @return the name
+     */
+    public String getName() {
+        if (isDouble()) {
+            return  getPlayer1().toString() + " || " + getPlayer2().toString();
+        } else {
+            Player player = player1 != null ? player1 : player2;
+            return player.toString();
+        }
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        
+    }
+
+    
+
     public Boolean containsPlayer(Player player) {
         if (player != null) {
         return this.player1.getId() == player.getId()  || 
@@ -103,10 +131,9 @@ public class Team {
     @Override
     public String toString() {
         if (isDouble()) {
-            return "DOUBLE " + getId() + " " + getPlayer1().toString() + " || " + getPlayer2().toString();
+            return "DOUBLE " + getName();
         } else {
-            Player player = player1 != null ? player1 : player2;
-            return "SINGLE " + getId() + " " + player.toString();
+            return "SINGLE " + getName();
         }
     }
 
