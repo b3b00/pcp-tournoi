@@ -211,30 +211,30 @@ COPY public.options (id, is_preset, label, mode, set_length, winning_sets) FROM 
 --
 
 COPY public.player (id, is_licensed, name) FROM stdin;
-80	f	1
-86	f	7
-88	f	9
-89	f	10
-90	f	24
-79	t	1
-81	t	2
-82	t	4
-83	t	5
-84	t	56
-85	t	6
-87	t	8
-115	f	45
-116	t	46
-117	t	444
-118	t	4444
-119	t	444444
-120	f	s
-121	f	sdg
-122	f	s
-133	f	ddfh
-134	f	dsfhdfhsdfhsdfh
-135	f	f
-136	f	z
+80	f	basile
+86	f	genevieve
+88	f	odilon
+89	f	edouard
+90	f	épipahnie
+79	t	raymond
+81	t	lucien
+82	t	alix
+83	t	guilaume
+84	t	paulin
+85	t	tatiana
+87	t	yvettes
+115	f	nina
+116	t	remi
+117	t	marcel
+118	t	roseline
+119	t	prisca
+120	f   marius
+121	f	sebastien
+122	f	agnes
+133	f	vincent
+134	f	bernard
+135	f	francois
+136	f	ananie
 \.
 
 

@@ -93,7 +93,7 @@ public class Team {
      */
     public String getName() {
         if (isDouble()) {
-            return  getPlayer1().toString() + " || " + getPlayer2().toString();
+            return  getPlayer1().toString() + " - " + getPlayer2().toString();
         } else {
             Player player = player1 != null ? player1 : player2;
             return player.toString();

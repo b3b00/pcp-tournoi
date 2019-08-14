@@ -71,7 +71,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return getId()+" - "+getName()+" "+(getIsLicensed()?"X":"");
+        return getName()+" "+(getIsLicensed()?"X":"");
     }
 
     @Override
