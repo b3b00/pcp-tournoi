@@ -1,5 +1,7 @@
 package org.pcp.tournament.model.dto;
 
+import java.util.Date;
+
 import org.pcp.tournament.model.Options;
 
 public class NameAndOptions {
@@ -8,12 +10,15 @@ public class NameAndOptions {
 
     private Options options;
 
+    private Date date;
+
     /**
      * @return the name
      */
     public String getName() {
         return name;
     }
+
     /**
      * @param name the name to set
      */
@@ -35,5 +40,17 @@ public class NameAndOptions {
         this.options = options;
     }
 
-}
+    /**
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
 
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+}

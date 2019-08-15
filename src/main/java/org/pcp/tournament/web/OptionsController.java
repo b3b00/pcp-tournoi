@@ -56,7 +56,9 @@ public class OptionsController {
                 options = optionsDao.save(nameAndOptions.getOptions());
             }
             Tournament tournament = new Tournament(nameAndOptions.getName());
+            tournament.setDate(nameAndOptions.getDate());
             tournament.setOptions(options);
+
             Tournament tour = tournamentDao.save(tournament);
 
             return tour.getId();
@@ -72,12 +74,14 @@ public class OptionsController {
         try {
             Tournament tournament = tournamentDao.findById(id);
             if (tournament != null) {
+                tournament.setDate(nameAndOptions.getDate());
                 tournament.setName(nameAndOptions.getName());
                 Options options = tournament.getOptions();
                 Options newOptions = nameAndOptions.getOptions();                
                 if (options.getIsPreset()) {
                     if (newOptions.getIsPreset() && newOptions.getId() != options.getId()) {
-                        newOptions = optionsDao.findById(newOptions.getId());                        
+                        newOptions = optionsDao.findById(newOptions.getId());     
+                                           
                         tournament.setOptions(newOptions);
                     }
                     else if(!newOptions.getIsPreset()) {
