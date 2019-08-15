@@ -28,8 +28,8 @@
         group = group;
     });
 
-    function unTeam(group, team) {
-        //dispatch("unteam", { 'team':team,'player':player });
+    function unGroup(group, team) {
+        dispatch("unGroup", { 'group':group,'team':team });
     }
 
     function selectGroup(state) {
@@ -37,19 +37,16 @@
         dispatch("selectionChanged",state);
     }
 
-     function teamName(team) {
-         return `${team.player1} - ${team.player2}`;
-     }
+  
 </script>
 
 {#if (group.teams != null || group.teams.length > 0)}
-<SelectableUL on:selectionChanged={selectGroup} selected={selected} >
+<SelectableUL on:selectionChanged={selectGroup} selected={selected} label={group.name}>
     {#each group.teams  as team}
 
    
     <li class="w3-display-container">
-        {team.name} 
-        <!-- <span on:click="{() => {unTeam(team,team.player1<span class={team.name ? "fa fa-star w3-display-center" : ""}></span>)}}" class="w3-button w3-display-right">&times;</span>         -->
+        {team.name} <span on:click="{() => {unGroup(group,team)}}" class="w3-button w3-display-right">&times;</span>
     </li>
    
    

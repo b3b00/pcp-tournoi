@@ -25,6 +25,8 @@
 
     export let selected = false;
 
+    export let label = "";
+
     function setHeaderStyle() {
         if (selected) {
             selectClass = "w3-display-container selected header";
@@ -41,7 +43,7 @@
     }
 </script>
 <ul class="w3-ul w3-border w3-card" >
-    <li class="{selectClass}" on:click={selectItem} >&nbsp;
+    <li class="{selectClass}" on:click={selectItem} >{label != null ? label : "&nbsp;"}
 
     </li>
     <slot></slot>

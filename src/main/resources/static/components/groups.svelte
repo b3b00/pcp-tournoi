@@ -48,6 +48,17 @@
   
 
     function selectGroup(group, data) {
+        group.selected = data.detail.state;
+        tournament.groups.forEach(g => {
+            if (g.id == group.id) {
+                g.selected = data.detail.detail.state;
+            }
+            else {
+                if (g.selected === undefined) {
+                    g.selected = false;
+                }
+            }
+        })
     }
 
     async function computeUngroupedTeams() {
@@ -96,6 +107,50 @@
     }
     
 
+    function onUnGroup(data) {
+        let group = data.detail.group;
+        let team = data.detail.team;
+        unGroup(group, team);
+    }
+
+    async function unGroup(group, team) {
+        if (group != null && team != null) {
+            tournament.groups.forEach(async g => {
+                if (g != null) {
+                    let found = false;
+                    let teamIn = g.teams.filter(t => t.id == team.id);
+
+                    if (teamIn != null && teamIn.length > 0) {
+                        let teams = g.teams.filter(t => t.id != team.id);
+                        g.teams = teams;
+                        const uri = `/tournaments/${tournamentId}/groups`;        
+                        const res = await fetch(uri, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            method: "PUT",
+                            body:JSON.stringify(g)
+                        });
+                        tournament = await res.json();
+                        computeUngroupedTeams(); 
+                    }
+                }
+            });
+            tournament.teams = tournament.teams;
+            computeUnTeamedPlayers();
+        } 
+    }
+
+    function selectUngroupedTeam(team) {
+        let realTeam = ungroupedTeams.find(t => t.id == team.id);
+        realTeam.selected = !realTeam.selected;
+        ungroupedTeams = ungroupedTeams;
+    }
+
+    async function buildGroup() {
+    }
+
 </script>
 
 <div class="w3-panel w3-card startDialog" >
@@ -116,7 +171,7 @@
     <ul class="w3-ul w3-border w3-card">
     {#each tournament.groups as group}
             <li class="w3-display-container">        
-                <Group group={group}  on:selectionChanged={(data) => { selectGroup(group,data) }}/>       
+                <Group group={group} on:unGroup={onUnGroup} on:selectionChanged={(data) => { selectGroup(group,data) }}/>       
                 <!-- <Group group={group} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectGroup(group,data) }}/>        -->
             </li>
     {/each}
@@ -125,13 +180,22 @@
     <p>no groups</p>
 {/if}
 </div>
+
+<!-- action sur les équipes et joueurs -->
+<div class="w3-container w3-cell" style="width:10%">
+   
+    <button on:click={buildGroup} class="fa fa-arrow-left">        
+    </button>
+
+</div>
+
 <!-- équipes non affectées -->
 
 <div class="w3-container w3-cell" style="width:60%">
     <ul class="w3-ul w3-border w3-card">
         
         {#each ungroupedTeams as team}
-        <li  on:click={() => {}}> <!-- style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            -->
+        <li  on:click={() => {selectUngroupedTeam(team)}} style={team.selected ? "background-color:lightgray;" : "background-color:white"}>            
             <span>{team.name}<span>
         </li>
         {/each}       
