@@ -41,7 +41,7 @@
 </script>
 
 {#if (group.teams != null || group.teams.length > 0)}
-<SelectableUL on:selectionChanged={selectGroup} selected={selected} label={group.name}>
+<SelectableUL on:selectionChanged={selectGroup} selected={selected} label={"Poule "+group.name}>
     {#each group.teams  as team}
 
    

@@ -22,7 +22,8 @@ public class GroupsStrategies {
         }
         try {
         for (int i = 0; i < groupNumber; i++) {
-            Group group = new Group(i+"");            
+            String name = Character.toString ((char) i+65);
+            Group group = new Group(name);            
             for (int j = 0; j < baseTeamNumber; j++) {
                 int randomIndex = rnd.nextInt(indexes.size());
                 int ti = indexes.get(randomIndex);
