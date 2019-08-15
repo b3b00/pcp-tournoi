@@ -2,11 +2,7 @@
     button.hide {
         display:none;
         visibility:hidden;
-    }
-    input.hide {
-        display:none;
-        visibility:hidden;
-    }
+    }    
 </style>
 <script>
 

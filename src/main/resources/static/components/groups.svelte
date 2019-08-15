@@ -23,56 +23,32 @@
         tournament = {
             id: tournamentId,
             teams: [],
+            groups: [],
             players: []
         };
 
         if (tournamentId != -1) {
             await load(); 
-            //stub();
         }
 
     });
 
 
     async function load() {
+        try {
         const res = await fetch(`/tournaments/${tournamentId}`);
-        tournament = await res.json();        
+        tournament = await res.json(); 
+        computeUngroupedTeams();
+        }        
+        catch(error) {       
+            console.log(error);
+        }
     }
     
-    // function p(i) {
-    //     return {
-    //         name: "palyer "+i,
-    //         id: i,
-    //         isLicensed:(i%2 == 0)
-    //     };
-    // }
+  
 
-    // function t(i) {
-    //     let player1 = p(i);
-    //     let player2 = p(i+1);
-    //     return {
-    //         id:i,
-    //         player1 : player1,
-    //         player2 : player2,
-    //         name:`${player1.name} - ${player2.name}` 
-    //     }
-    // }
-
-    // function g(i) {
-    //     return {
-    //         id:i,
-    //         name:"group "+i,
-    //         teams:[t(i),t(i+1)],            
-    //     }
-    // }
-
-    //  function stub() {
-    //      tournament.groups = [g(1),g(5)];   
-    //      console.log(tournament.groups);         
-    //  }
-
-     function selectGroup(group, data) {
-     }
+    function selectGroup(group, data) {
+    }
 
     async function computeUngroupedTeams() {
         ungroupedTeams = [];
@@ -84,7 +60,7 @@
             })
         });
         }        
-        unTeamedPlayers = substract(tournament.groups, grouped);
+        ungroupedTeams = substract(tournament.teams, grouped);
     }
 
     function substract(a, b) {    
