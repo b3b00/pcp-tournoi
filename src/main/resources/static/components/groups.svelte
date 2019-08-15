@@ -149,6 +149,32 @@
     }
 
     async function buildGroup() {
+        let selectedTeams = ungroupedTeams.filter(t => t.selected);
+        let selectedGroups = tournament.groups.filter(g => g.selected);
+        if (selectedGroups.length == 1) {
+            let group = selectedGroups[0];
+            if (selectedTeams.length > 0) {
+                selectedTeams.forEach(t => group.teams.push(t));
+                const uri = `/tournaments/${tournamentId}/groups`;        
+                        const res = await fetch(uri, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            method: "PUT",
+                            body:JSON.stringify(group)
+                        });
+                        tournament = await res.json();
+                        computeUngroupedTeams(); 
+
+            }
+            else {
+                alert('Vous devez sélectionner au moins 1 équipe.')
+            }
+        }
+        else {
+            alert('Vous devez sélectionner une et une seule poule')
+        }
     }
 
 </script>

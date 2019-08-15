@@ -75,7 +75,6 @@ public class GroupsController {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             if (!tournament.getGroups().isEmpty()) {
-                List<Group> groups = tournament.getGroups();
                 Group modifiedGroup = groupDao.findById(group.getId());
                 modifiedGroup.getTeams().clear();
                 for (Team t : group.getTeams()) {
