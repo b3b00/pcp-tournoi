@@ -18,13 +18,33 @@
         const res = await fetch(`/tournaments/${tournamentId}`);
         tournament = await res.json();        
         players = tournament.players;
+        countLicensees();
+        countNotLicensees
     }
 
- 
+    let countLic = 0;
+    function countLicensees() {
+        let count = 0;
+        players.forEach(p => {
+            if (p.isLicensed) {
+                count ++;
+            }
+        });
+        countLic = count;
+    }
+
+
+    let countNonLic = 0;
+    function countNotLicensees() {
+        countNonLic = players.length - countLic;
+
+    }
 
 
 </script>
-<p>{tournament.name} - {tournament.id}</p>
+<p>{players.length} joueurs</p>
+<p>{countLic} licenciés</p>
+<p>{countNonLic} non licenciés</p>
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
 <tr>
     <th>nom</th>

@@ -6,7 +6,8 @@
 
     const modes = {
         RANDOM: "RANDOM",
-        MIX: "MIX"
+        MIX: "MIX",
+        SINGLE : "SINGLE"
     }
 
     const dispatch = createEventDispatcher();
@@ -29,6 +30,9 @@
 
         if (tournamentId != -1) {
             await load(); 
+            if (tournament != null && tournament.options.mode == "SINGLE") {
+                single();
+            }
         }
 
     });
@@ -62,7 +66,9 @@
         return res;
     }
 
-
+    async  function single() {
+        computeTemas(modes.SINGLE)
+    }
 
     async function random() {
         computeTeams(modes.RANDOM);
@@ -300,7 +306,17 @@
 {:else} 
 
 <hr/>
-<p>tournoi en simple, pas besoin d'équipes</p>
+<div class="w3-container w3-cell" style="width:60%">
+    <ul class="w3-ul w3-border w3-card">
+        {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
+        {#each tournament.teams as team}
+        <li>            
+            <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
+        </li>
+        {/each} 
+        {/if}      
+    </ul>
+</div>
 {/if}
 
 

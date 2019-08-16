@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TeamDao;
 import org.pcp.tournament.dao.TournamentDao;
+import org.pcp.tournament.model.Mode;
 import org.pcp.tournament.model.Player;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
@@ -153,6 +154,10 @@ public class TeamsController {
             if (players.size() % 2 == 0) {
                 List<Team> teams = new ArrayList<Team>();
                 switch (mode) {
+                case SINGLE: {
+                    teams= TeamStrategies.single(players, teamDao);
+                    break;
+                }
                 case RANDOM: {
                     teams = TeamStrategies.pureRandom(players, teamDao);
                     break;
