@@ -245,10 +245,7 @@
 
 </script>
 
-{#if (tournament !== null && tournament !== undefined &&
-    tournament.options !== null && tournament.options !== undefined && 
-    tournament.options.mode == "DOUBLE")}
-    <br/>
+{#if (tournament !== null && tournament !== undefined && tournament.options !== null && tournament.options !== undefined && tournament.options.mode == "DOUBLE")} // DOUBLE    <br/>
     <hr/>
     <br/>
     <button on:click={random}>hasard total</button>
@@ -263,56 +260,56 @@
 
     <!-- équipes -->    
     <div class="w3-container w3-cell" style="width:60%">
+        {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
+            <ul class="w3-ul w3-border w3-card">
+            {#each tournament.teams as team}
+                {#if (!isTeamEmpty(team))}
+                    <li class="w3-display-container">        
+                    <Team team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
+                    </li>
+                {/if} // null team
+            {/each} // each team (double)
+            </ul>
+        {:else} // /has teams
+            <p>no teams</p>
+        {/if} // /has teams
+        </div>
+        {#if (unTeamedPlayers.length > 0)}
+            <!-- action sur les équipes et joueurs -->
+            <div class="w3-container w3-cell" style="width:10%">
+
+            <button on:click={buildTeam} class="fa fa-arrow-left">        
+            </button>
+
+            </div>
+
+            <!-- joueurs non affectés -->
+
+            <div class="w3-container w3-cell" style="width:60%">
+            <ul class="w3-ul w3-border w3-card">
+
+            {#each unTeamedPlayers as player}
+                <li  on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
+                <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
+                </li>
+            {/each}   // each unteamed    
+            </ul>
+            </div>
+        {/if} // has unteamed
+{:else} // /DOUBLE
+    <hr/>
+    <div class="w3-container w3-cell" style="width:60%">
+    <ul class="w3-ul w3-border w3-card">
     {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
-        <ul class="w3-ul w3-border w3-card">
         {#each tournament.teams as team}
-        {#if (!isTeamEmpty(team))}
-            <li class="w3-display-container">        
-            <Team team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
+            <li>            
+            <span>{team.name}</span>
             </li>
-            {/if}
-        {/each}
-        </ul>
-    {:else}
-        <p>no teams</p>
-    {/if}
-    </div>
-    {#if (unTeamedPlayers.length > 0)}
-        <!-- action sur les équipes et joueurs -->
-        <div class="w3-container w3-cell" style="width:10%">
-
-        <button on:click={buildTeam} class="fa fa-arrow-left">        
-        </button>
-
-        </div>
-
-        <!-- joueurs non affectés -->
-
-        <div class="w3-container w3-cell" style="width:60%">
-        <ul class="w3-ul w3-border w3-card">
-
-        {#each unTeamedPlayers as player}
-            <li  on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
-            <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
-            </li>
-        {/each}       
-        </ul>
-        </div>
-    {/if}
-{:else} 
-<hr/>
-<div class="w3-container w3-cell" style="width:60%">
-<ul class="w3-ul w3-border w3-card">
-{#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
-    {#each tournament.teams as team}
-        <li>            
-        <span>{team.name}</span>
-        </li>
-    {/each} 
-{/if}      
-</ul>
+        {/each} // each team(single)
+    {/if}  // has team (single)    
+    </ul>
 </div>
-{/if}
+{/if} // /SINGLE
 
 
 </div>
