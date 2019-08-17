@@ -18,25 +18,27 @@
         const res = await fetch(`/tournaments/${tournamentId}`);
         tournament = await res.json();        
         players = tournament.players;
-        countLicensees();
-        countNotLicensees
+        countLic =  await countLicensees();
+        countNonLic = await countNotLicensees()
     }
 
     let countLic = 0;
-    function countLicensees() {
+    let countNonLic = 0;
+
+    async function countLicensees() {
         let count = 0;
         players.forEach(p => {
             if (p.isLicensed) {
                 count ++;
             }
         });
-        countLic = count;
+        return count;
     }
 
 
-    let countNonLic = 0;
-    function countNotLicensees() {
-        countNonLic = players.length - countLic;
+    
+    async function countNotLicensees() {
+        return  players.length - countLic;
 
     }
 

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TeamDao;
 import org.pcp.tournament.dao.TournamentDao;
-import org.pcp.tournament.model.Mode;
 import org.pcp.tournament.model.Player;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
@@ -43,17 +42,17 @@ public class TeamsController {
         return teams;
     }
 
-    @PostMapping(value="/tournaments/{tournamentId}/teams/{teamId}/player/{playerId}")
+    @PostMapping(value = "/tournaments/{tournamentId}/teams/{teamId}/player/{playerId}")
     public ResponseEntity<?> addPlayerToTeam(@PathVariable int tournamentId, @PathVariable int teamId,
-    @PathVariable int playerId) {
+            @PathVariable int playerId) {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             Team team = teamDao.findById(teamId);
             if (team != null) {
                 Player player = playerDao.findById(playerId);
                 if (player != null) {
-                    team.addPlayer(player);                    
-                    teamDao.save(team);                    
+                    team.addPlayer(player);
+                    teamDao.save(team);
                     tournament = tournamentDao.findById(tournamentId);
                     return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
                 }
@@ -144,38 +143,43 @@ public class TeamsController {
 
     @PostMapping("/tournaments/{tournamentId}/teams/create/{mode}")
     public ResponseEntity<?> createTeams(@PathVariable int tournamentId, @PathVariable TeamStrategiesEnum mode) {
-
+        List<Team> teams = new ArrayList<Team>();
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             List<Player> players = tournament.getPlayers();
             if (!tournament.getTeams().isEmpty()) {
                 clearTeams(tournamentId);
             }
-            if (players.size() % 2 == 0) {
-                List<Team> teams = new ArrayList<Team>();
-                switch (mode) {
-                case SINGLE: {
-                    teams= TeamStrategies.single(players, teamDao);
-                    break;
+            if (mode == TeamStrategiesEnum.SINGLE) {
+                teams = TeamStrategies.single(players, teamDao);
+            } else {
+                if (players.size() % 2 == 0) {
+                    switch (mode) {
+                        case SINGLE: {
+                            teams = TeamStrategies.single(players, teamDao);
+                            break;
+                        }
+                        case RANDOM: {
+                            teams = TeamStrategies.pureRandom(players, teamDao);
+                            break;
+                        }
+                        case MIX: {
+                            teams = TeamStrategies.mixLicensees(players, teamDao);
+                            break;
+                        }
+                    }
+                } else {
+                    return new ResponseEntity<String>("nombre de joueur doit être pair (" + players.size() + ")",
+                            HttpStatus.BAD_REQUEST);
                 }
-                case RANDOM: {
-                    teams = TeamStrategies.pureRandom(players, teamDao);
-                    break;
-                }
-                case MIX: {
-                    teams = TeamStrategies.mixLicensees(players, teamDao);
-                    break;
-                }
-                }
+
                 tournament.setTeams(teams);
                 tournament = tournamentDao.save(tournament);
                 return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<String>("nombre de joueur doit être pair (" + players.size() + ")",
-                        HttpStatus.BAD_REQUEST);
             }
         }
-        return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
-    }
 
+        return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+
+    }
 }

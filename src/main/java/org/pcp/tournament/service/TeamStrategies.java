@@ -20,11 +20,8 @@ public class TeamStrategies {
 
 
     public static List<Team> single(List<Player> players, TeamDao teamDao) {
-        Random rnd = new Random();
         List<Team> teams = new ArrayList<Team>();
         
-        int count = players.size();
-        List<Integer> playersIds = players.stream().map((Player p) -> p.getId()).collect(Collectors.toList());
         for (Player player : players) {
             Team team = new Team(player, null);
             teamDao.save(team);
