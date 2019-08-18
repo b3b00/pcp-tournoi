@@ -67,7 +67,7 @@
     }
 
     async  function single() {
-        computeTemas(modes.SINGLE)
+        computeTeams(modes.SINGLE)
     }
 
     async function random() {
