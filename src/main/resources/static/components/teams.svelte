@@ -319,7 +319,7 @@
         {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
         {#each tournament.teams as team}
         <li>            
-            <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
+            <span>{team.name}</span>
         </li>
         {/each} 
         {/if}      
