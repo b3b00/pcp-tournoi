@@ -152,6 +152,9 @@ public class TeamsController {
             }
             if (mode == TeamStrategiesEnum.SINGLE) {
                 teams = TeamStrategies.single(players, teamDao);
+                tournament.setTeams(teams);
+                tournament = tournamentDao.save(tournament);
+                return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
             } else {
                 if (players.size() % 2 == 0) {
                     switch (mode) {
