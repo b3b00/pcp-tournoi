@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +33,7 @@ public class Tournament {
     @OneToMany
     private List<Group> groups;
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date date;
 
     public Tournament() {

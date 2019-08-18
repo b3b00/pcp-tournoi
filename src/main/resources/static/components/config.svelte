@@ -73,6 +73,7 @@
                         const opt = tournament.options;
                         tournamentOptions = opt;                        
                         tournamentName = tournament.name;
+                        tournamentDate = tournament.date;
                         dispatch("setTournament", { 'tournamentId': id })
                     }
                 );
@@ -221,7 +222,6 @@
 </div>
 </div>
 <br/>
-
 <button on:click={saveTournament} >Enregistrer</button>
 
 
