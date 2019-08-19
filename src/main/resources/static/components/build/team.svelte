@@ -32,7 +32,7 @@
 </script>
 
 {#if (team.player1 != null || team.player2 != null)}
-<SelectableUL on:selectionChanged={selectTeam} selected={selected} on:drop>
+<SelectableUL on:selectionChanged={selectTeam} selected={selected} on:drop payload={team}>
 
 
     {#if (team.player1 != null)}

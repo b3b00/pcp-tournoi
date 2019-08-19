@@ -13,7 +13,6 @@
 <script>
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-    //import Player from './player.svelte';
 
     const dispatch = createEventDispatcher();
 
@@ -24,6 +23,8 @@
     });
 
     export let selected = false;
+
+    export let payload = {};
 
     export let label = "";
 
@@ -45,7 +46,7 @@
     function dropped(ev) {
         console.log("UL dropped");
         console.log(ev);
-        dispatch("drop",{event:ev});
+        dispatch("drop",{event:ev,payload:payload});
     }
 
 </script>

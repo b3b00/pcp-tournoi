@@ -3,32 +3,19 @@
         
                 function dragstart (player) {
                     return function(ev) {
-                        console.log("dragging");
-                        console.log(player);
+
                         ev.dataTransfer.setData("application/json", JSON.stringify(player));
                     }
-                    //ev.dataTransfer.setData("item", item);
                 }
-                function dragover (ev) {
-                    ev.preventDefault();
-                    ev.dataTransfer.dropEffect = 'move';
-                }
-                function drop (team) {
-                    return async function(ev) {
+                
+                function drop (ev) {
                         ev.preventDefault();
-                        console.log("dropped");
-                        let detail = ev.detail;
-                        console.log(detail);
-                        let event = detail.event;
-                        console.log(event);
-                        let data = event.dataTransfer;
-                        console.log(data);
-                        let pjson = data.getData('application/json');                        
-                        console.log(pjson);
-                        let player = JSON.parse(pjson);
-                        console.log(player);        
-                        addPlayer(team,player);
-                    }
+                        let pjson = ev.detail.event.dataTransfer.getData('application/json');                        
+                        let player = JSON.parse(pjson);                        
+                        let realteam = ev.detail.payload;
+                        if (realteam.player1 == null || realteam.player2 == null) {
+                            addPlayer(realteam,player);
+                        }
                 }
              
 
@@ -295,17 +282,6 @@
 
 <button on:click={clear}>tout supprimer</button>
 
-<span id="dropper">target</span>
-<script defer>
-document.querySelector('#dropper').addEventListener('dragover', function(e) {
-    e.preventDefault(); // Annule l'interdiction de drop
-});
-
-document.querySelector('#dropper').addEventListener('drop', function(e) {
-    e.preventDefault(); // Annule l'interdiction de drop
-    console.log(e);
-});
-</script>
 <div>
 
 <!-- équipes -->    
@@ -315,7 +291,7 @@ document.querySelector('#dropper').addEventListener('drop', function(e) {
     {#each tournament.teams as team}
         {#if (!isTeamEmpty(team))}
             <li class="w3-display-container">        
-                <Team on:drop={drop(team)} team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
+                <Team on:drop={drop} team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
             </li>
         {/if}
     {/each}
