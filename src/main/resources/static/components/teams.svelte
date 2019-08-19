@@ -79,7 +79,7 @@
     }
 
     async function clear() {
-        const uri = `/tournaments/${tournamentId}/teams/delete`;        
+        const uri = `/tournaments/${tournamentId}/teams`;        
         const res = await fetch(uri, {
             headers: {
                 'Accept': 'application/json',
@@ -92,7 +92,7 @@
     }
 
     async function computeTeams(mode) {
-        const uri = `/tournaments/${tournamentId}/teams/create/${mode}`;        
+        const uri = `/tournaments/${tournamentId}/teams/$create?mode=${mode}`;        
         const res = await fetch(uri, {
             headers: {
                 'Accept': 'application/json',
@@ -124,7 +124,7 @@
                         found = true;
                     }
                     if (found) {
-                        const uri = `/tournaments/${tournamentId}/teams/${team.id}`;        
+                        const uri = `/tournaments/${tournamentId}/teams/${team.id}/$update`;        
                         const res = await fetch(uri, {
                             headers: {
                                 'Accept': 'application/json',
@@ -144,7 +144,7 @@
     }
 
     async function createTeam(player1, player2 ) {
-        const uri = `/tournaments/${tournament.id}/teams/player1/${player1.id}/player2/${player2.id}`;
+        const uri = `/tournaments/${tournament.id}/teams?player1=${player1.id}&player2=${player2.id}`;
         const res = await fetch(uri,
             {
                 headers: {
@@ -225,14 +225,14 @@
         if (selectedPlayers.length == 1 && selectedTeams.length == 1) {
             const team = selectedTeams[0];
             const player = selectedPlayers[0];
-            const uri = `/tournaments/${tournament.id}/teams/${team.id}/player/${player.id}`;
+            const uri = `/tournaments/${tournament.id}/teams/${team.id}?player=${player.id}`;
             const res = await fetch(uri,
             {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                method: "POST"
+                method: "PUT"
             });
             tournament = await res.json();
             computeUnTeamedPlayers();
