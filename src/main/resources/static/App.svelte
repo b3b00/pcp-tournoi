@@ -5,6 +5,14 @@
 	li.selectable {
 		cursor: pointer;
 	}
+	button.selected {
+		background-color: lightgray;
+		font-weight: bold;
+	}
+	button.notSelected {
+		background-color: white;
+		font-weight: normal;
+	}
 </style>
 <script>
 	const notSelectedStyle = "w3-bar selectable";
@@ -58,6 +66,7 @@
 				t.class= notSelectedStyle;
 			}
 		});
+		tournaments = tournaments;
 	}
 
 </script>
@@ -65,9 +74,9 @@
 <div class="w3-panel w3-card startDialog">
 
 		<p style="display:inline">
-				<button on:click={() => changeState(STATE.HOME)}>Accueil</button>
-				<button on:click={() => changeState(STATE.BUILD)}>Configuration</button>
-				<button on:click={() => changeState(STATE.RUN)}>Jeu</button>	 			
+				<button class={(state == STATE.HOME) ? "selected" : "notSelected"} on:click={() => changeState(STATE.HOME)}>Accueil</button>
+				<button class={(state == STATE.BUILD) ? "selected" : "notSelected"} on:click={() => changeState(STATE.BUILD)}>Configuration</button>
+				<button class={(state == STATE.RUN) ? "selected" : "notSelected"} on:click={() => changeState(STATE.RUN)}>Jeu</button>	 			
 			</p>
 </div>
 
