@@ -51,13 +51,13 @@ const states = {
 
 <Layout on:one="{onConfig}" on:two="{onPlayers}" on:three="{onTeams}" on:four="{onGroups}" tournamentId={tournamentId}>
 	{#if (state == states.CONFIG) }
-		<Config on:done="{onPlayers}" tournamentId={tournamentId} on:setTournament={setTournament}/>
+		<Config ournamentId={tournamentId} on:setTournament={setTournament}/>
 	{:else if (state == states.PLAYERS)}
-		<Players tournamentId={tournamentId} on:back={onConfig} on:next={onTeams}/>
+		<Players tournamentId={tournamentId} />
 	{:else if (state == states.TEAMS)}	
-		<Teams on:back={onPlayers} tournamentId={tournamentId} on:next={onGroups}/>
+		<Teams tournamentId={tournamentId} />
 	{:else if (state == states.GROUPS)}
-		<Groups on:back={onTeams} tournamentId={tournamentId} />
+		<Groups tournamentId={tournamentId} />
 	{:else}
 		<p>unknwon state <strong>{state}</strong></p>
 	{/if}
