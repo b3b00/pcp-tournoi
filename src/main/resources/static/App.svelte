@@ -1,5 +1,14 @@
+<style>
+	li.selected {
+		background-color: lightgray;
+	}
+	li.selectable {
+		cursor: pointer;
+	}
+</style>
 <script>
-
+	const notSelectedStyle = "w3-bar selectable";
+	const selectedStyle = notSelectedStyle+" selected";
 
 	const STATE = {
 		BUILD : "build",
@@ -39,6 +48,16 @@
 
 	function setTournament(newTournamentId ) {
 		tournamentId = newTournamentId;
+		tournaments.forEach(t => {
+			if (t.id == newTournamentId) {
+				t.selected = true;
+				t.class = selectedStyle;
+			}
+			else {
+				t.selected = false;
+				t.class= notSelectedStyle;
+			}
+		});
 	}
 
 </script>
@@ -59,10 +78,15 @@
 
 <ul class="w3-ul w3-border">
 {#each tournaments as tournament}
-	<li class="w3-bar" style="cursor: pointer;" on:click={() => {setTournament(tournament.id);}}> 
-		{tournament.name}
+	<li on:click={() => {setTournament(tournament.id);}} class={tournament.class}>
+		
+		<span>{tournament.name}</span><br>
+		<span><i>{tournament.date}</i></span>
 	</li>
 {/each}
+<li on:click={() => {setTournament(-1);}} class={notSelectedStyle}>		
+		<span>nouveau tournoi</span><br>		
+	</li>
 </ul>
 
 {/if}
