@@ -81,7 +81,7 @@
 
 
     async function createGroups() {
-        const uri = `/tournaments/${tournamentId}/groups/${groupNumber}`;        
+        const uri = `/tournaments/${tournamentId}/groups?number=${groupNumber}`;        
         const res = await fetch(uri, {
             headers: {
                 'Accept': 'application/json',

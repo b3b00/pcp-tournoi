@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,13 +33,6 @@ public class GroupsController {
 
     @Autowired
     TeamDao teamDao;
-
-    @GetMapping(value = "/tournaments/{tournamentId}/groups")
-    public List<Group> getAll(@PathVariable int tournamentId) {
-        Tournament tournament = tournamentDao.findById(tournamentId);
-        List<Group> groups = tournament.getGroups();
-        return groups;
-    }
 
     private Tournament clearGroups(Tournament tournament) {
         List<Group> groups = new ArrayList<Group>();
@@ -55,8 +49,22 @@ public class GroupsController {
         return tournament;
     }
 
-    @PostMapping("/tournaments/{tournamentId}/groups/{number}")
-    public ResponseEntity<?> createGroups(@PathVariable int tournamentId, @PathVariable int number) {
+
+//region [GET]
+
+    @GetMapping(value = "/tournaments/{tournamentId}/groups")
+    public List<Group> getAll(@PathVariable int tournamentId) {
+        Tournament tournament = tournamentDao.findById(tournamentId);
+        List<Group> groups = tournament.getGroups();
+        return groups;
+    }
+
+//endregion    
+
+//region [POST]    
+
+    @PostMapping("/tournaments/{tournamentId}/groups")
+    public ResponseEntity<?> createGroups(@PathVariable int tournamentId, @RequestParam("number") int number) {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             if (!tournament.getGroups().isEmpty()) {
@@ -69,6 +77,8 @@ public class GroupsController {
         }
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     }
+
+//region [PUT]
 
     @PutMapping("/tournaments/{tournamentId}/groups")
     public ResponseEntity<?> unGroup(@PathVariable int tournamentId, @RequestBody Group group) {
@@ -91,6 +101,10 @@ public class GroupsController {
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     }
 
+//endregion
+
+//region [DELETE]
+
     @DeleteMapping("tournaments/{tournamentId}/groups")
     public ResponseEntity<?> deleteGroups(@PathVariable int tournamentId) {
         Tournament tournament = tournamentDao.findById(tournamentId);
@@ -102,5 +116,7 @@ public class GroupsController {
         }
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     }
+
+//endregion    
 
 }
