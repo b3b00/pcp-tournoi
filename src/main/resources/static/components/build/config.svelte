@@ -140,14 +140,14 @@
         tournamentOptions = optionsByName["SINGLE"];
     }
 
-    async function fetchTournaments() {
-        const res = await fetch('/tournaments');
-        tournaments = await res.json();
-        tournaments.forEach(t => {
-            tournamentsById[t.id] = t;
-            tournamentItems.push({ "label": `${t.name}`, "value": `${t.id}` });
-        })
-    }
+    // async function fetchTournaments() {
+    //     const res = await fetch('/tournaments');
+    //     tournaments = await res.json();
+    //     tournaments.forEach(t => {
+    //         tournamentsById[t.id] = t;
+    //         tournamentItems.push({ "label": `${t.name}`, "value": `${t.id}` });
+    //     })
+    // }
 
     async function fetchTournament(id) {
         const res = await fetch(`/tournaments/${id}`);
@@ -160,7 +160,6 @@
 
     onMount(async () => {
         fetchPresetOptions();
-        fetchTournaments();
         if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {
             fetchTournament(tournamentId);
         }
@@ -168,22 +167,6 @@
 
 </script>
 
-
-<div class="w3-panel w3-card startDialog">
-
-
-    <ul class="w3-ul w3-border">
-        <li>
-            <h2>Names</h2>
-        </li>
-        {#each tournaments as tournament}
-                <li class="w3-bar" style="cursor: pointer;" on:click={() => {loadTournament(tournament.id);}}> <!--on:click={() => {opentTournament(tournament.id);}}>-->
-                    {tournament.name}
-                </li>
-                
-                {/each}
-                </ul>
-</div>
 
 
 <div class="w3-panel w3-card startDialog" >

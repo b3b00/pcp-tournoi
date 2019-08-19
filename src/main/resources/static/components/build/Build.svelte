@@ -17,11 +17,16 @@
         import Teams from './teams.svelte';
         import Groups from './groups.svelte';
     
-        
+        import { onMount } from 'svelte';    
             
         let state=states.CONFIG;
-        let tournamentId = -1;
+        export let tournamentId = -1;
     
+
+        onMount(async () => {
+            tournamentId = tournamentId;
+        });
+
         function onConfig(data) {
             tournamentId = data.detail.tournamentId;
             state=states.CONFIG;
@@ -51,7 +56,7 @@
     
     <Layout on:one="{onConfig}" on:two="{onPlayers}" on:three="{onTeams}" on:four="{onGroups}" tournamentId={tournamentId}>
         {#if (state == states.CONFIG) }
-            <Config ournamentId={tournamentId} on:setTournament={setTournament}/>
+            <Config tournamentId={tournamentId} on:setTournament={setTournament}/>
         {:else if (state == states.PLAYERS)}
             <Players tournamentId={tournamentId} />
         {:else if (state == states.TEAMS)}	
