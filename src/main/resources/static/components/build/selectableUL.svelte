@@ -41,8 +41,15 @@
         setHeaderStyle();
         dispatch("selectionChanged",{state:selected});
     }
+
+    function dropped(ev) {
+        console.log("UL dropped");
+        console.log(ev);
+        dispatch("drop",{event:ev});
+    }
+
 </script>
-<ul class="w3-ul w3-border w3-card" >
+<ul class="w3-ul w3-border w3-card" on:drop={dropped} on:dragover={(e) => {e.preventDefault();}}>
     <li class="{selectClass}" on:click={selectItem} >{label != null ? label : "&nbsp;"}
 
     </li>
