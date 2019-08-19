@@ -12,7 +12,7 @@
     import { beforeUpdate, afterUpdate } from 'svelte'; 
 
  	import Build from './components/build/Build.svelte';
-	import Run from './components/run/Run.svelte';
+	import Run from './components/run/run.svelte';   
 
 
 	let tournamentId = -1;
