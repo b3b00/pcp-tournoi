@@ -70,7 +70,7 @@
         <tr>
             <td></td>
                 {#each scores as score,i (score)}
-                <td align="center">{i}</td>
+                <td align="center">{i+1}</td>
                 {/each}
         </tr>
         <tr>
