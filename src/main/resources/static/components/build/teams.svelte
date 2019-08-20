@@ -1,14 +1,14 @@
 
 <script>
         
-    function dragstart (player) {
+    function dragstartPlayer (player) {
         return function(ev) {
 
             ev.dataTransfer.setData("application/json", JSON.stringify(player));
         }
     }
     
-    function drop (ev) {
+    function dropPlayerOnTeam (ev) {
             ev.preventDefault();
             let pjson = ev.detail.event.dataTransfer.getData('application/json');                        
             let player = JSON.parse(pjson);                        
@@ -17,7 +17,16 @@
                 addPlayer(realteam,player);
             }
     }
-             
+
+    function dropPlayerOnPlayer (sourceplayer) {
+        return function(ev) {
+            ev.preventDefault();
+            let pjson = ev.dataTransfer.getData('application/json');                        
+            let targetplayer = JSON.parse(pjson);                        
+            createTeam(sourceplayer,targetplayer);
+        }
+    } 
+
 
     import Team from './team.svelte';
     import { onMount } from 'svelte';
@@ -291,7 +300,7 @@
     {#each tournament.teams as team}
         {#if (!isTeamEmpty(team))}
             <li class="w3-display-container">        
-                <Team on:drop={drop} team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
+                <Team on:drop={dropPlayerOnTeam} team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
             </li>
         {/if}
     {/each}
@@ -315,7 +324,11 @@
     <ul class="w3-ul w3-border w3-card">
         
         {#each unTeamedPlayers as player (player.id)}
-        <li  draggable=true on:dragstart={dragstart(player)} on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
+        <li  draggable=true on:dragover={(e) => {e.preventDefault();}} 
+                            on:drop={dropPlayerOnPlayer(player)} 
+                            on:dragstart={dragstartPlayer(player)} 
+                            on:click={() => {selectUnteamedPlayer(player)}} 
+                            style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
             <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
         </li>
         {/each}       
