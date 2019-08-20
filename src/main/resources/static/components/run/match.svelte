@@ -2,12 +2,28 @@
     td.teamName {
         font-weight: bold;
     }
+    tr {
+        padding: 0 0 0 0; 
+        border : 0 0 0 0;
+    }
+    td {
+        width:20px;
+        text-align: center;
+        padding: 0 0 0 0; 
+        border : 0 0 0 0;
+    }
+    input {
+        width:50%;
+    }
+    table {
+        padding: 0 0 0 0; 
+        border : 0 0 0 0;
+        width:500px;
+    }
 </style>
 <script>
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-
-    export let tournamentId;
 
     export let tournament;
 
@@ -15,22 +31,19 @@
 
     export let team2;
 
-    export let team1Id;
-
-    export let team2Id;
-
-    export let setCount = 1;
-
     let scores = [];
 
+
+
     function initScores() {
+        let setCount = 1;
         if (tournament.options !== undefined && tournament.options.winningSets > 1) {
             setCount = 2 * tournament.options.winningSets - 1;
         }
         else {
             setCount = 1;
         }
-        console.log(`initialize scores for a ${setCount} sets` );
+        
         for (let i = 0; i < setCount; i++) {
             scores.push({ left: "0", right: "1" });
         }
@@ -40,11 +53,6 @@
     
 
     onMount(async () => {
-        console.log("tournamentId : " + tournamentId);
-        console.log(team1);
-        console.log(team2);
-        console.log(tournament);
-        //initScores();
     });
 
 
@@ -56,7 +64,7 @@
     }
 
 </script>
-<div class="w3-container">
+
 
     <table>
         <tr>
@@ -80,4 +88,3 @@
             {/each}
         </tr>
     </table>
-</div>
