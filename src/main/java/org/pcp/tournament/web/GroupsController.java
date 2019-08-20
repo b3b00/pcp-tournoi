@@ -87,6 +87,8 @@ public class GroupsController {
             if (!tournament.getGroups().isEmpty()) {
                 Group modifiedGroup = groupDao.findById(group.getId());
                 modifiedGroup.getTeams().clear();
+                groupDao.save(modifiedGroup);
+                modifiedGroup = groupDao.findById(group.getId());                
                 for (Team t : group.getTeams()) {
                     Team team = teamDao.findById(t.getId());
                     if (team != null) {
