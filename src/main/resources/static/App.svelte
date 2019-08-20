@@ -71,6 +71,9 @@
 				}
 			});
 		}
+		if (newTournamentId == -1) {
+			state = STATE.BUILD;
+		}
 		tournaments = tournaments;
 	}
 
@@ -93,6 +96,7 @@
 
 {#if state == STATE.HOME}
 
+
 <ul class="w3-ul w3-border">
 {#if tournaments != null && tournaments.length > 0}
 	{#each tournaments as tournament}
@@ -103,7 +107,7 @@
 		</li>
 	{/each}
 {/if}
-<li on:click={() => {setTournament(-1);}} class={notSelectedStyle}>		
+<li on:click={() => {setTournament(-1);}} class={tournamentId == -1 ? selectedStyle : notSelectedStyle}>		
 		<span>nouveau tournoi</span><br>		
 	</li>
 </ul>
@@ -113,6 +117,7 @@
 
 {#if (state == STATE.BUILD)}
 	<Build tournamentId={tournamentId}></Build>
-{:else}
+{/if}
+{#if (state == STATE.RUN)}
 	<Run tournamentId={tournamentId}></Run>
 {/if}
