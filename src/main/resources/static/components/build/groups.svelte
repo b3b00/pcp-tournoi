@@ -4,6 +4,28 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
 
+
+    function dragstart (team) {
+        console.log(`dragstart event for ${team.id} - ${team.name}`);
+        return function(ev) {
+            let content = JSON.stringify(team);
+            console.log(`start drag ${content}`);
+            ev.dataTransfer.setData("application/json", content);
+        }
+    }
+    
+    function drop (ev) {
+            ev.preventDefault();
+            let tjson = ev.detail.event.dataTransfer.getData('application/json');                        
+            let team = JSON.parse(tjson);                        
+            let realGroup = ev.detail.payload;
+            if (realGroup != null) {                
+                addTeams([team],realGroup);
+                computeUngroupedTeams();
+            }
+    }
+
+
     const modes = {
         RANDOM: "RANDOM",
         MIX: "MIX"
@@ -138,7 +160,7 @@
                 }
             });
             tournament.teams = tournament.teams;
-            computeUnTeamedPlayers();
+            computeUngroupedTeams();
         } 
     }
 
@@ -154,18 +176,19 @@
         if (selectedGroups.length == 1) {
             let group = selectedGroups[0];
             if (selectedTeams.length > 0) {
-                selectedTeams.forEach(t => group.teams.push(t));
-                const uri = `/tournaments/${tournamentId}/groups`;        
-                        const res = await fetch(uri, {
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            method: "PUT",
-                            body:JSON.stringify(group)
-                        });
-                        tournament = await res.json();
-                        computeUngroupedTeams(); 
+                addTeam(selectedTeams,group);
+                // selectedTeams.forEach(t => group.teams.push(t));
+                // const uri = `/tournaments/${tournamentId}/groups`;        
+                //         const res = await fetch(uri, {
+                //             headers: {
+                //                 'Accept': 'application/json',
+                //                 'Content-Type': 'application/json'
+                //             },
+                //             method: "PUT",
+                //             body:JSON.stringify(group)
+                //         });
+                //         tournament = await res.json();
+                //         computeUngroupedTeams(); 
 
             }
             else {
@@ -175,6 +198,21 @@
         else {
             alert('Vous devez sélectionner une et une seule poule')
         }
+    }
+
+    async function addTeams(teams, group) {
+        teams.forEach(t => group.teams.push(t));
+        const uri = `/tournaments/${tournamentId}/groups`;        
+        const res = await fetch(uri, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body:JSON.stringify(group)
+        });
+        tournament = await res.json();
+        computeUngroupedTeams(); 
     }
 
 </script>
@@ -197,7 +235,7 @@
     <ul class="w3-ul w3-border w3-card">
     {#each tournament.groups as group}
             <li class="w3-display-container">        
-                <Group group={group} on:unGroup={onUnGroup} on:selectionChanged={(data) => { selectGroup(group,data) }}/>       
+                <Group on:drop={drop} group={group} on:unGroup={onUnGroup} on:selectionChanged={(data) => { selectGroup(group,data) }}/>       
                 <!-- <Group group={group} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectGroup(group,data) }}/>        -->
             </li>
     {/each}
@@ -220,8 +258,8 @@
 <div class="w3-container w3-cell" style="width:60%">
     <ul class="w3-ul w3-border w3-card">
         
-        {#each ungroupedTeams as team}
-        <li  on:click={() => {selectUngroupedTeam(team)}} style={team.selected ? "background-color:lightgray;" : "background-color:white"}>            
+        {#each ungroupedTeams as team (team.id)}
+        <li draggable=true on:dragstart={dragstart(team)}  on:click={() => {selectUngroupedTeam(team)}} style={team.selected ? "background-color:lightgray;" : "background-color:white"}>            
             <span>{team.name}<span>
         </li>
         {/each}       
