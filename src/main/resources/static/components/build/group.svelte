@@ -19,7 +19,19 @@
     
     function computeTeamNames() {
         group.teams.forEach(t => {
-            t.name = t.player1.name + " - "+t.player2.name;
+            let name = "";
+            if (t.player1 != null)  {
+                if (t.player2 != null) {
+                    name = t.player1.name + " - "+t.player2.name;
+                }
+                else {
+                    name = t.player1.name;
+                }
+            }
+            else if (t.player2 != null) {
+                name = t.player2.name;
+            }
+            t.name = name;
         })
     }
 
@@ -41,7 +53,7 @@
 </script>
 
 {#if (group.teams != null || group.teams.length > 0)}
-<SelectableUL on:selectionChanged={selectGroup} selected={selected} label={"Poule "+group.name}>
+<SelectableUL on:drop on:selectionChanged={selectGroup} payload={group} selected={selected} label={"Poule "+group.name}>
     {#each group.teams  as team}
 
    
