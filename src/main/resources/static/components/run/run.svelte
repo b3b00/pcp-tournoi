@@ -27,9 +27,32 @@
         team2 = tournament.teams[1];
     }
 
+    let startIndex = 0;
+
+    function showDial() {
+        var dialog = document.querySelector('dialog');
+        if (startIndex < tournament.teams.length-2) {
+            team1 = tournament.teams[startIndex];
+            team2 = tournament.teams[startIndex+1];
+            dialog.show();
+        }
+    }
+
+    function hideDial() {
+        var dialog = document.querySelector('dialog');
+        dialog.close();
+    }
+
 </script>
 <p> coming ...</p>
-<Match tournament={tournament} team1={team1} team2={team2} >
-    
-</Match>
+<input type="number" placeholder="0" bind:value={startIndex}/>
+<button on:click={showDial}>show</button>
+<dialog >
+
+    <Match tournament={tournament} team1={team1} team2={team2} >
+    </Match>
+
+    <button on:click={hideDial}>Close</button>
+
+</dialog>    
 

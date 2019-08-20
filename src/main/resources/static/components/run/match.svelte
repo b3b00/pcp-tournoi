@@ -80,8 +80,4 @@
             {/each}
         </tr>
     </table>
-    
-    {#each scores as score (score)}
-    <p>{score.left} - {score.right}</p>
-    {/each}
 </div>
