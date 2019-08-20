@@ -1,22 +1,22 @@
 
 <script>
         
-                function dragstart (player) {
-                    return function(ev) {
+    function dragstart (player) {
+        return function(ev) {
 
-                        ev.dataTransfer.setData("application/json", JSON.stringify(player));
-                    }
-                }
-                
-                function drop (ev) {
-                        ev.preventDefault();
-                        let pjson = ev.detail.event.dataTransfer.getData('application/json');                        
-                        let player = JSON.parse(pjson);                        
-                        let realteam = ev.detail.payload;
-                        if (realteam.player1 == null || realteam.player2 == null) {
-                            addPlayer(realteam,player);
-                        }
-                }
+            ev.dataTransfer.setData("application/json", JSON.stringify(player));
+        }
+    }
+    
+    function drop (ev) {
+            ev.preventDefault();
+            let pjson = ev.detail.event.dataTransfer.getData('application/json');                        
+            let player = JSON.parse(pjson);                        
+            let realteam = ev.detail.payload;
+            if (realteam.player1 == null || realteam.player2 == null) {
+                addPlayer(realteam,player);
+            }
+    }
              
 
     import Team from './team.svelte';
@@ -314,7 +314,7 @@
 <div class="w3-container w3-cell" style="width:60%">
     <ul class="w3-ul w3-border w3-card">
         
-        {#each unTeamedPlayers as player}
+        {#each unTeamedPlayers as player (player.id)}
         <li  draggable=true on:dragstart={dragstart(player)} on:click={() => {selectUnteamedPlayer(player)}} style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
             <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
         </li>
