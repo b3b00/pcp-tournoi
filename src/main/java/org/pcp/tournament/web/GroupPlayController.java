@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pcp.tournament.dao.GroupDao;
+import org.pcp.tournament.dao.GroupPhaseDao;
 import org.pcp.tournament.dao.GroupPlayDao;
 import org.pcp.tournament.dao.MatchDao;
 import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.Group;
+import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Match;
 import org.pcp.tournament.model.Options;
@@ -35,6 +37,9 @@ public class GroupPlayController {
     GroupPlayDao groupPlayDao;
 
     @Autowired
+    GroupPhaseDao groupPhaseDao;
+
+    @Autowired
     MatchDao matchDao;
 
     @Autowired
@@ -43,8 +48,14 @@ public class GroupPlayController {
     // region [GET]
 
     @GetMapping(value = "/groupPlay/{groupPlayId}")
-    public GroupPlay getPGroupPlay(@PathVariable int groupPlayId) {
+    public GroupPlay getGroupPlay(@PathVariable int groupPlayId) {
         GroupPlay groupPlay = groupPlayDao.findById(groupPlayId);
+        return groupPlay;
+    }
+
+    @GetMapping(value = "/groupPhase/{groupPhaseId}")
+    public GroupPhase getGroupPhase(@PathVariable int groupPhaseId) {
+        GroupPhase groupPlay = groupPhaseDao.findById(groupPhaseId);
         return groupPlay;
     }
 
@@ -54,13 +65,13 @@ public class GroupPlayController {
 
     // region [POST]
 
-    @PostMapping("/tournaments/{tournamentId}/groupPlays/$create")
-    public ResponseEntity<?> createGroupPlays(@PathVariable int tournamentId) {
+    @PostMapping("/tournaments/{tournamentId}/groupPhase/$create")
+    public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId) {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             try {
                 Options options = tournament.getOptions();
-                List<GroupPlay> groupPlays = new ArrayList<GroupPlay>();
+                GroupPhase phase = new GroupPhase();
 
                 for (Group group : tournament.getGroups()) {
                     GroupPlay play = new GroupPlay();
@@ -83,9 +94,10 @@ public class GroupPlayController {
                     }
                     play.setMatches(matches);
                     groupPlayDao.save(play);
-
+                    phase.addGroupPlay(play);
                 }
-                return new ResponseEntity<List<GroupPlay>>(groupPlays, HttpStatus.OK);
+                phase = groupPhaseDao.save(phase);
+                return new ResponseEntity<GroupPhase>(phase, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<String>("error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
