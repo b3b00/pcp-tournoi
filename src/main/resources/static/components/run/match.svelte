@@ -31,40 +31,16 @@
 
     export let tournament;
 
-    export let team1;
-
-    export let team2;
+    export let match;
 
     let scores = [];
-
-
-
-    function initScores() {
-        let setCount = 1;
-        if (tournament.options !== undefined && tournament.options.winningSets > 1) {
-            setCount = 2 * tournament.options.winningSets - 1;
-        }
-        else {
-            setCount = 1;
-        }
-        
-        for (let i = 0; i < setCount; i++) {
-            scores.push({ left: "0", right: "1" });
-        }
-        scores = scores;
-    }
-
-    
 
     onMount(async () => {
     });
 
 
     $:{
-        tournament = tournament;
-        if (tournament.options !== undefined && (scores == undefined || scores.length == 0)) {
-            initScores();
-        }
+        tournament = tournament;        
     }
 
 </script>
@@ -73,21 +49,19 @@
     <table>
         <tr>
             <td></td>
-                {#each scores as score,i (score)}
+                {#each match.score as score,i (score)}
                 <td align="center">{i+1}</td>
                 {/each}
         </tr>
         <tr>
-            <td class="teamName">{team1.name}</td>
-            {#each scores as score (score)}
-            <!---->
+            <td class="teamName">{match.leftTeam.name}</td>
+            {#each match.score as score (score)}
             <td><input type="number" min="0" placeholder="0" bind:value={score.left} /></td>
             {/each}
         </tr>
         <tr>
-            <td class="teamName">{team2.name}</td>
-            {#each scores as score (score)}
-            <!-- bind:value={score.right}--> 
+            <td class="teamName">{match.rightTeam.name}</td>
+            {#each match.score as score (score)}
             <td><input type="number" min="0" placeholder="0" bind:value={score.right} /></td>
             {/each}
         </tr>

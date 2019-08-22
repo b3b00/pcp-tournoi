@@ -53,4 +53,9 @@
     <div class="w3-half {rightStyle}">
       </div>
   </div>
+  <!--
+    TODO : 
+  <Match match={match}>
+  </Match>
+  -->
 </div>
