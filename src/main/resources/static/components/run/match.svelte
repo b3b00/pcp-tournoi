@@ -1,3 +1,7 @@
+<!-- display editable match -->
+<!-- uses :
+  - 0 
+-->
 <style>
     td.teamName {
         font-weight: bold;
