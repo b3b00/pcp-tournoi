@@ -18,7 +18,6 @@
     export let groupPlay;
   
     onMount(() => {
-      
     })
   
     function openGroup() {
@@ -26,18 +25,20 @@
     }
 
     function openMatch() {
-
+      
     }
   
   </script>
   
 
-  <div on:click={openGroup}>
+  {#if groupPlay != null && groupPlay.rankings != null}
+  <div class="w3-container" on:click={openGroup}>
 
-    <ul>
-      <li><h2>group {groupPlay.group.name}}</h2></li>
-      {# each groupPlay.rankings ranking} 
+    <ul class="w3-ul w3-border">
+      <li><h2>group {groupPlay.group.name}</h2></li>
+      {#each groupPlay.rankings as ranking} 
         <li>{ranking.team.name} - {ranking.points} </li>
       {/each}
     </ul>
   </div>
+  {/if}
