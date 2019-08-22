@@ -54,12 +54,16 @@ public class GroupPlayController {
     }
 
     @GetMapping(value = "/groupPhase/{groupPhaseId}")
-    public GroupPhase getGroupPhase(@PathVariable int groupPhaseId) {
-        GroupPhase groupPlay = groupPhaseDao.findById(groupPhaseId);
-        return groupPlay;
+    public ResponseEntity<?> getGroupPhase(@PathVariable int groupPhaseId) {
+        GroupPhase groupPhase = groupPhaseDao.findById(groupPhaseId);
+        if (groupPhase != null) {
+            for (GroupPlay group : groupPhase.getGroups()) {
+                group.computeRanking();
+            }
+            return new ResponseEntity<GroupPhase>(groupPhase, HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("la phase de poule " + groupPhaseId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     }
-
-    // TODO get group phase ?
 
     // endregion
 
@@ -67,6 +71,7 @@ public class GroupPlayController {
 
     @PostMapping("/tournaments/{tournamentId}/groupPhase/$create")
     public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId) {
+        List<Tournament> all = tournamentDao.findAll();
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             try {

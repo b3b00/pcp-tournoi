@@ -4,13 +4,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 import org.pcp.tournament.model.Team;
+import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.dao.GroupDao;
 import org.pcp.tournament.model.Group;
 
 
 public class GroupsStrategies {
 
-    public static List<Group> createGroups(List<Team> teams, int groupNumber, GroupDao groupDao) {
+    public static List<Group> createGroups(Tournament tournament, int groupNumber, GroupDao groupDao) {
+        List<Team> teams = tournament.getTeams();
         List<Group> groups = new ArrayList<Group>();        
         int baseTeamNumber = teams.size() / groupNumber;
         int remainingNumber = teams.size() % groupNumber;
@@ -31,6 +33,7 @@ public class GroupsStrategies {
                 Team team = teams.get(ti);
                 group.addTeam(team);
             }
+            group.setTournament(tournament);
             groupDao.save(group);
             groups.add(group);
         }
