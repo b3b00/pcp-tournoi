@@ -10,13 +10,19 @@
     export let items = {}
 
     function onClick(index) {
-        dispatch("click", { 'items': items.slice(0, index) });
+        // let newCrumb = items;
+        // if (index > 0) {
+            let newCrumb = items.slice(0,index+1);
+        // }
+        dispatch("click", { 'items': newCrumb });
     }
 
 </script>
 
 {#each items as item,i}
 
-    <a href="#" on:click={() => {onClick(i)}}</a>}>{item.name}</a>
+    <span>&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>
+    <span style="cursor: pointer" on:click={() => {onClick(i)}}>{item.label}</span>
+    
 
 {/each}

@@ -45,7 +45,7 @@ est un composant "layout" :
 
 <script>
 
-    let currentcrumb;
+    let currentBreadCrumb;
 
     function breadCrumbCallback(data) {
         /*
@@ -70,6 +70,13 @@ est un composant "layout" :
    // racine : run, rien à afficher
 {/if}
 ```
+
+## comment gérer les liens d'avancée ?
+
+normalement juste un push d'item dans run doit faire le job si on vient ensuite modifier la propriété currentBreadCrumb.
+
+chaque component doit pouvoir lever un dispatch "moveCrumb" trappé par run.svelte
+
 
 # matchs
 les matchs s'ouvrent dans des dialog modales (se sont les derniers éléments).

@@ -8,6 +8,7 @@
   </style>
   
   <script>
+    import {mover} from './nav.js';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
   
@@ -17,11 +18,17 @@
   
     export let groupPlay;
   
-    onMount(() => {
-    })
+
+  let moveMe;
+
+  onMount(() => {
+        moveMe = mover(dispatch);
+    });
   
-    function openGroup() {
-      dispatch("open", { 'group': groupPlay })
+    function openGroup() {     
+        moveMe("group ", "poule "+groupPlay.group.name,"group",groupPlay.id);
+    // }
+    //   dispatch("open", { 'group': groupPlay })
     }
 
     function openMatch() {
@@ -32,7 +39,7 @@
   
 
   {#if groupPlay != null && groupPlay.rankings != null}
-  <div class="w3-container" on:click={openGroup}>
+  <div class="w3-container" on:click={openGroup} >
 
     <ul class="w3-ul w3-border">
       <li><h4>group {groupPlay.group.name}</h4></li>

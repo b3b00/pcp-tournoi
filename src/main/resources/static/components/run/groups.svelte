@@ -5,16 +5,29 @@
 
 <script>
 
+  import {mover} from './nav.js';
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 
   import GroupPreview from './group_preview.svelte';
+
+  const dispatch = createEventDispatcher();
+
+  let moveMe;
+
+  onMount(() => {
+        moveMe = mover(dispatch);
+    });
+
+    function onclickGroup(group) {        
+        moveMe("group "+group.name, "group "+group.name,"group",group.id);
+    }
   
   export let phase;
 
 </script>
 {#if phase !== null && phase !== undefined}
   {#each phase.groups as group} 
-      <GroupPreview groupPlay={group}></GroupPreview>
+      <GroupPreview groupPlay={group} on:move></GroupPreview>
   {/each}
 {/if}
