@@ -6,8 +6,11 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="group_table")
@@ -23,7 +26,9 @@ public class Group {
     private List<Team> teams;
 
     
-
+    @ManyToOne
+    @JsonIgnore
+    private Tournament tournament;
 
     public Group() {
         teams = new ArrayList<Team>();
@@ -86,6 +91,20 @@ public class Group {
 
     public void addTeams(List<Team> teams) {
         teams.addAll(teams);
+    }
+
+    /**
+     * @return the tournament
+     */
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    /**
+     * @param tournament the tournament to set
+     */
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
     }
 
     @Override

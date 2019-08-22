@@ -30,7 +30,7 @@ public class Tournament {
     @OneToMany
     private List<Team> teams;
 
-    @OneToMany
+    @OneToMany(mappedBy="tournament")
     private List<Group> groups;
 
     @JsonFormat(pattern="yyyy-MM-dd")
