@@ -22,8 +22,16 @@ public class Match {
     @OneToOne
     private Team leftTeam;
 
+    @Transient
+    @JsonInclude
+    private int leftWonSet = 0;
+
     @OneToOne
     private Team rightTeam;
+
+    @Transient
+    @JsonInclude
+    private int rightWonSet = 0;
 
     @OneToMany
     private List<MatchSet> score;
@@ -103,6 +111,34 @@ public class Match {
         this.winner = winner;
     }
 
+    /**
+     * @return the leftWonSet
+     */
+    public int getLeftWonSet() {
+        return leftWonSet;
+    }
+
+    /**
+     * @param leftWonSet the leftWonSet to set
+     */
+    public void setLeftWonSet(int leftWonSet) {
+        this.leftWonSet = leftWonSet;
+    }
+
+    /**
+     * @return the rightWonSet
+     */
+    public int getRightWonSet() {
+        return rightWonSet;
+    }
+
+    /**
+     * @param rightWonSet the rightWonSet to set
+     */
+    public void setRightWonSet(int rightWonSet) {
+        this.rightWonSet = rightWonSet;
+    }
+
     public int pointDifference(Team team) {
         if (team.getId() == getLeft().getId())  {
             return leftPointDifference();
@@ -129,25 +165,25 @@ public class Match {
     }
 
     public void compute(Options options) {
-        int leftWon = 0;
-        int rightWon = 0;
+        leftWonSet = 0;
+        rightWonSet = 0;
         for (MatchSet matchSet : getScore()) {
             Team setWinner = winner(matchSet, options);
             if (setWinner != null) {
                 if (setWinner.getId() == getLeft().getId()) {
-                    leftWon++;
+                    leftWonSet++;
                 }
                 else {
-                    rightWon++;
+                    rightWonSet++;
                 }
             }
         }
         setIsEnded(false);
-        if (leftWon >= options.getWinningSets()) {
+        if (leftWonSet >= options.getWinningSets()) {
             setWinner(getLeft());
             setIsEnded(true);
         }
-        if (rightWon >= options.getWinningSets()) {
+        if (rightWonSet >= options.getWinningSets()) {
             setWinner(getRight());
             setIsEnded(true);
         }
