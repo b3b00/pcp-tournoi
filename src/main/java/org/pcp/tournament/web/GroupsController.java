@@ -70,7 +70,7 @@ public class GroupsController {
             if (!tournament.getGroups().isEmpty()) {
                 clearGroups(tournament);
             }
-            List<Group> groups = GroupsStrategies.createGroups(tournament.getTeams(), number, groupDao);
+            List<Group> groups = GroupsStrategies.createGroups(tournament, number, groupDao);
             tournament.setGroups(groups);
             tournament = tournamentDao.save(tournament);
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
