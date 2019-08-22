@@ -71,7 +71,6 @@ public class GroupPlayController {
 
     @PostMapping("/tournaments/{tournamentId}/groupPhase/$create")
     public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId) {
-        List<Tournament> all = tournamentDao.findAll();
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             try {
