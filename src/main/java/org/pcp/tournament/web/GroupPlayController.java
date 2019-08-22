@@ -7,12 +7,14 @@ import org.pcp.tournament.dao.GroupDao;
 import org.pcp.tournament.dao.GroupPhaseDao;
 import org.pcp.tournament.dao.GroupPlayDao;
 import org.pcp.tournament.dao.MatchDao;
+import org.pcp.tournament.dao.RunDao;
 import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.Group;
 import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Match;
 import org.pcp.tournament.model.Options;
+import org.pcp.tournament.model.Run;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.service.MatchService;
@@ -41,6 +43,9 @@ public class GroupPlayController {
 
     @Autowired
     MatchDao matchDao;
+
+    @Autowired
+    RunDao runDao;
 
     @Autowired
     MatchService matchService;
@@ -101,7 +106,15 @@ public class GroupPlayController {
                     phase.addGroupPlay(play);
                 }
                 phase = groupPhaseDao.save(phase);
-                return new ResponseEntity<GroupPhase>(phase, HttpStatus.OK);
+                Run run = tournament.getRun();
+                if (run == null) {
+                    run = new Run(tournament,phase);
+                }
+                run.setGroupPhase(phase);
+                runDao.save(run);
+                tournament.setRun(run);
+                tournamentDao.save(tournament);
+                return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<String>("error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }

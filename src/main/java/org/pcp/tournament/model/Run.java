@@ -1,0 +1,64 @@
+package org.pcp.tournament.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+public class Run {
+
+
+    @Id
+    @GeneratedValue
+    private int id;
+
+    @JsonIgnore
+    @OneToOne
+    private Tournament tournament;
+
+    @OneToOne
+    private GroupPhase groupPhase;
+
+    //TODO private FinalPhases finalPhases;
+
+    public Run() {
+        this.tournament = null;
+        this.groupPhase =null;
+    }
+
+    public Run(Tournament tournament, GroupPhase groupPhase) {
+        this.tournament = tournament;
+        this.groupPhase = groupPhase;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public GroupPhase getGroupPhase() {
+        return groupPhase;
+    }
+
+    public void setGroupPhase(GroupPhase groupPhase) {
+        this.groupPhase = groupPhase;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
+
+    
+
+
+}

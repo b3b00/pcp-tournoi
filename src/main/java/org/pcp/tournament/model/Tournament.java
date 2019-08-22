@@ -33,12 +33,23 @@ public class Tournament {
     @OneToMany(mappedBy="tournament")
     private List<Group> groups;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @OneToOne(mappedBy="tournament")
+    private Run run;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     public Tournament() {
         players = new ArrayList<Player>();
         teams = new ArrayList<Team>();
+    }
+
+    public Run getRun() {
+        return run;
+    }
+
+    public void setRun(Run run) {
+        this.run = run;
     }
 
     public Date getDate() {

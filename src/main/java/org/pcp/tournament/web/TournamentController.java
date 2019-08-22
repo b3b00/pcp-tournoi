@@ -8,6 +8,8 @@ import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TeamDao;
 import org.pcp.tournament.dao.TournamentDao;
+import org.pcp.tournament.model.GroupPhase;
+import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,16 @@ public class TournamentController {
     @GetMapping(value = "/tournaments/{id}")
     public Tournament getTournament(@PathVariable int id) {
         Tournament tournament = tournamentDao.findById(id);
+        if (tournament.getRun() != null && tournament.getRun().getGroupPhase() != null) {
+            GroupPhase groupPhase = tournament.getRun().getGroupPhase();
+            if (groupPhase.getGroups() != null) {
+                for (GroupPlay group : groupPhase.getGroups()) {
+                    if (group != null) {
+                        group.computeRanking();
+                    }
+                }
+            }
+        }
         return tournament;
     }
 
