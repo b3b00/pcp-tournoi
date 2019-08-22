@@ -8,13 +8,13 @@
 
 <style>
   span.winner {
-    color:red;
+    color:green;
   }
   span.loser {
-    color:black;
+    color:red;
   }
   span.defaultStyle {
-    color:black;
+    color:rgb(26, 25, 25);
   }
 </style>
 
@@ -40,12 +40,12 @@
   })
 
   function openMatch() {
-    dispatch("setTournament", { 'match': match })
+    dispatch("open", { 'match': match })
   }
 
 </script>
 
-<div on:click="openMatch">
+<div on:click={openMatch}>
   <div class="w3-row-padding">
     <div class="w3-half {leftStyle}">
       {match.leftTeam.name} (leftWonSet) - {match.rightTeam.name} (rightWonSet)
