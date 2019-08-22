@@ -73,6 +73,20 @@ public class GroupPlay {
         this.matches = matches;
     }
 
+    /**
+     * @return the rankings
+     */
+    public List<TeamRanking> getRankings() {
+        return rankings;
+    }
+
+    /**
+     * @param rankings the rankings to set
+     */
+    public void setRankings(List<TeamRanking> rankings) {
+        this.rankings = rankings;
+    }
+
     public void computeRanking() {
         rankings = new ArrayList<TeamRanking>();
         for (Team team : getGroup().getTeams()) {
