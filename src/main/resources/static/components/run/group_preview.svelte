@@ -35,7 +35,7 @@
   <div class="w3-container" on:click={openGroup}>
 
     <ul class="w3-ul w3-border">
-      <li><h2>group {groupPlay.group.name}</h2></li>
+      <li><h4>group {groupPlay.group.name}</h4></li>
       {#each groupPlay.rankings as ranking} 
         <li>{ranking.team.name} - {ranking.points} </li>
       {/each}
