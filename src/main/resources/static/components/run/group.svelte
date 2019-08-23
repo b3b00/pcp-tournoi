@@ -14,7 +14,7 @@
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 
-  import GroupPreview from './group_preview.svelte';
+  import MatchPreview from './match_preview.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -29,4 +29,7 @@
 
 </script>
 
-<h3>GROUP {groupPlay.group.name} contains {groupPlay.group.teams.length} teams</h3>
+<!-- TODO titre du groupe ? -->
+  {#each groupPlay.matches as match,i}
+    <MatchPreview match={match} on:move/>
+  {/each}

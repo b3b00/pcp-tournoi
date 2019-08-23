@@ -26,6 +26,7 @@
 
   export let match;
 
+
   let leftStyle;
 
   let rightStyle;
@@ -40,17 +41,19 @@
   })
 
   function openMatch() {
-    dispatch("open", { 'match': match })
+    alert("will open match later");
+    // dispatch("open", { 'match': match })
   }
 
 </script>
 
 <div on:click={openMatch}>
-  <div class="w3-row-padding">
+  <div class="w3-third w3-row-padding w3-container">
     <div class="w3-half {leftStyle}">
-      {match.leftTeam.name} (leftWonSet) - {match.rightTeam.name} (rightWonSet)
+      {match.left.name} ({match.leftWonSet})
     </div>
     <div class="w3-half {rightStyle}">
+        {match.right.name} ({match.rightWonSet})
       </div>
   </div>
   <!--
