@@ -73,6 +73,7 @@
         body: JSON.stringify(savedMatch)
       });
     match = await res.json();
+    dispatch('matchSaved',{});
     setStyle();    
   }
 

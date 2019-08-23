@@ -109,9 +109,9 @@ public class GroupPlay {
             }
 
             TeamRanking ranking = new TeamRanking(team, points, difference);
-            rankings.add(ranking);
-            Collections.sort(rankings);
+            rankings.add(ranking);            
         }
+        Collections.sort(rankings);
     }
 
     

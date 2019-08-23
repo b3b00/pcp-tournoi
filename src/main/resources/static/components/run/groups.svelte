@@ -5,7 +5,7 @@
 
 <script>
 
-  import {mover} from './nav.js';
+  import {tools} from './tools.js';
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 
@@ -16,7 +16,7 @@
   let moveMe;
 
   onMount(() => {
-        moveMe = mover(dispatch);
+        moveMe = tools.mover(dispatch);
     });
 
     function onclickGroup(group) {        

@@ -59,4 +59,8 @@ public class TeamRanking implements Comparable<TeamRanking> {
         return team.hashCode() + points + difference;
     }
 
+    public String toString() {
+        return team.getName()+" - "+getPoints()+" - "+getDifference();
+    }
+
 }

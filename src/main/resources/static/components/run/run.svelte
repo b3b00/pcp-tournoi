@@ -17,7 +17,7 @@
     import BreadCrumb from './breadcrumb.svelte';
     import GroupPhase from './groups.svelte';
     import Group from './group.svelte';
-    import { mover } from './nav.js';
+    import { tools } from './tools.js';
     import { onMount } from "svelte";
     import { createEventDispatcher } from "svelte";
 
@@ -45,8 +45,7 @@
 
     let currentItem;
 
-    onMount(async () => {
-        // moveMe = mover(dispatch);
+    onMount(async () => {        
         currentBreadCrumb = [
             {
                 "name": "run", "label": "run", "path": "run", "id": "1"
@@ -59,9 +58,8 @@
 
     });
 
-    async function fetchTournament(id) {
-        const res = await fetch(`/tournaments/${id}`);
-        tournament = await res.json();
+    async function fetchTournament(id) {        
+        tournament = await tools.fetchTournament(id);
         tournamentId = tournament.id;
         if (tournament.run == null || tournament.run === undefined) {
             const res = await fetch(`/tournaments/${id}/groupPhase/$create`,
@@ -120,7 +118,6 @@
     {:else if (currentItem.name == "group")}
         <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
     {:else}
-        <p>current state is {currentItem.name} - {currentItem.label}</p>
         <span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>
     {/if}
 {:else}
