@@ -129,14 +129,8 @@
 
 {#if currentItem != null && currentItem !== undefined}
     {#if (currentItem.name == "groupPhase")}
-        {console.log("move to phase - 2")}
-        {console.log(groupPhase)}
-        {console.log("-----")}
         <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
     {:else if (currentItem.name == "group")}
-        {console.log("move to group - 2 ")}         
-        {console.log(group)}
-        {console.log("-----")}
         <Group groupPlay={group} on:move={moveScreen}></Group>
     {:else}
         <p>current state is {currentItem.name} - {currentItem.label}</p>
@@ -144,5 +138,4 @@
     {/if}
 {:else}
 <span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>
-
 {/if}
