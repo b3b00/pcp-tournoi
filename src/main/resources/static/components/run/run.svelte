@@ -85,33 +85,59 @@
     function moveScreen(data) {
         currentBreadCrumb = [...currentBreadCrumb, data.detail];
         currentItem = currentBreadCrumb[currentBreadCrumb.length - 1];
+        navigator(null);
     }
 
+    
+
     function navigator(data) {
-        let newBreadCrumb = data.detail.items;
+        let newBreadCrumb = currentBreadCrumb;
+        if (data != null) {
+            newBreadCrumb = data.detail.items;        
+        }
+        console.log("==============")
+        console.log("===  bread ===")
+        console.log("==============")
+        console.log(newBreadCrumb);
+        console.log("==============")
         newBreadCrumb.forEach(item => {
             fetchTournament(tournamentId);
             if (item.name == "groupPhase") {
+
                 groupPhase = tournament.run.groupPhase;
+                {console.log("move to phase - 1")}
+                {console.log(groupPhase)}
+                {console.log("-----")}
             }
-            if (item.name == "group") {
+            if (item.name == "group") {       
                 group = tournament.run.groupPhase.groups.filter(g => g.id == item.id)[0];
+                {console.log("move to group - 1 ")}         
+                {console.log(group)}
+                {console.log("-----")}
             }
         });
         currentItem = newBreadCrumb[newBreadCrumb.length - 1];
         currentBreadCrumb = newBreadCrumb;
     }
 
+
 </script>
 
 <BreadCrumb items={currentBreadCrumb} on:click={navigator}></BreadCrumb>
 <hr>
 
+
 {#if currentItem != null && currentItem !== undefined}
     {#if (currentItem.name == "groupPhase")}
+        {console.log("move to phase - 2")}
+        {console.log(groupPhase)}
+        {console.log("-----")}
         <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
     {:else if (currentItem.name == "group")}
-        <Group groupPlay={group}></Group>
+        {console.log("move to group - 2 ")}         
+        {console.log(group)}
+        {console.log("-----")}
+        <Group groupPlay={group} on:move={moveScreen}></Group>
     {:else}
         <p>current state is {currentItem.name} - {currentItem.label}</p>
         <span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>

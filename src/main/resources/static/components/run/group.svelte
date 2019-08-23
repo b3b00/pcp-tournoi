@@ -7,3 +7,26 @@
 -->
 
 <!-- TODO -->
+
+<script>
+
+  import {mover} from './nav.js';
+  import { onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
+
+  import GroupPreview from './group_preview.svelte';
+
+  const dispatch = createEventDispatcher();
+
+  let moveMe;
+
+  onMount(() => {
+        moveMe = mover(dispatch);
+  });
+
+  export let groupPlay;
+
+
+</script>
+
+<h3>GROUP {groupPlay.group.name} contains {groupPlay.group.teams.length} teams</h3>

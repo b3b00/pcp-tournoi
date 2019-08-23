@@ -26,7 +26,7 @@
     });
   
     function openGroup() {     
-        moveMe("group ", "poule "+groupPlay.group.name,"group",groupPlay.id);
+        moveMe("group", "poule "+groupPlay.group.name,"group",groupPlay.id);
     // }
     //   dispatch("open", { 'group': groupPlay })
     }
