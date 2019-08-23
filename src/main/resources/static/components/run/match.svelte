@@ -54,15 +54,15 @@
                 {/each}
         </tr>
         <tr>
-            <td class="teamName">{match.leftTeam.name}</td>
+            <td class="teamName">{match.left.name}</td>
             {#each match.score as score (score)}
-            <td><input type="number" min="0" placeholder="0" bind:value={score.left} /></td>
+            <td><input type="text" min="0" placeholder="0" bind:value={score.left} /></td>
             {/each}
         </tr>
         <tr>
-            <td class="teamName">{match.rightTeam.name}</td>
+            <td class="teamName">{match.right.name}</td>
             {#each match.score as score (score)}
-            <td><input type="number" min="0" placeholder="0" bind:value={score.right} /></td>
+            <td><input type="text" min="0" placeholder="0" bind:value={score.right} /></td>
             {/each}
         </tr>
     </table>
