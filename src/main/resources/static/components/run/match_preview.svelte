@@ -28,6 +28,8 @@
 
   export let match;
 
+  export let tournament;
+
 
   let leftStyle;
 
@@ -37,47 +39,46 @@
 
   onMount(() => {
     defaultStyle = "defaultStyle";
-    leftStyle = "w3-half "+defaultStyle;
-    rightStyle = "w3-half "+defaultStyle;
+    leftStyle = defaultStyle;
+    rightStyle = defaultStyle;
     if (match.winner != null) {
-      leftStyle = "w3-half" + (match.winner.id == match.leftTeam.id ? "winnerStyle" : "loserStyle");
-      leftStyle = "w3-half" + (match.winner.id == match.rightTeam.id ? "winnerStyle" : "loserStyle");
+      leftStyle = (match.winner.id == match.leftTeam.id ? "winnerStyle" : "loserStyle");
+      leftStyle = (match.winner.id == match.rightTeam.id ? "winnerStyle" : "loserStyle");
     }
   })
 
   function openMatch(matchId) {
     let dial = document.getElementById(`match_${matchId}`);
+    console.log("typeof showModal : "+(typeof dial.showModal));
     dial.showModal();
   }
 
 </script>
 
 
-<!-- {#if match !== undefined && match != null} -->
 <div >
   <div on:click={() => {openMatch(match.id)}} class="w3-card w3-quarter  w3-container" style="clear:both">
     <div>
     <div class="w3-quarter {leftStyle}">
       {match.left.name}
-    <!-- </div>
-    <div class="w3-quarter {leftStyle}"> -->
+    </div>
+    <div class="w3-quarter {leftStyle}">
        ({match.leftWonSet}) 
     </div>
     <div class="w3-quarter {leftStyle}">
         {match.right.name}
-      <!-- </div>
-      <div class="w3-quarter {leftStyle}"> -->
-         ({match.rightWonSet}) *
+      </div>
+      <div class="w3-quarter {leftStyle}">
+         ({match.rightWonSet}) 
       </div>
     </div>
   </div>
   
     
-    <dialog id="match_{match.id}">
-  <Match match={match}>
-  </Match>  
-    </dialog>
+  <dialog id="match_{match.id}">
+    <Match match={match} tournament={tournament}>
+    </Match>  
+  </dialog>
 
   
 </div>
-<!-- {/if}  -->

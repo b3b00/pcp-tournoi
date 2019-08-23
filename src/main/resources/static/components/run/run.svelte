@@ -131,7 +131,7 @@
     {#if (currentItem.name == "groupPhase")}
         <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
     {:else if (currentItem.name == "group")}
-        <Group groupPlay={group} on:move={moveScreen}></Group>
+        <Group groupPlay={group} tournament={tournament} on:move={moveScreen}></Group>
     {:else}
         <p>current state is {currentItem.name} - {currentItem.label}</p>
         <span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>

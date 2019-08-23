@@ -18,6 +18,8 @@
 
   const dispatch = createEventDispatcher();
 
+  export let tournament;
+
   let moveMe;
 
   onMount(() => {
@@ -31,5 +33,5 @@
 
 <!-- TODO titre du groupe ? -->
   {#each groupPlay.matches as match,i}
-    <MatchPreview match={match} on:move/>
+    <MatchPreview match={match} tournament={tournament} on:move/>
   {/each}
