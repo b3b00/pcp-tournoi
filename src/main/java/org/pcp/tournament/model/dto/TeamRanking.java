@@ -43,12 +43,12 @@ public class TeamRanking implements Comparable<TeamRanking> {
     public int compareTo(TeamRanking other) {
         if (other != null) {
             if (getPoints() > other.getPoints()) {
-                return 1;
+                return -1;
             } else {
-                return Integer.compare(getDifference(), other.getDifference());
+                return -Integer.compare(getDifference(), other.getDifference());
             }
         }
-        return 1;
+        return -1;
     }
 
     public boolean equals(Object o) {

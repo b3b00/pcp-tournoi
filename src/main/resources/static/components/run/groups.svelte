@@ -27,7 +27,9 @@
 
 </script>
 {#if phase !== null && phase !== undefined}
+<div class="w3-container">
   {#each phase.groups as group} 
       <GroupPreview groupPlay={group} on:move></GroupPreview>
   {/each}
+</div>
 {/if}

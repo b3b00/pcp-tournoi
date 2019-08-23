@@ -39,7 +39,7 @@
   
 
   {#if groupPlay != null && groupPlay.rankings != null}
-  <div class="w3-container" on:click={openGroup} >
+  <div class="w3-container w3-quarter" on:click={openGroup} >
 
     <ul class="w3-ul w3-border">
       <li><h4>group {groupPlay.group.name}</h4></li>

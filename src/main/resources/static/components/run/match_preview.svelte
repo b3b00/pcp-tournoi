@@ -80,7 +80,7 @@
 
 
 <div>
-  <div on:click={()=> {openMatch(match.id)}} class="w3-card w3-quarter w3-container" style="clear:both">
+  <div on:click={()=> {openMatch(match.id)}} class="w3-card w3-quarter w3-container w3-margin w3-padding" style="clear:both">
     <div>
       <div class="w3-quarter">
         <span class=" {leftStyle}">
