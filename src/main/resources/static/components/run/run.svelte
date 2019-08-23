@@ -95,31 +95,18 @@
         if (data != null) {
             newBreadCrumb = data.detail.items;        
         }
-        console.log("==============")
-        console.log("===  bread ===")
-        console.log("==============")
-        console.log(newBreadCrumb);
-        console.log("==============")
         newBreadCrumb.forEach(item => {
             fetchTournament(tournamentId);
             if (item.name == "groupPhase") {
-
                 groupPhase = tournament.run.groupPhase;
-                {console.log("move to phase - 1")}
-                {console.log(groupPhase)}
-                {console.log("-----")}
             }
             if (item.name == "group") {       
                 group = tournament.run.groupPhase.groups.filter(g => g.id == item.id)[0];
-                {console.log("move to group - 1 ")}         
-                {console.log(group)}
-                {console.log("-----")}
             }
         });
         currentItem = newBreadCrumb[newBreadCrumb.length - 1];
         currentBreadCrumb = newBreadCrumb;
     }
-
 
 </script>
 
@@ -131,7 +118,7 @@
     {#if (currentItem.name == "groupPhase")}
         <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
     {:else if (currentItem.name == "group")}
-        <Group groupPlay={group} tournament={tournament} on:move={moveScreen}></Group>
+        <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
     {:else}
         <p>current state is {currentItem.name} - {currentItem.label}</p>
         <span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>

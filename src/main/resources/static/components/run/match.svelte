@@ -38,6 +38,10 @@
     onMount(async () => {
     });
 
+    function save() {
+        let dial = document.getElementById(`match_${match.id}`);
+        dial.close();
+    }
 
     $:{
         tournament = tournament;        
@@ -66,3 +70,4 @@
             {/each}
         </tr>
     </table>
+    <button on:click={save}>close</button>

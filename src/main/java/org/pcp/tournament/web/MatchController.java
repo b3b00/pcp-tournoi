@@ -68,6 +68,7 @@ public class MatchController {
                     matchSetDao.save(set);
                 }
                 newMatch = matchDao.save(match);
+                newMatch.compute(tournament.getOptions());
                 return newMatch;
             }
             throw new NotFoundException("match not found");

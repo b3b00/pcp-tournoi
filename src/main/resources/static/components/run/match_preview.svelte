@@ -8,13 +8,17 @@
 
 <style>
   span.winner {
-    color:green;
+    color: lightgreen;
+    font-weight: bold;
   }
+
   span.loser {
-    color:red;
+    color: red;
+    font-style: italic;
   }
+
   span.defaultStyle {
-    color:rgb(26, 25, 25);
+    color: rgb(26, 25, 25);
   }
 </style>
 
@@ -37,48 +41,75 @@
 
   let defaultStyle;
 
-  onMount(() => {
+  function setStyle() {
     defaultStyle = "defaultStyle";
     leftStyle = defaultStyle;
     rightStyle = defaultStyle;
     if (match.winner != null) {
-      leftStyle = (match.winner.id == match.leftTeam.id ? "winnerStyle" : "loserStyle");
-      leftStyle = (match.winner.id == match.rightTeam.id ? "winnerStyle" : "loserStyle");
+      leftStyle = (match.winner.id == match.left.id ? "winner" : "loser");
+      rightStyle = (match.winner.id == match.right.id ? "winner" : "loser");
     }
+  }
+
+
+  onMount(() => {
+    setStyle();
   })
 
   function openMatch(matchId) {
     let dial = document.getElementById(`match_${matchId}`);
-    console.log("typeof showModal : "+(typeof dial.showModal));
     dial.showModal();
+  }
+
+  async function saveMatch(savedMatch) {
+
+    const res = await fetch(`/tournament/${tournament.id}/match`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'PUT',
+        body: JSON.stringify(savedMatch)
+      });
+    match = await res.json();
+    setStyle();    
   }
 
 </script>
 
 
-<div >
-  <div on:click={() => {openMatch(match.id)}} class="w3-card w3-quarter  w3-container" style="clear:both">
+<div>
+  <div on:click={()=> {openMatch(match.id)}} class="w3-card w3-quarter w3-container" style="clear:both">
     <div>
-    <div class="w3-quarter {leftStyle}">
-      {match.left.name}
-    </div>
-    <div class="w3-quarter {leftStyle}">
-       ({match.leftWonSet}) 
-    </div>
-    <div class="w3-quarter {leftStyle}">
-        {match.right.name}
+      <div class="w3-quarter">
+        <span class=" {leftStyle}">
+          {match.left.name}
+        </span>
       </div>
-      <div class="w3-quarter {leftStyle}">
-         ({match.rightWonSet}) 
+      <div class="w3-quarter">
+        <span class=" {leftStyle}">
+          ({match.leftWonSet})
+        </span>
+      </div>
+      <div class="w3-quarter">
+        <span class=" {rightStyle}">
+          {match.right.name}
+        </span>
+      </div>
+      <div class="w3-quarter">
+        <span class=" {rightStyle}">
+          ({match.rightWonSet})
+        </span>
       </div>
     </div>
   </div>
-  
-    
-  <dialog id="match_{match.id}">
+
+
+  <dialog id="match_{match.id}" on:close={()=> {saveMatch(match)}}>
     <Match match={match} tournament={tournament}>
-    </Match>  
+    </Match>
   </dialog>
 
-  
+
 </div>
