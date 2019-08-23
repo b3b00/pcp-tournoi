@@ -39,13 +39,17 @@
   
 
   {#if groupPlay != null && groupPlay.rankings != null}
+
   <div class="w3-container w3-quarter" on:click={openGroup} >
 
-    <ul class="w3-ul w3-border">
-      <li><h4>group {groupPlay.group.name}</h4></li>
-      {#each groupPlay.rankings as ranking} 
-        <li>{ranking.team.name} - {ranking.points} </li>
-      {/each}
-    </ul>
-  </div>
+        <div class="w3-padding w3-border"><h4>group {groupPlay.group.name}</h4></div>
+        {#each groupPlay.rankings as ranking} 
+          <div class="w3-container w3-padding w3-border-right w3-border-left w3-border-bottom">
+          <div class="w3-half" style="text-align: center">{ranking.team.name}</div>  
+          <div class="w3-quarter">&nbsp;</div>
+          <div class="w3-quarter" style="text-align: center">{ranking.points}</div>
+          </div>
+        {/each}
+      
+    </div>
   {/if}
