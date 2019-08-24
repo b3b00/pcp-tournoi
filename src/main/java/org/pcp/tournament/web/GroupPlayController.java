@@ -55,6 +55,7 @@ public class GroupPlayController {
     @GetMapping(value = "/groupPlay/{groupPlayId}")
     public GroupPlay getGroupPlay(@PathVariable int groupPlayId) {
         GroupPlay groupPlay = groupPlayDao.findById(groupPlayId);
+        groupPlay.computeRanking();
         return groupPlay;
     }
 

@@ -18,5 +18,11 @@ export const tools = {
     let tournament = await res.json();
     return tournament;
   }
+  ,
+  fetchGroupPlay : async function(groupPlayId) {
+    const res = await fetch(`/groupPlay/${groupPlayId}`);
+    let group = await res.json();
+    return group;
+  }
 
 }
