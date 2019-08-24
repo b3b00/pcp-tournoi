@@ -109,6 +109,7 @@ public class GroupPlay {
         }
 
         return ranking;
+
     }
 
     public void computeRanking() {
