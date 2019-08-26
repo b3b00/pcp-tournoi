@@ -65,6 +65,7 @@ public class MatchController {
             if (realMatch != null) {
                 for (int i = 0; i < match.getScore().size(); i++) {
                     MatchSet set = match.getSet(i);
+                    set.setMatch(match);
                     matchSetDao.save(set);
                 }
                 newMatch = matchDao.save(match);
@@ -79,9 +80,6 @@ public class MatchController {
     }
     // endregion
 
-    // region [DELETE]
-
-    // @DeleteMapping("/tournament/{tournamentId}/players/{playerId}")
-    // endregion
+    
 
 }

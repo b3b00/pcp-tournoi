@@ -3,6 +3,9 @@ package org.pcp.tournament.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -16,7 +19,9 @@ public class Player {
 
     private Boolean isLicensed;
 
-    
+    @JsonIgnore
+    @ManyToOne
+    private Tournament tournament;
     
     public Player() {
 
@@ -67,6 +72,14 @@ public class Player {
      */
     public void setIsLicensed(Boolean isLicensed) {
         this.isLicensed = isLicensed;
+    }
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
     }
 
     @Override

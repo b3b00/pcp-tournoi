@@ -25,6 +25,7 @@ public class MatchService {
                 MatchSet set = new MatchSet();
                 set.setLeft(0);
                 set.setRight(0);
+                set.setMatch(match);
                 set = matchSetDao.save(set);
                 newMatch.addSet(set);
             }

@@ -3,9 +3,11 @@ package org.pcp.tournament.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
@@ -25,8 +27,16 @@ public class Team {
     @Transient
     private String name;
 
+    @JsonIgnore
+    @ManyToOne
+    private Group group;
+
+    @JsonIgnore
+    @ManyToOne
+    private Tournament tournament;
+
     public Team() {
-        
+
     }
 
     public Team(Player p1, Player p2) {
@@ -93,7 +103,7 @@ public class Team {
      */
     public String getName() {
         if (isDouble()) {
-            return  getPlayer1().toString() + " - " + getPlayer2().toString();
+            return getPlayer1().toString() + " - " + getPlayer2().toString();
         } else {
             Player player = player1 != null ? player1 : player2;
             return player.toString();
@@ -104,15 +114,34 @@ public class Team {
      * @param name the name to set
      */
     public void setName(String name) {
-        
+
     }
 
-    
+    /**
+     * @return the group
+     */
+    public Group getGroup() {
+        return group;
+    }
+
+    /**
+     * @param group the group to set
+     */
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
 
     public Boolean containsPlayer(Player player) {
         if (player != null) {
-        return this.player1.getId() == player.getId()  || 
-                this.player2.getId() == player.getId();
+            return this.player1.getId() == player.getId() || this.player2.getId() == player.getId();
         }
         return false;
     }
@@ -137,13 +166,12 @@ public class Team {
         }
     }
 
-	public void addPlayer(Player player) {
+    public void addPlayer(Player player) {
         if (getPlayer1() == null) {
             setPlayer1(player);
-        }
-        else if (getPlayer2() == null) {
+        } else if (getPlayer2() == null) {
             setPlayer2(player);
         }
-	}
+    }
 
 }

@@ -3,11 +3,13 @@ package org.pcp.tournament.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.pcp.tournament.model.dto.TeamRanking;
@@ -35,6 +37,10 @@ public class GroupPlay {
 
     @OneToMany
     private List<Match> matches;
+
+    @ManyToOne
+    @JsonIgnore
+    private GroupPhase phase;
 
     /**
      * @return the id
@@ -84,6 +90,14 @@ public class GroupPlay {
      */
     public void setRankings(List<TeamRanking> rankings) {
         this.rankings = rankings;
+    }
+
+    public GroupPhase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(GroupPhase phase) {
+        this.phase = phase;
     }
 
     private TeamRanking updateRanking(TeamRanking ranking, Team team, Match match, Options options) {
@@ -152,5 +166,7 @@ public class GroupPlay {
         rankings.addAll(rankingByTeam.values());
         Collections.sort(rankings);
     }
+
+
 
 }

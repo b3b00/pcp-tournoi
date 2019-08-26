@@ -19,7 +19,7 @@ public class GroupPhase {
     @GeneratedValue
     private int id;
 
-    @OneToMany
+    @OneToMany(mappedBy = "phase")
     private List<GroupPlay> groups;
 
     public GroupPhase() {

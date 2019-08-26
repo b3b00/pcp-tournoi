@@ -36,6 +36,9 @@ public class TeamsController {
     @Autowired
     TeamDao teamDao;
 
+    @Autowired
+    TeamStrategies strategies;
+
 //region [GET]
 
     @GetMapping(value = "/tournaments/{tournamentId}/teams")
@@ -82,7 +85,7 @@ public class TeamsController {
                 clearTeams(tournamentId);
             }
             if (mode == TeamStrategiesEnum.SINGLE) {
-                teams = TeamStrategies.single(players, teamDao);
+                teams = strategies.single(players,  tournament);
                 tournament.setTeams(teams);
                 tournament = tournamentDao.save(tournament);
                 return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
@@ -90,15 +93,15 @@ public class TeamsController {
                 if (players.size() % 2 == 0) {
                     switch (mode) {
                         case SINGLE: {
-                            teams = TeamStrategies.single(players, teamDao);
+                            teams = strategies.single(players, tournament);
                             break;
                         }
                         case RANDOM: {
-                            teams = TeamStrategies.pureRandom(players, teamDao);
+                            teams = strategies.pureRandom(players, tournament);
                             break;
                         }
                         case MIX: {
-                            teams = TeamStrategies.mixLicensees(players, teamDao);
+                            teams = strategies.mixLicensees(players, tournament);
                             break;
                         }
                     }

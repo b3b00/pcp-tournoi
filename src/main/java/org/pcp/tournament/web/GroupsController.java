@@ -34,6 +34,9 @@ public class GroupsController {
     @Autowired
     TeamDao teamDao;
 
+    @Autowired
+    GroupsStrategies strategies;
+
     private Tournament clearGroups(Tournament tournament) {
         List<Group> groups = new ArrayList<Group>();
         groups.addAll(tournament.getGroups());
@@ -70,7 +73,7 @@ public class GroupsController {
             if (!tournament.getGroups().isEmpty()) {
                 clearGroups(tournament);
             }
-            List<Group> groups = GroupsStrategies.createGroups(tournament, number, groupDao);
+            List<Group> groups = strategies.createGroups(tournament, number);
             tournament.setGroups(groups);
             tournament = tournamentDao.save(tournament);
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);

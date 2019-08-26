@@ -22,7 +22,7 @@ public class Group {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "group")
     private List<Team> teams;
 
     

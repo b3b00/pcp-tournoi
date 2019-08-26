@@ -33,7 +33,7 @@ public class Match {
     @JsonInclude
     private int rightWonSet = 0;
 
-    @OneToMany
+    @OneToMany(mappedBy = "match")
     private List<MatchSet> score;
 
     @Transient
@@ -150,7 +150,7 @@ public class Match {
 
     private int leftPointDifference() {
         int diff = 0;
-        for (MatchSet matchSet : getScore()) {
+            for (MatchSet matchSet : getScore()) {
             diff += matchSet.getLeft() - matchSet.getRight();
         }
         return diff;

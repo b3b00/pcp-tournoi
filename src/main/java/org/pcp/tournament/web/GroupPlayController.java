@@ -82,7 +82,7 @@ public class GroupPlayController {
             try {
                 Options options = tournament.getOptions();
                 GroupPhase phase = new GroupPhase();
-
+                phase = groupPhaseDao.save(phase); // to allow group -> phase linking
                 for (Group group : tournament.getGroups()) {
                     GroupPlay play = new GroupPlay();
                     play.setGroup(group);
@@ -103,6 +103,7 @@ public class GroupPlayController {
                         }
                     }
                     play.setMatches(matches);
+                    play.setPhase(phase);
                     groupPlayDao.save(play);
                     phase.addGroupPlay(play);
                 }

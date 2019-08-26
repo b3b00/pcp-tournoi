@@ -6,7 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -22,6 +25,10 @@ public class MatchSet {
 
     @Column(name="right_score")
     private int right;
+
+    @JsonIgnore
+    @ManyToOne
+    private Match match;
 
 
     public int getId() {
@@ -46,6 +53,14 @@ public class MatchSet {
 
     public void setLeft(int left) {
         this.left = left;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
     }
 
 }

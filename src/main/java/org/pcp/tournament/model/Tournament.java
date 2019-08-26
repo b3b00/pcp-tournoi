@@ -24,10 +24,11 @@ public class Tournament {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "tournament")    
     private List<Player> players;
 
-    @OneToMany
+    
+    @OneToMany(mappedBy = "tournament")
     private List<Team> teams;
 
     @OneToMany(mappedBy="tournament")
