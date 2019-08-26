@@ -45,6 +45,10 @@ public class GroupsController {
         tournament = tournamentDao.save(tournament);
 
         for (Group group : groups) {
+            group.getTeams().stream().forEach(t -> {
+                t.setGroup(null);
+                teamDao.save(t);
+            });
             group.getTeams().clear();
             groupDao.save(group);
             groupDao.delete(group);
@@ -89,13 +93,20 @@ public class GroupsController {
         if (tournament != null) {
             if (!tournament.getGroups().isEmpty()) {
                 Group modifiedGroup = groupDao.findById(group.getId());
+                modifiedGroup.getTeams().stream().forEach(t -> {
+                    t.setGroup(null);
+                    teamDao.save(t);
+                });
                 modifiedGroup.getTeams().clear();
+
                 groupDao.save(modifiedGroup);
                 modifiedGroup = groupDao.findById(group.getId());                
                 for (Team t : group.getTeams()) {
                     Team team = teamDao.findById(t.getId());
                     if (team != null) {
                         modifiedGroup.addTeam(team);
+                        team.setGroup(modifiedGroup);
+                        teamDao.save(team);
                     }                    
                 }
                 groupDao.save(modifiedGroup);

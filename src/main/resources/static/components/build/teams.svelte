@@ -78,6 +78,7 @@
     async function computeUnTeamedPlayers() {
         unTeamedPlayers = [];
         let teamed = [];
+        if (tournament.teams !== undefined && tournament.teams !== null) {
         tournament.teams.forEach(t => {
             if (t.player1 != null) {
                 teamed.push(t.player1);
@@ -86,6 +87,7 @@
                 teamed.push(t.player2);
             }
         });
+        }
         unTeamedPlayers = substract(tournament.players, teamed);
     }
 
