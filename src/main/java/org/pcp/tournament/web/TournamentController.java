@@ -12,7 +12,9 @@ import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
+import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,9 @@ public class TournamentController {
     @Autowired
     DataLoader dataLoader;
 
+    @Autowired
+    RunService runService;
+
     @GetMapping(value = "/tournaments")
     public List<Tournament> all() {
         List<Tournament> tournaments = tournamentDao.findAll();
@@ -58,6 +63,13 @@ public class TournamentController {
             }
         }
         return tournament;
+    }
+
+
+    @DeleteMapping("/tournaments/{tournamentId}/run")
+    public Tournament deleteRun(@PathVariable int tournamentId) {
+        runService.deleteRunForTournament(tournamentId);
+        return tournamentDao.findById(tournamentId);
     }
 
     @GetMapping("/tournaments/deleteAll")

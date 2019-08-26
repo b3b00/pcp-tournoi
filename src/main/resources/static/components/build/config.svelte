@@ -165,11 +165,28 @@
         }
     });
 
+    async function deleteRun() {
+        const res = await fetch(`/tournaments/${tournamentId}/run`,{
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "DELETE"
+            });
+        tournament = await res.json();
+        tournamentId = tournament.id;
+        tournamentName = tournament.name;
+        tournamentDate = tournament.date;
+        tournamentOptions = tournament.options;
+    }
+
 </script>
 
 
 
 <div class="w3-panel w3-card startDialog" >
+
+<button on:click={deleteRun}>delete run</button>
 
 <div class="w3-row-padding">
 
