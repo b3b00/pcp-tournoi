@@ -355,7 +355,7 @@
 <div class="w3-container w3-cell" style="width:60%">
     <ul class="w3-ul w3-border w3-card">
         {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
-        {#each tournament.teams as team}
+        {#each tournament.teams as team }
         <li>            
             <span>{team.name}</span>
         </li>

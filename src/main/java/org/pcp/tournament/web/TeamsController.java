@@ -62,6 +62,7 @@ public class TeamsController {
                 Player player2 = playerDao.findById(player2Id);
                 if (player2 != null) {
                     Team team = new Team(player1, player2);
+                    team.setTournament(tournament);
                     teamDao.save(team);
                     tournament.addTeam(team);
                     tournament = tournamentDao.save(tournament);
