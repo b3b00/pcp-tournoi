@@ -42,6 +42,8 @@ public class GroupPlay {
     @JsonIgnore
     private GroupPhase phase;
 
+    private boolean isDone;
+
     /**
      * @return the id
      */
@@ -100,6 +102,20 @@ public class GroupPlay {
         this.phase = phase;
     }
 
+    /**
+     * @return the isDone
+     */
+    public boolean getIsDone() {
+        return isDone;
+    }
+
+    /**
+     * @param isDone the isDone to set
+     */
+    public void setIsDone(boolean isDone) {
+        this.isDone = isDone;
+    }
+
     private TeamRanking updateRanking(TeamRanking ranking, Team team, Match match, Options options) {
         match.compute(options);
         boolean isLeft = match.getLeft().getId() == team.getId();
@@ -121,7 +137,8 @@ public class GroupPlay {
             ranking.setPoints(ranking.getPoints() + point);
             ranking.setDifference(ranking.getDifference() + diff);
         }
-
+        boolean isAllDone = (matches.stream().allMatch(m -> m.getIsEnded()));
+        setIsDone(isAllDone);
         return ranking;
 
     }
