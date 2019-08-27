@@ -4,6 +4,7 @@
     import BreadCrumb from './breadcrumb.svelte';
     import GroupPhase from './groups.svelte';
     import Group from './group.svelte';
+    import Board from './board.svelte';
     import { tools } from './tools.js';
     import { onMount } from "svelte";
     import { createEventDispatcher } from "svelte";
@@ -27,6 +28,8 @@
     let tournament = {};
 
     let groupPhase;
+
+    let board;
 
     let group;
 
@@ -63,6 +66,23 @@
         else {
             groupPhase = tournament.run.groupPhase;
         }
+
+        if (tournament.run.board == null || tournament.run.board === undefined) {
+            const res2 = await fetch(`/tournaments/${id}/board/$create?start=8`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST'
+                });
+            tournament = await res2.json();
+            board = tournament.run.board;
+        }
+        else {
+            board = tournament.run.board;
+        }
+        
     }
 
     let currentBreadCrumb;
@@ -104,9 +124,17 @@
         <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
     {:else if (currentItem.name == "group")}
         <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
+    {:else if (currentItem.name == "board")}        
+       <Board tournament={tournament} on:move={moveScreen}></Board> 
     {:else}
         <span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>
     {/if}
 {:else}
-<span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>
+<ul>
+
+<li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
+
+<li style="cursor:pointer" on:click={() => {moveMe("board","tableaux","board",null)}}>board</li>
+
+</ul>
 {/if}

@@ -1,7 +1,9 @@
 package org.pcp.tournament.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.pcp.tournament.model.Match;
 import org.pcp.tournament.model.MatchSet;
@@ -15,6 +17,7 @@ import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Run;
 import org.pcp.tournament.model.Tournament;
+import org.pcp.tournament.model.dto.TeamRanking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -87,6 +90,68 @@ public class RunService {
             
 
         }
+    }
+
+    public void buildBoard(Tournament tournament, int startingRound) {
+        int nbGroups = tournament.getGroups().size();
+        int nbSelectedByGroup = startingRound/nbGroups;
+        List<GroupPlay> groups = tournament.getRun().getGroupPhase().getGroups();
+        List<List<TeamRanking>> selection = new ArrayList<List<TeamRanking>>();
+        List<TeamRanking> selected = new ArrayList<TeamRanking>();
+        for (GroupPlay group : groups) {
+            group.computeRanking();
+            List<TeamRanking> groupRanking = group.getRankings();
+            List<TeamRanking> groupSelection = new ArrayList<TeamRanking>();
+            if (groupRanking.size() >= nbSelectedByGroup) {
+                for (int i = 0; i < nbSelectedByGroup; i++) {
+                    groupSelection.add(groupRanking.get(i));
+                    selected.add(groupRanking.get(i));
+                }
+                selection.add(groupSelection);
+            }
+        }
+
+        int count = selection.stream().map(s -> s.size()).reduce(0,(Integer a,Integer b) -> a+b);
+        if (count < startingRound) {
+            List<TeamRanking> additional = new ArrayList<TeamRanking>();
+            List<Integer> selectedIds = selected.stream().map(tr -> tr.getTeam().getId()).collect(Collectors.toList());
+            int missingCount = startingRound - count;
+            List<TeamRanking> full = getFullRanking(tournament);
+            for (int i = 0; i < missingCount; i++) {
+                TeamRanking team = null;
+                int j = 0;
+                while(team == null && j < full.size()) {
+                    TeamRanking rank = full.get(j);
+                    boolean contains = selectedIds.stream()
+                    .map(sid -> rank.getTeam().getId() == sid)
+                    .reduce(false , (Boolean a, Boolean b) -> a || b);
+                    if (!selectedIds.contains(rank.getTeam().getId())) {
+                        team = rank;
+                        selectedIds.add(team.getTeam().getId());
+                        selected.add(team);                        
+                    }
+                    j++;
+                }
+            }
+            System.out.println("hello");
+            ;
+        }
+
+
+    }
+
+    private List<TeamRanking> getFullRanking(Tournament tournament) {
+        List<TeamRanking> rankings = new ArrayList<TeamRanking>();
+
+        List<GroupPlay> groups = tournament.getRun().getGroupPhase().getGroups();
+        for (GroupPlay group : groups) {
+            group.computeRanking();
+            rankings.addAll(group.getRankings());
+        }
+        
+        Collections.sort(rankings);
+
+        return rankings;
     }
 
 }
