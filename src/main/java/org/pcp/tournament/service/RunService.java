@@ -47,8 +47,6 @@ public class RunService {
     }
 
     public void deleteRunForTournament(Tournament tournament) {
-
-        GroupPhase phase = null;
         Run run = tournament.getRun();
         List<GroupPlay> plays = new ArrayList<GroupPlay>();
         List<Match> matches = new ArrayList<Match>();
@@ -90,17 +88,5 @@ public class RunService {
 
         }
     }
-
-    private void deleteMatch(Match match) {
-        if (match.getScore() != null) {
-            for (MatchSet set : match.getScore()) {
-                set.setMatch(null); 
-                matchSetDao.delete(set);
-            }
-            matchDao.delete(match);
-        }
-    }
-
-
 
 }

@@ -22,7 +22,8 @@ public class Run {
     @OneToOne
     private GroupPhase groupPhase;
 
-    //TODO private FinalPhases finalPhases;
+    @OneToOne
+    private TournamentBoard board;
 
     public Run() {
         this.tournament = null;
@@ -56,6 +57,20 @@ public class Run {
 
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
+    }
+
+    /**
+     * @return the board
+     */
+    public TournamentBoard getBoard() {
+        return board;
+    }
+
+    /**
+     * @param board the board to set
+     */
+    public void setBoard(TournamentBoard board) {
+        this.board = board;
     }
 
     
