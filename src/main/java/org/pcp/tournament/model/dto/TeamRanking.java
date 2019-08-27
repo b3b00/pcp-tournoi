@@ -8,24 +8,35 @@ public class TeamRanking implements Comparable<TeamRanking> {
 
     private int points;
 
-    private int difference;
+    private int setDifference;
 
-    public TeamRanking(Team team, int points, int difference) {
+    private int pointsDifference;
+
+    public TeamRanking(Team team, int points, int setDifference, int pointsDifference) {
         this.team = team;
         this.points = points;
-        this.difference = difference;
+        this.setDifference = setDifference;
+        this.setPointsDifference(pointsDifference);
     }
 
     public Team getTeam() {
         return team;
     }
 
-    public int getDifference() {
-        return difference;
+    public int getSetDifference() {
+        return setDifference;
     }
 
-    public void setDifference(int difference) {
-        this.difference = difference;
+    public void setSetDifference(int dsetDifference) {
+        this.setDifference = dsetDifference;
+    }
+
+    public int getPointsDifference() {
+        return pointsDifference;
+    }
+
+    public void setPointsDifference(int pointsDifference) {
+        this.pointsDifference = pointsDifference;
     }
 
     public int getPoints() {
@@ -45,7 +56,11 @@ public class TeamRanking implements Comparable<TeamRanking> {
             if (getPoints() > other.getPoints()) {
                 return -1;
             } else {
-                return -Integer.compare(getDifference(), other.getDifference());
+                int comp = - Integer.compare(getSetDifference(), other.getSetDifference());
+                if (comp == 0) {
+                    comp = - Integer.compare(getPointsDifference(), other.getPointsDifference());
+                }
+                return comp;
             }
         }
         return -1;
@@ -56,11 +71,11 @@ public class TeamRanking implements Comparable<TeamRanking> {
     }
 
     public int hashCode() {
-        return team.hashCode() + points + difference;
+        return team.hashCode() + points + setDifference;
     }
 
     public String toString() {
-        return team.getName()+" - "+getPoints()+" - "+getDifference();
+        return team.getName()+" - "+getPoints()+" - "+getSetDifference();
     }
 
 }

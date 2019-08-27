@@ -14,6 +14,9 @@ public class Round {
     @GeneratedValue
     private int id;
 
+    @OneToMany
+    private List<Match> matches;
+
     /**
      * @return the id
      */
@@ -28,8 +31,7 @@ public class Round {
         this.id = id;
     }
 
-    @OneToMany
-    private List<Match> matches;
+    
 
     /**
      * @return the matches

@@ -121,7 +121,7 @@ public class GroupPlay {
         boolean isLeft = match.getLeft().getId() == team.getId();
         boolean isRight = match.getRight().getId() == team.getId();
         if (ranking == null) {
-            ranking = new TeamRanking(team, 0, 0);
+            ranking = new TeamRanking(team, 0, 0,0);
         }
         Team winner = match.getWinner();
         if (winner != null) {
@@ -135,7 +135,8 @@ public class GroupPlay {
             }
 
             ranking.setPoints(ranking.getPoints() + point);
-            ranking.setDifference(ranking.getDifference() + diff);
+            ranking.setSetDifference(ranking.getSetDifference() + diff);
+            ranking.setPointsDifference(ranking.getPointsDifference());
         }
         boolean isAllDone = (matches.stream().allMatch(m -> m.getIsEnded()));
         setIsDone(isAllDone);

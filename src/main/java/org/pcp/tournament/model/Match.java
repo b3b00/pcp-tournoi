@@ -33,6 +33,15 @@ public class Match {
     @JsonInclude
     private int rightWonSet = 0;
 
+    @Transient
+    @JsonInclude
+    private int rightPoints = 0;
+
+    @Transient
+    @JsonInclude
+    private int leftPoints = 0;
+
+
     @OneToMany(mappedBy = "match")
     private List<MatchSet> score;
 
@@ -125,11 +134,24 @@ public class Match {
         this.leftWonSet = leftWonSet;
     }
 
-    /**
-     * @return the rightWonSet
-     */
     public int getRightWonSet() {
         return rightWonSet;
+    }
+
+    public int getLeftPoints() {
+        return leftPoints;
+    }
+
+    public void setLeftPoints(int leftPoints) {
+        this.leftPoints = leftPoints;
+    }
+
+    public int getRightPoints() {
+        return rightPoints;
+    }
+
+    public void setRightPoints(int rightPoints) {
+        this.rightPoints = rightPoints;
     }
 
     /**
@@ -139,19 +161,10 @@ public class Match {
         this.rightWonSet = rightWonSet;
     }
 
-    public int pointDifference(Team team) {
-        if (team.getId() == getLeft().getId())  {
-            return leftPointDifference();
-        }
-        else {
-            return rightPointDifference();
-        }
-    }
-
     private int leftPointDifference() {
         int diff = 0;
             for (MatchSet matchSet : getScore()) {
-            diff += matchSet.getLeft() - matchSet.getRight();
+            diff += matchSet.getLeft() - matchSet.getRight();            
         }
         return diff;
     }
@@ -177,6 +190,8 @@ public class Match {
                     rightWonSet++;
                 }
             }
+            setLeftPoints(leftPointDifference());
+            setRightPoints(rightPointDifference());
         }
         setIsEnded(false);
         if (leftWonSet >= options.getWinningSets()) {

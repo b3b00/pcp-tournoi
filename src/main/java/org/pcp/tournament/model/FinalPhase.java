@@ -17,6 +17,9 @@ public class FinalPhase {
 
     private String name;
 
+    @OneToMany
+    private List<Round> rounds;
+
     /**
      * @return the id
      */
@@ -45,8 +48,7 @@ public class FinalPhase {
         this.name = name;
     }
 
-    @OneToMany
-    private List<Round> rounds;
+    
 
     /**
      * @return the rounds
