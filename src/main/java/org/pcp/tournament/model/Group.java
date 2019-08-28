@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="group_table")
-public class Group {
+public class Group implements IPingModel {
 
     @Id
     @GeneratedValue

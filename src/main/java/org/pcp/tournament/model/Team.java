@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
-public class Team {
+public class Team implements IPingModel  {
 
     @Id
     @GeneratedValue

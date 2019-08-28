@@ -19,12 +19,117 @@ import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.FinalPhase;
 import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
+import org.pcp.tournament.model.IPingModel;
 import org.pcp.tournament.model.Run;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.dto.TeamRanking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.javatuples.Pair;
+
+
+
+interface IMatchPath {
+
+    IPingModel accept(IPingModel model) throws MatchPathException;
+    
+}
+
+class GroupsPath implements IMatchPath {
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof Tournament) {
+            Tournament t = (Tournament)model;            
+            return t.getRun().getGroupPhase();
+        }
+        else {
+            throw new MatchPathException("expecting a tournament , found "+model.getClass().getName());
+        }
+    }
+}
+
+class GroupPath implements IMatchPath {
+
+    private String groupName;
+
+    public GroupPath(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof GroupPhase) {
+            GroupPhase phase = (GroupPhase)model;            
+            GroupPlay play =  phase.getGroups().stream()
+                .filter(p -> p.getGroup().getName().equals(groupName))
+                .findAny()
+                .orElse(null);
+            if (play != null) {
+                return play;                
+            }
+            else {
+                throw new MatchPathException("group "+groupName+" not found");
+            }
+        }
+        else {
+            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
+        }
+    }
+} 
+
+class RankedInGroupPath implements IMatchPath {
+
+    private int ranking;
+
+    public RankedInGroupPath(int ranking) {
+        this.ranking = ranking;
+    }
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof GroupPlay) {
+            GroupPlay play = (GroupPlay)model;  
+            if (ranking > 0 && ranking < play.getRankings().size()) {
+                return play.getRankings().get(ranking).getTeam();
+            }
+            else {
+                throw new MatchPathException("no team ranked #"+ranking);    
+            }
+        }
+        else {
+            throw new MatchPathException("expecting a group play , found "+model.getClass().getName());
+        }
+    }
+
+}
+
+class RankedInGroupPhasePath implements IMatchPath {
+
+    private int ranking;
+
+    public RankedInGroupPhasePath(int ranking) {
+        this.ranking = ranking;
+    }
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof GroupPhase) {
+            GroupPhase phase = (GroupPhase)model;  
+
+            // TODO 
+return null;
+
+            // if (ranking > 0 && ranking < play.getRankings().size()) {
+            //     return play.getRankings().get(ranking).getTeam();
+            // }
+            // else {
+            //     throw new MatchPathException("no team ranked #"+ranking);    
+            // }
+        }
+        else {
+            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
+        }
+    }
+
+}
+
 
 
 class PathBuilder {

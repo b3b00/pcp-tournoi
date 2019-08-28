@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-public class Round {
+public class Round implements IPingModel  {
 
     @Id
     @GeneratedValue

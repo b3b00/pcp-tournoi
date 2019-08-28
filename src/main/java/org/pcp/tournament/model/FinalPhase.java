@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-public class FinalPhase {
+public class FinalPhase implements IPingModel{
 
 
     @Id

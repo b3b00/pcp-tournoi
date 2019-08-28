@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Options {
+public class Options implements IPingModel  {
 
     @Id
     @GeneratedValue

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Tournament {
+public class Tournament implements IPingModel  {
 
     @Id
     @GeneratedValue

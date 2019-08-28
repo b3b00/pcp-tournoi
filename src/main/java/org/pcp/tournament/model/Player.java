@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-public class Player {
+public class Player implements IPingModel  {
 
     @Id
     @GeneratedValue

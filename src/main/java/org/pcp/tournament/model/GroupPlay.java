@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "group_play")
-public class GroupPlay {
+public class GroupPlay implements IPingModel  {
 
     @Id
     @GeneratedValue

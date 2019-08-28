@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name="group_phase")
-public class GroupPhase {
+public class GroupPhase implements IPingModel  {
 
     @Id
     @GeneratedValue

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="set_table")
-public class MatchSet {
+public class MatchSet implements IPingModel  {
 
     @Id
     @GeneratedValue

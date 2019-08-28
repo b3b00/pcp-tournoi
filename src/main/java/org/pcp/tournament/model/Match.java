@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Entity
-public class Match {
+public class Match implements IPingModel  {
 
     @Id
     @GeneratedValue
