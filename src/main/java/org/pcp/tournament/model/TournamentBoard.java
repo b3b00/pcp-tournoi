@@ -39,6 +39,12 @@ public class TournamentBoard implements IPingModel  {
         return boards;
     }
 
+    public FinalPhase getBoard(String name) {
+        return boards.stream().filter((FinalPhase fp) -> fp.getName().equals(name))
+            .findAny()
+            .orElse(null);
+    }
+
     /**
      * @param rounds the rounds to set
      */

@@ -51,6 +51,11 @@ public class Round implements IPingModel  {
         this.matches = matches;
     }
 
+
+    public int getName() {
+        return matches.size();
+    }
+
     /**
      * @return the phase
      */

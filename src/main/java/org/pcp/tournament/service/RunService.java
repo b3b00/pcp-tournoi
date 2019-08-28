@@ -21,6 +21,7 @@ import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.IPingModel;
 import org.pcp.tournament.model.Run;
 import org.pcp.tournament.model.Tournament;
+import org.pcp.tournament.model.TournamentBoard;
 import org.pcp.tournament.model.dto.TeamRanking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -127,6 +128,99 @@ class RankedInGroupPhasePath implements IMatchPath {
 }
 
 
+class BoardsPath implements IMatchPath  {
+
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof Tournament) {
+            Tournament tournament = (Tournament)model;  
+            return tournament.getRun().getBoard();
+        }
+        else {
+            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
+        }
+    }
+}
+
+
+class BoardPath implements IMatchPath  {
+
+    private String name;
+
+    public BoardPath(String name) {
+        this.name = name;
+    }
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof TournamentBoard) {
+            TournamentBoard boards = (TournamentBoard)model;  
+            FinalPhase board = boards.getBoard(name);
+            if (board != null) {
+                return board;
+            }
+            else {
+                throw new MatchPathException("board "+name+" not found");
+            }
+        }
+        else {
+            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
+        }
+    }
+}
+
+class RoundPath implements IMatchPath  {
+
+    private int index;
+
+    public RoundPath(int index) {
+        this.index = index;
+    }
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof FinalPhase) {
+            FinalPhase board = (FinalPhase)model;
+            Round round = board.getRounds().stream()
+            .filter(r -> r.getName() == index)
+            .findAny()
+            .orElse(null);
+            if (round != null) {
+                return round;
+            }
+            else {
+                throw new MatchPathException("phase "+board.getName()+" does not have round #"+index);
+            }
+        }
+        else {
+            throw new MatchPathException("expecting a final phase, found "+model.getClass().getName());
+        }
+    }
+}
+
+
+class MatchPath implements IMatchPath  {
+
+    private int index;
+
+    public MatchPath(int index) {
+        this.index = index;
+    }
+
+    public IPingModel accept(IPingModel model) throws MatchPathException {
+        if (model instanceof Round) {
+            Round round = (Round)model;
+            
+            if (index >= 0 && index < round.getName()) {
+                return round.getMatches().get(index);
+            }
+            else {
+                throw new MatchPathException("round "+round.getName()+" does not have match #"+index);
+            }
+        }
+        else {
+            throw new MatchPathException("expecting a round, found "+model.getClass().getName());
+        }
+    }
+}
 
 class PathBuilder {
     StringBuilder builder;
@@ -269,6 +363,7 @@ public class RunService {
     public static String groupPath = "group";
     public static String boardsPath = "boards";
     public static String boardPath = "board";
+    public static String roundPath = "round";
     public static String matchPath = "match";
 
     public String buildMatchPath(GroupPlay group, int rank) {
@@ -293,6 +388,8 @@ public class RunService {
         pathBuilder.append(boardsPath)
         .append(boardPath)
         .append(phase.getName())
+        .append(roundPath)
+        .append(round.getMatches().size())
         .append(matchPath)
         .append(matchNumber)
         .append(status.toString());
