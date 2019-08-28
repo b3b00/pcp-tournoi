@@ -4,25 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.pcp.tournament.model.Group;
-import org.pcp.tournament.model.Match;
-import org.pcp.tournament.model.MatchSet;
-import org.pcp.tournament.model.PlayStatusEnum;
-import org.pcp.tournament.model.Round;
-import org.pcp.tournament.dao.GroupPhaseDao;
-import org.pcp.tournament.dao.GroupPlayDao;
-import org.pcp.tournament.dao.MatchDao;
-import org.pcp.tournament.dao.MatchSetDao;
-import org.pcp.tournament.dao.RunDao;
-import org.pcp.tournament.dao.TournamentDao;
-import org.pcp.tournament.model.FinalPhase;
-import org.pcp.tournament.model.GroupPhase;
-import org.pcp.tournament.model.GroupPlay;
-import org.pcp.tournament.model.IPingModel;
-import org.pcp.tournament.model.Run;
-import org.pcp.tournament.model.Tournament;
-import org.pcp.tournament.model.TournamentBoard;
-import org.pcp.tournament.model.dto.TeamRanking;
+import org.pcp.tournament.model.*;
+import org.pcp.tournament.model.dto.*;
+import org.pcp.tournament.dao.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.javatuples.Pair;
@@ -427,7 +412,10 @@ public class RunService {
 
     
 
-    private void checkGroupPath(String[] elements, Tournament tournament) throws MatchPathException {
+    private List<IMatchPath> checkGroupPath(String[] elements, Tournament tournament) throws MatchPathException {
+        List<IMatchPath> path = new ArrayList<IMatchPath>();
+        path.add(new GroupsPath());
+        path.add(new GroupsPath());
         if (elements[1].equals(groupPath)) {
             String name = elements[2];
             int i = 0;
@@ -441,24 +429,27 @@ public class RunService {
             if (!found) {
                 throw new MatchPathException("group "+name+" does not exists.");
             }
-            // TODO check if nam is a group name
-            Pair<Boolean,Integer> parsedint = tryParseInt(elements[3]);
-            if (parsedint.getValue0()) {
+            path.add(new GroupPath(name));
+            
+            Pair<Boolean,Integer> parsedInt = tryParseInt(elements[3]);
+            if (parsedInt.getValue0()) {
+                path.add(new RankedInGroupPath(parsedInt.getValue1()));
+            }
+            else {
+                throw new MatchPathException(elements[1]+" is not a ranking");
+            }
 
+        }   
+        else {
+            Pair<Boolean,Integer> parsedInt = tryParseInt(elements[1]);
+            if (parsedInt.getValue0()) {
+                path.add(new RankedInGroupPhasePath(parsedInt.getValue1()));
             }
             else {
                 throw new MatchPathException(elements[1]+" is not a ranking");
             }
         }   
-        else {
-            Pair<Boolean,Integer> parsedint = tryParseInt(elements[1]);
-            if (parsedint.getValue0()) {
-
-            }
-            else {
-                throw new MatchPathException(elements[1]+" is not a ranking");
-            }
-        }        
+        return path;     
     }
 
 
