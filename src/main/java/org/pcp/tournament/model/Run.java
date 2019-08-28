@@ -19,7 +19,7 @@ public class Run {
     @OneToOne
     private Tournament tournament;
 
-    @OneToOne
+    @OneToOne(mappedBy = "run")
     private GroupPhase groupPhase;
 
     @OneToOne

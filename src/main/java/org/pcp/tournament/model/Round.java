@@ -3,6 +3,7 @@ package org.pcp.tournament.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class Round {
 
     @OneToMany
     private List<Match> matches;
+
+    @ManyToOne
+    private FinalPhase phase;
 
     /**
      * @return the id
@@ -45,6 +49,20 @@ public class Round {
      */
     public void setMatches(List<Match> matches) {
         this.matches = matches;
+    }
+
+    /**
+     * @return the phase
+     */
+    public FinalPhase getPhase() {
+        return phase;
+    }
+
+    /**
+     * @param phase the phase to set
+     */
+    public void setPhase(FinalPhase phase) {
+        this.phase = phase;
     }
 
 }

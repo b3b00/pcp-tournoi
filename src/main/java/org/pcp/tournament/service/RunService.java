@@ -5,14 +5,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.pcp.tournament.model.Group;
 import org.pcp.tournament.model.Match;
 import org.pcp.tournament.model.MatchSet;
+import org.pcp.tournament.model.PlayStatusEnum;
+import org.pcp.tournament.model.Round;
 import org.pcp.tournament.dao.GroupPhaseDao;
 import org.pcp.tournament.dao.GroupPlayDao;
 import org.pcp.tournament.dao.MatchDao;
 import org.pcp.tournament.dao.MatchSetDao;
 import org.pcp.tournament.dao.RunDao;
 import org.pcp.tournament.dao.TournamentDao;
+import org.pcp.tournament.model.FinalPhase;
 import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Run;
@@ -20,7 +24,26 @@ import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.dto.TeamRanking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.javatuples.Pair;
 
+
+class PathBuilder {
+    StringBuilder builder;
+
+    public PathBuilder() {
+        builder = new StringBuilder();        
+    } 
+
+    public PathBuilder append(String pathElement) {
+        builder.append("/")
+        .append(pathElement);
+        return this;
+    }
+
+    public PathBuilder append(int pathElement) {
+        return append(Integer.toString(pathElement));
+    }
+}
 @Component
 public class RunService {
 
@@ -113,7 +136,6 @@ public class RunService {
 
         int count = selection.stream().map(s -> s.size()).reduce(0,(Integer a,Integer b) -> a+b);
         if (count < startingRound) {
-            List<TeamRanking> additional = new ArrayList<TeamRanking>();
             List<Integer> selectedIds = selected.stream().map(tr -> tr.getTeam().getId()).collect(Collectors.toList());
             int missingCount = startingRound - count;
             List<TeamRanking> full = getFullRanking(tournament);
@@ -121,10 +143,7 @@ public class RunService {
                 TeamRanking team = null;
                 int j = 0;
                 while(team == null && j < full.size()) {
-                    TeamRanking rank = full.get(j);
-                    boolean contains = selectedIds.stream()
-                    .map(sid -> rank.getTeam().getId() == sid)
-                    .reduce(false , (Boolean a, Boolean b) -> a || b);
+                    TeamRanking rank = full.get(j);                    
                     if (!selectedIds.contains(rank.getTeam().getId())) {
                         team = rank;
                         selectedIds.add(team.getTeam().getId());
@@ -153,5 +172,118 @@ public class RunService {
 
         return rankings;
     }
+
+
+//region [match referencing]
+
+
+    public static String groupsPath = "groups";
+    public static String groupPath = "group";
+    public static String boardsPath = "boards";
+    public static String boardPath = "board";
+    public static String matchPath = "match";
+
+    public String buildMatchPath(GroupPlay group, int rank) {
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.append(groupsPath)
+        .append(groupPath)
+        .append(group.getGroup().getName())        
+        .append(rank);
+        return pathBuilder.toString();
+    }
+
+    public String buildMatchPath(int rank) {
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.append(groupsPath)        
+        .append(rank);
+        return pathBuilder.toString();
+    }
+
+    public String builMatchPath(Round round, int matchNumber, PlayStatusEnum status ) {
+        PathBuilder pathBuilder = new PathBuilder();
+        FinalPhase phase = round.getPhase();
+        pathBuilder.append(boardsPath)
+        .append(boardPath)
+        .append(phase.getName())
+        .append(matchPath)
+        .append(matchNumber)
+        .append(status.toString());
+        return pathBuilder.toString();
+    }
+
+    public String[] checkPath(String path, Tournament tournament) throws MatchPathException {
+        String[] elements = path.split("\\/");
+
+        if (elements != null && elements.length > 1)  {
+            String start = elements[0];
+            if (start.equals(groupsPath)) {
+                checkGroupPath(elements, tournament);
+            }
+            else if(start.equals(boardsPath)) {
+                checkBoardPath(elements, tournament);
+            }
+        }
+
+        return elements;
+    }
+
+    private Pair<Boolean,Integer> tryParseInt(String element) {
+        int i = 0;
+        boolean ok = false;
+        try{
+            i = Integer.parseInt(element);
+            ok = true;
+        }catch(NumberFormatException e){
+            i = 0;
+            ok = false;
+        }
+        return new Pair<Boolean,Integer>(ok, i);
+    }
+
+    
+
+    private void checkGroupPath(String[] elements, Tournament tournament) throws MatchPathException {
+        if (elements[1].equals(groupPath)) {
+            String name = elements[2];
+            int i = 0;
+            boolean found = false;
+            List<Group> groups = tournament.getGroups();
+            while (! found && i <  groups.size()) {
+                Group group = groups.get(i);
+                found = group.getName().equals(name);
+                i++;
+            }
+            if (!found) {
+                throw new MatchPathException("group "+name+" does not exists.");
+            }
+            // TODO check if nam is a group name
+            Pair<Boolean,Integer> parsedint = tryParseInt(elements[3]);
+            if (parsedint.getValue0()) {
+
+            }
+            else {
+                throw new MatchPathException(elements[1]+" is not a ranking");
+            }
+        }   
+        else {
+            Pair<Boolean,Integer> parsedint = tryParseInt(elements[1]);
+            if (parsedint.getValue0()) {
+
+            }
+            else {
+                throw new MatchPathException(elements[1]+" is not a ranking");
+            }
+        }        
+    }
+
+
+    private void checkBoardPath(String[] elements, Tournament tournament) {
+
+    }
+
+    
+
+//endregion
+
 
 }

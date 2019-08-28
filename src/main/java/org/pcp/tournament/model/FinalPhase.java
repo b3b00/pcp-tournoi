@@ -17,7 +17,7 @@ public class FinalPhase {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "phase")
     private List<Round> rounds;
 
     /**

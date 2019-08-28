@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -23,6 +24,9 @@ public class GroupPhase {
     @OneToMany(mappedBy = "phase")
     @OrderBy("id ASC")
     private List<GroupPlay> groups;
+
+    @OneToOne
+    private Run run;
 
     public GroupPhase() {
         groups = new ArrayList<GroupPlay>();
@@ -47,6 +51,20 @@ public class GroupPhase {
     */
    public List<GroupPlay> getGroups() {
        return groups;
+   }
+
+   /**
+    * @return the run
+    */
+   public Run getRun() {
+       return run;
+   }
+
+   /**
+    * @param run the run to set
+    */
+   public void setRun(Run run) {
+       this.run = run;
    }
 
    /**
