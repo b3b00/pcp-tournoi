@@ -1,7 +1,6 @@
 package org.pcp.tournament.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,7 +86,7 @@ class RankedInGroupPath implements IMatchPath {
     public IPingModel accept(IPingModel model) throws MatchPathException {
         if (model instanceof GroupPlay) {
             GroupPlay play = (GroupPlay)model;  
-            if (ranking > 0 && ranking < play.getRankings().size()) {
+            if (ranking >= 0 && ranking < play.getRankings().size()) {
                 return play.getRankings().get(ranking).getTeam();
             }
             else {
@@ -112,16 +111,13 @@ class RankedInGroupPhasePath implements IMatchPath {
     public IPingModel accept(IPingModel model) throws MatchPathException {
         if (model instanceof GroupPhase) {
             GroupPhase phase = (GroupPhase)model;  
-
-            // TODO 
-return null;
-
-            // if (ranking > 0 && ranking < play.getRankings().size()) {
-            //     return play.getRankings().get(ranking).getTeam();
-            // }
-            // else {
-            //     throw new MatchPathException("no team ranked #"+ranking);    
-            // }
+            List<TeamRanking> rankings = phase.getFullRanking();
+            if (ranking >= 0 && ranking < rankings.size()) {
+                return rankings.get(ranking).getTeam();
+            }
+            else {
+                throw new MatchPathException("no team ranked #"+ranking);    
+            }
         }
         else {
             throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
@@ -243,7 +239,7 @@ public class RunService {
         if (count < startingRound) {
             List<Integer> selectedIds = selected.stream().map(tr -> tr.getTeam().getId()).collect(Collectors.toList());
             int missingCount = startingRound - count;
-            List<TeamRanking> full = getFullRanking(tournament);
+            List<TeamRanking> full = tournament.getRun().getGroupPhase().getFullRanking();
             for (int i = 0; i < missingCount; i++) {
                 TeamRanking team = null;
                 int j = 0;
@@ -263,20 +259,7 @@ public class RunService {
 
 
     }
-
-    private List<TeamRanking> getFullRanking(Tournament tournament) {
-        List<TeamRanking> rankings = new ArrayList<TeamRanking>();
-
-        List<GroupPlay> groups = tournament.getRun().getGroupPhase().getGroups();
-        for (GroupPlay group : groups) {
-            group.computeRanking();
-            rankings.addAll(group.getRankings());
-        }
-        
-        Collections.sort(rankings);
-
-        return rankings;
-    }
+    
 
 
 //region [match referencing]

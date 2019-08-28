@@ -8,7 +8,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.pcp.tournament.model.dto.TeamRanking;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -78,6 +81,19 @@ public class GroupPhase implements IPingModel  {
        this.groups.add(groupPlay);
    }
     
+
+   public List<TeamRanking> getFullRanking() {
+    List<TeamRanking> rankings = new ArrayList<TeamRanking>();
+    
+    for (GroupPlay group : groups) {
+        group.computeRanking();
+        rankings.addAll(group.getRankings());
+    }
+    
+    Collections.sort(rankings);
+
+    return rankings;
+}
 
 
 }
