@@ -8,222 +8,14 @@ import org.pcp.tournament.model.*;
 import org.pcp.tournament.model.dto.*;
 import org.pcp.tournament.dao.*;
 
+import org.pcp.tournament.service.matchreferences.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.javatuples.Pair;
 
 
 
-interface IMatchPath {
 
-    IPingModel accept(IPingModel model) throws MatchPathException;
-    
-}
-
-class GroupsPath implements IMatchPath {
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof Tournament) {
-            Tournament t = (Tournament)model;            
-            return t.getRun().getGroupPhase();
-        }
-        else {
-            throw new MatchPathException("expecting a tournament , found "+model.getClass().getName());
-        }
-    }
-}
-
-class GroupPath implements IMatchPath {
-
-    private String groupName;
-
-    public GroupPath(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof GroupPhase) {
-            GroupPhase phase = (GroupPhase)model;            
-            GroupPlay play =  phase.getGroups().stream()
-                .filter(p -> p.getGroup().getName().equals(groupName))
-                .findAny()
-                .orElse(null);
-            if (play != null) {
-                return play;                
-            }
-            else {
-                throw new MatchPathException("group "+groupName+" not found");
-            }
-        }
-        else {
-            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
-        }
-    }
-} 
-
-class RankedInGroupPath implements IMatchPath {
-
-    private int ranking;
-
-    public RankedInGroupPath(int ranking) {
-        this.ranking = ranking;
-    }
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof GroupPlay) {
-            GroupPlay play = (GroupPlay)model;  
-            if (ranking >= 0 && ranking < play.getRankings().size()) {
-                return play.getRankings().get(ranking).getTeam();
-            }
-            else {
-                throw new MatchPathException("no team ranked #"+ranking);    
-            }
-        }
-        else {
-            throw new MatchPathException("expecting a group play , found "+model.getClass().getName());
-        }
-    }
-
-}
-
-class RankedInGroupPhasePath implements IMatchPath {
-
-    private int ranking;
-
-    public RankedInGroupPhasePath(int ranking) {
-        this.ranking = ranking;
-    }
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof GroupPhase) {
-            GroupPhase phase = (GroupPhase)model;  
-            List<TeamRanking> rankings = phase.getFullRanking();
-            if (ranking >= 0 && ranking < rankings.size()) {
-                return rankings.get(ranking).getTeam();
-            }
-            else {
-                throw new MatchPathException("no team ranked #"+ranking);    
-            }
-        }
-        else {
-            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
-        }
-    }
-
-}
-
-
-class BoardsPath implements IMatchPath  {
-
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof Tournament) {
-            Tournament tournament = (Tournament)model;  
-            return tournament.getRun().getBoard();
-        }
-        else {
-            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
-        }
-    }
-}
-
-
-class BoardPath implements IMatchPath  {
-
-    private String name;
-
-    public BoardPath(String name) {
-        this.name = name;
-    }
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof TournamentBoard) {
-            TournamentBoard boards = (TournamentBoard)model;  
-            FinalPhase board = boards.getBoard(name);
-            if (board != null) {
-                return board;
-            }
-            else {
-                throw new MatchPathException("board "+name+" not found");
-            }
-        }
-        else {
-            throw new MatchPathException("expecting a group phase , found "+model.getClass().getName());
-        }
-    }
-}
-
-class RoundPath implements IMatchPath  {
-
-    private int index;
-
-    public RoundPath(int index) {
-        this.index = index;
-    }
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof FinalPhase) {
-            FinalPhase board = (FinalPhase)model;
-            Round round = board.getRounds().stream()
-            .filter(r -> r.getName() == index)
-            .findAny()
-            .orElse(null);
-            if (round != null) {
-                return round;
-            }
-            else {
-                throw new MatchPathException("phase "+board.getName()+" does not have round #"+index);
-            }
-        }
-        else {
-            throw new MatchPathException("expecting a final phase, found "+model.getClass().getName());
-        }
-    }
-}
-
-
-class MatchPath implements IMatchPath  {
-
-    private int index;
-
-    public MatchPath(int index) {
-        this.index = index;
-    }
-
-    public IPingModel accept(IPingModel model) throws MatchPathException {
-        if (model instanceof Round) {
-            Round round = (Round)model;
-            
-            if (index >= 0 && index < round.getName()) {
-                return round.getMatches().get(index);
-            }
-            else {
-                throw new MatchPathException("round "+round.getName()+" does not have match #"+index);
-            }
-        }
-        else {
-            throw new MatchPathException("expecting a round, found "+model.getClass().getName());
-        }
-    }
-}
-
-class PathBuilder {
-    StringBuilder builder;
-
-    public PathBuilder() {
-        builder = new StringBuilder();        
-    } 
-
-    public PathBuilder append(String pathElement) {
-        builder.append("/")
-        .append(pathElement);
-        return this;
-    }
-
-    public PathBuilder append(int pathElement) {
-        return append(Integer.toString(pathElement));
-    }
-}
 @Component
 public class RunService {
 
@@ -333,7 +125,6 @@ public class RunService {
                 }
             }
             System.out.println("hello");
-            ;
         }
 
 
@@ -387,7 +178,7 @@ public class RunService {
         if (elements != null && elements.length > 1)  {
             String start = elements[0];
             if (start.equals(groupsPath)) {
-                checkGroupPath(elements, tournament);
+                parseGroupPath(elements, tournament);
             }
             else if(start.equals(boardsPath)) {
                 checkBoardPath(elements, tournament);
@@ -397,22 +188,11 @@ public class RunService {
         return elements;
     }
 
-    private Pair<Boolean,Integer> tryParseInt(String element) {
-        int i = 0;
-        boolean ok = false;
-        try{
-            i = Integer.parseInt(element);
-            ok = true;
-        }catch(NumberFormatException e){
-            i = 0;
-            ok = false;
-        }
-        return new Pair<Boolean,Integer>(ok, i);
-    }
+    
 
     
 
-    private List<IMatchPath> checkGroupPath(String[] elements, Tournament tournament) throws MatchPathException {
+    private List<IMatchPath> parseGroupPath(String[] elements, Tournament tournament) throws MatchPathException {
         List<IMatchPath> path = new ArrayList<IMatchPath>();
         path.add(new GroupsPath());
         path.add(new GroupsPath());
@@ -455,6 +235,19 @@ public class RunService {
 
     private void checkBoardPath(String[] elements, Tournament tournament) {
 
+    }
+
+    private Pair<Boolean,Integer> tryParseInt(String element) {
+        int i = 0;
+        boolean ok = false;
+        try{
+            i = Integer.parseInt(element);
+            ok = true;
+        }catch(NumberFormatException e){
+            i = 0;
+            ok = false;
+        }
+        return new Pair<Boolean,Integer>(ok, i);
     }
 
     

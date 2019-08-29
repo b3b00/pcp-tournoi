@@ -29,4 +29,9 @@ package-lock.json
 
 ### SVELTE ### 
 node_modules/
+
+### OTHER ###
+pcp-tournoi.iml
 bundle.*
+.idea/
+Maven*
