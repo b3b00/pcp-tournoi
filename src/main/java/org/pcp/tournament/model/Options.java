@@ -118,4 +118,8 @@ public class Options implements IPingModel  {
         this.isPreset = isPreset;
     }
 
+    public String toString() {
+        return getId()+" - "+getLabel()+" - "+getWinningSets()+"/"+getSetLength()+" - "+getIsPreset();
+    }
+
 }
