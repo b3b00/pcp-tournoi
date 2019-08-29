@@ -18,8 +18,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 // @ComponentScan(basePackages = {"org.pcp.tournament.dao","org.pcp.tournament.service.*"})
 public class DummyTest {
 
+    
+
     @Autowired
-    MyComp myComp;
+    OptionsDao optionsDao;
 
     // @BeforeClass
     // public static void beforeClass() {        
@@ -35,7 +37,6 @@ public class DummyTest {
     public void dummyPassing() {
         System.out.println("dummy passing - in");
 
-        myComp.testMe();
 
         // java.util.List<Options> options = optionsDao.findAll();
         // for (Options option : options) {
