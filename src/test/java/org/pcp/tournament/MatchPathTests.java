@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pcp.tournament.dao.*;
 import org.pcp.tournament.model.*;
-
+import org.pcp.tournament.service.TeamStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,24 +16,18 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DummyTest {
+public class MatchPathTests {
 
+
+  
 
     @Autowired
-    OptionsDao optionsDao;
-
-    @Autowired
-    PlayerDao playerDao;
+    DBInitializer dbInitializer;
 
     @Test
     public void dummyPassing() {
         System.out.println("dummy passing - in");
-        List<Options> options = optionsDao.findAll();
-        for (Options option : options) {
-            System.out.println(option.toString());
-        }
-        List<Player> players = playerDao.findAll();
-
+        Tournament tournament = dbInitializer.InitTournament();        
         assertTrue("passing test ", true);
         System.out.println("dummy passing - out");
     }
