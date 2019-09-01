@@ -45,6 +45,8 @@ public class GroupsStrategies {
                 team.setGroup(group);
                 teamDao.save(team);
                 group.addTeam(team);
+                team.setGroup(group);
+                teamDao.save(team);
             }
             group.setTournament(tournament);
             groupDao.save(group);
@@ -56,8 +58,11 @@ public class GroupsStrategies {
             indexes.remove(randomIndex);
             Group group = groups.get(i);
             Team team = teams.get(ti);
+            
             group.addTeam(team);
-            groupDao.save(group);
+            group = groupDao.save(group);
+            team.setGroup(group);
+            teamDao.save(team);
         }
     }
     catch(Exception e) {
