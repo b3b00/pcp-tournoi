@@ -40,10 +40,10 @@ public class PlayersController {
     public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player) {
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
-            player.setTournament(tournament);            
+            player.setTournament(tournament);
             Player newPlayer = playerDao.save(player);
             
-            tournament.getPlayers().add(newPlayer);            
+            tournament.getPlayers().add(newPlayer);
             tournamentDao.save(tournament);
             return newPlayer;
         } catch (Exception e) {
