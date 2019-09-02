@@ -27,6 +27,8 @@ public class BoardController {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             runService.buildBoard(tournament, startingRound);
+            tournament = tournamentDao.findById(tournamentId);
+            return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
         }
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     } 
