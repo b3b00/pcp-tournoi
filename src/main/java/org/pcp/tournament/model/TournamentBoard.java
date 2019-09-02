@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,6 +34,11 @@ public class TournamentBoard implements IPingModel  {
     @OneToMany
     private List<FinalPhase> boards;
 
+
+    public TournamentBoard() {
+        boards = new ArrayList<FinalPhase>();
+    }
+
     /**
      * @return the rounds
      */
@@ -43,6 +50,10 @@ public class TournamentBoard implements IPingModel  {
         return boards.stream().filter((FinalPhase fp) -> fp.getName().equals(name))
             .findAny()
             .orElse(null);
+    }
+
+    public void addBoard(FinalPhase board) {
+        this.boards.add(board);
     }
 
     /**

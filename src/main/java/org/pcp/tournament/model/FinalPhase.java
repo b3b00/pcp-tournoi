@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,6 +21,11 @@ public class FinalPhase implements IPingModel{
 
     @OneToMany(mappedBy = "phase")
     private List<Round> rounds;
+
+
+    public FinalPhase() {
+        this.rounds = new ArrayList<Round>();
+    }
 
     /**
      * @return the id
@@ -50,6 +57,7 @@ public class FinalPhase implements IPingModel{
 
     
 
+
     /**
      * @return the rounds
      */
@@ -64,4 +72,8 @@ public class FinalPhase implements IPingModel{
         this.rounds = rounds;
     }
 
+
+    public void addRound(Round round) {
+        this.rounds.add(round);
+    }
 }

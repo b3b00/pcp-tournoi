@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,11 @@ public class Round implements IPingModel  {
 
     @ManyToOne
     private FinalPhase phase;
+
+
+    public Round() {
+        matches = new ArrayList<Match>();
+    }
 
     /**
      * @return the id
@@ -49,6 +55,10 @@ public class Round implements IPingModel  {
      */
     public void setMatches(List<Match> matches) {
         this.matches = matches;
+    }
+
+    public void addMatch(Match match) {
+        this.matches.add(match);
     }
 
 

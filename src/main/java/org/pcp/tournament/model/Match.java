@@ -7,6 +7,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
@@ -52,6 +53,12 @@ public class Match implements IPingModel  {
     @Transient
     @JsonInclude
     private boolean isEnded;
+
+    @JsonIgnore
+    private String leftTeamReference;
+
+    @JsonIgnore
+    private String rightTeamReference;
 
 
     public Match() {
@@ -154,12 +161,26 @@ public class Match implements IPingModel  {
         this.rightPoints = rightPoints;
     }
 
-    /**
-     * @param rightWonSet the rightWonSet to set
-     */
     public void setRightWonSet(int rightWonSet) {
         this.rightWonSet = rightWonSet;
     }
+
+    public String getLeftTeamReference() {
+        return leftTeamReference;
+    }
+
+    public void setLeftTeamReference(String leftTeamReference) {
+        this.leftTeamReference = leftTeamReference;
+    }
+
+    public String getRightTeamReference() {
+        return rightTeamReference;
+    }
+
+    public void setRightTeamReference(String rightTeamReference) {
+        this.rightTeamReference = rightTeamReference;
+    }
+
 
     private int leftPointDifference() {
         int diff = 0;
@@ -217,6 +238,8 @@ public class Match implements IPingModel  {
         }
         return null;
     }
+
+    
 
     public String  toString() {
         return getLeft().getName()+" - "+getRight().getName();
