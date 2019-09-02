@@ -124,7 +124,6 @@ public class RunService {
                     j++;
                 }
             }
-            System.out.println("hello");
         }
 
 

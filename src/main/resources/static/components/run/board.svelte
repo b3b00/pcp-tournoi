@@ -11,6 +11,8 @@
 
   export let tournament;
 
+  export let tournamentId;
+
   let moveMe;
 
   onMount(() => {
@@ -21,7 +23,8 @@
 
   async function build() {
     console.log(tournament);
-    const uri = `/tournaments/${tournament.Id}/board/$create?start=${startingRound}`;        
+    console.log(tournamentId);
+    const uri = `/tournaments/${tournamentId}/board/$create?start=${startingRound}`;        
         const res = await fetch(uri, {
             headers: {
                 'Accept': 'application/json',
