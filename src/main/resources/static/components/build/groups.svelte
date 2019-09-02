@@ -3,6 +3,7 @@
     import Group from './group.svelte';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
+    import {GroupDisplay} from './groupDisplay.js';
 
 
     function dragstart (team) {
@@ -247,7 +248,7 @@
         
         {#each ungroupedTeams as team (team.id)}
         <li draggable=true on:dragstart={dragstart(team)}  on:click={() => {selectUngroupedTeam(team)}} style={team.selected ? "background-color:lightgray;" : "background-color:white"}>            
-            <span>{team.name}<span>
+            <span>{@html GroupDisplay.getTeamDisplayName(team)}<span>
         </li>
         {/each}       
     </ul>

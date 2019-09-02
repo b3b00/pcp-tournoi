@@ -30,3 +30,8 @@ package-lock.json
 ### SVELTE ### 
 node_modules/
 bundle.*
+
+
+#OTHER
+.idea/
+pcp-tournoi.iml
