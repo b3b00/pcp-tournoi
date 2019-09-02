@@ -28,6 +28,7 @@
 <script>
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
+    import {GroupDisplay} from '../build/groupDisplay.js';
 
     export let tournament;
 
@@ -58,13 +59,13 @@
                 {/each}
         </tr>
         <tr>
-            <td class="teamName">{match.left.name}</td>
+            <td class="teamName">{@html GroupDisplay.getTeamDisplayName(match.left)}</td>
             {#each match.score as score (score)}
             <td><input type="text" min="0" placeholder="0" bind:value={score.left} /></td>
             {/each}
         </tr>
         <tr>
-            <td class="teamName">{match.right.name}</td>
+            <td class="teamName">{@html GroupDisplay.getTeamDisplayName(match.right)}</td>
             {#each match.score as score (score)}
             <td><input type="text" min="0" placeholder="0" bind:value={score.right} /></td>
             {/each}
