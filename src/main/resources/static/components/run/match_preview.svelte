@@ -28,6 +28,7 @@
 <script>
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
+  import {GroupDisplay} from '../build/groupDisplay.js';
 
   import Match from './match.svelte';
 
@@ -88,7 +89,7 @@
     <div>
       <div class="w3-quarter">
         <span class=" {leftStyle}">
-          {match.left.name}
+            {@html GroupDisplay.getTeamDisplayName(match.left)}          
         </span>
       </div>
       <div class="w3-quarter">
@@ -98,7 +99,7 @@
       </div>
       <div class="w3-quarter">
         <span class=" {rightStyle}">
-          {match.right.name}
+            {@html GroupDisplay.getTeamDisplayName(match.right)}
         </span>
       </div>
       <div class="w3-quarter">
