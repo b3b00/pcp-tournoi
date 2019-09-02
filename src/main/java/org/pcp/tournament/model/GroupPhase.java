@@ -8,6 +8,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.pcp.tournament.model.dto.TeamRanking;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class GroupPhase implements IPingModel  {
     private List<GroupPlay> groups;
 
     @OneToOne
+    @JsonIgnore
     private Run run;
 
     public GroupPhase() {

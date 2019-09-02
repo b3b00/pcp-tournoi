@@ -106,7 +106,7 @@ public class GroupPlayController {
                     play.setPhase(phase);
                     groupPlayDao.save(play);
                     phase.addGroupPlay(play);
-                }
+                }                
                 phase = groupPhaseDao.save(phase);
                 Run run = tournament.getRun();
                 if (run == null) {
@@ -114,6 +114,8 @@ public class GroupPlayController {
                 }
                 run.setGroupPhase(phase);
                 runDao.save(run);
+                phase.setRun(run);
+                groupPhaseDao.save(phase);
                 tournament.setRun(run);
                 tournamentDao.save(tournament);
                 return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
