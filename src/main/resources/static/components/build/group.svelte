@@ -5,6 +5,7 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import SelectableUL from './selectableUL.svelte';
+    import {GroupDisplay} from './groupDisplay.js';
 
     const dispatch = createEventDispatcher();
 
@@ -16,21 +17,12 @@
 
     export let selected = false;
 
+    const licenseeStar = "<span class='fa fa-star w3-display-center'></span>";
+
     
     function computeTeamNames() {
         group.teams.forEach(t => {
-            let name = "";
-            if (t.player1 != null)  {
-                if (t.player2 != null) {
-                    name = t.player1.name + " - "+t.player2.name;
-                }
-                else {
-                    name = t.player1.name;
-                }
-            }
-            else if (t.player2 != null) {
-                name = t.player2.name;
-            }
+            let name = GroupDisplay.getTeamDisplayName(t);    
             t.name = name;
         })
     }
@@ -58,7 +50,7 @@
 
    
     <li class="w3-display-container">
-        {team.name} <span on:click="{() => {unGroup(group,team)}}" class="w3-button w3-display-right">&times;</span>
+        {@html GroupDisplay.getTeamDisplayName(team)} <span on:click="{() => {unGroup(group,team)}}" class="w3-button w3-display-right">&times;</span>
     </li>
    
    

@@ -33,5 +33,10 @@ node_modules/
 ### OTHER ###
 pcp-tournoi.iml
 bundle.*
+
+
+#OTHER
 .idea/
+pcp-tournoi.iml
+
 Maven*

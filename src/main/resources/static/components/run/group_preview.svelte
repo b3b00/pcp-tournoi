@@ -11,6 +11,7 @@
     import {tools} from './tools.js';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
+    import {GroupDisplay} from '../build/groupDisplay.js';
   
     import MatchPreview from './match_preview.svelte';
 
@@ -45,7 +46,7 @@
         <div class="w3-padding w3-border"><h4>poule {groupPlay.group.name}</h4></div>
         {#each groupPlay.rankings as ranking} 
           <div class="w3-container w3-padding w3-border-right w3-border-left w3-border-bottom">
-          <div class="w3-half" style="text-align: center">{ranking.team.name}</div>  
+          <div class="w3-half" style="text-align: center">{@html GroupDisplay.getTeamDisplayName(ranking.team)}</div>  
           <div class="w3-quarter">&nbsp;</div>
           <div class="w3-quarter" style="text-align: center">{ranking.points}</div>
           </div>

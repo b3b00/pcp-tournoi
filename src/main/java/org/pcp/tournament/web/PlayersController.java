@@ -37,12 +37,13 @@ public class PlayersController {
     }
 
     @PostMapping(value = "/tournament/{tournamentId}/players")
-    public Player updatePlayer(@PathVariable int tournamentId, @RequestBody Player player) {
+    public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player) {
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
+            player.setTournament(tournament);
             Player newPlayer = playerDao.save(player);
-            newPlayer.setTournament(tournament);
-            tournament.getPlayers().add(newPlayer);            
+            
+            tournament.getPlayers().add(newPlayer);
             tournamentDao.save(tournament);
             return newPlayer;
         } catch (Exception e) {
@@ -51,8 +52,10 @@ public class PlayersController {
     }
 
     @PutMapping(value = "/tournament/{tournamentId}/players")
-    public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player) {
+    public Player updatePlayer(@PathVariable int tournamentId, @RequestBody Player player) {
         try {
+            Tournament tournament = tournamentDao.findById(tournamentId);
+            player.setTournament(tournament);
             Player updatedPlayer = playerDao.save(player);
             return updatedPlayer;
         } catch (Exception e) {
