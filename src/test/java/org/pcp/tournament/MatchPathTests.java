@@ -51,7 +51,6 @@ public class MatchPathTests {
             System.out.println(match.getLeftTeamReferenceLabel()+ " - "+match.getRightTeamReferenceLabel());
         }
         assertNotNull(phase);
-        //assertEquals( board.getBoards().size(),4);
         ;
     }
 

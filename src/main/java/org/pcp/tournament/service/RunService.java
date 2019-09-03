@@ -2,10 +2,8 @@ package org.pcp.tournament.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.pcp.tournament.model.*;
-import org.pcp.tournament.model.dto.*;
 import org.pcp.tournament.dao.*;
 
 import org.pcp.tournament.service.matchreferences.*;
@@ -148,44 +146,7 @@ public class RunService {
         if (tournament.getGroups().size() == startingRound) {
             buildBoardNominal(tournament, startingRound);
         } else {
-            int nbGroups = tournament.getGroups().size();
-            int nbSelectedByGroup = startingRound / nbGroups;
-            List<GroupPlay> groups = tournament.getRun().getGroupPhase().getGroups();
-            List<List<TeamRanking>> selection = new ArrayList<List<TeamRanking>>();
-            List<TeamRanking> selected = new ArrayList<TeamRanking>();
-            for (GroupPlay group : groups) {
-                group.computeRanking();
-                List<TeamRanking> groupRanking = group.getRankings();
-                List<TeamRanking> groupSelection = new ArrayList<TeamRanking>();
-                if (groupRanking.size() >= nbSelectedByGroup) {
-                    for (int i = 0; i < nbSelectedByGroup; i++) {
-                        groupSelection.add(groupRanking.get(i));
-                        selected.add(groupRanking.get(i));
-                    }
-                    selection.add(groupSelection);
-                }
-            }
-
-            int count = selection.stream().map(s -> s.size()).reduce(0, (Integer a, Integer b) -> a + b);
-            if (count < startingRound) {
-                List<Integer> selectedIds = selected.stream().map(tr -> tr.getTeam().getId())
-                        .collect(Collectors.toList());
-                int missingCount = startingRound - count;
-                List<TeamRanking> full = tournament.getRun().getGroupPhase().getFullRanking();
-                for (int i = 0; i < missingCount; i++) {
-                    TeamRanking team = null;
-                    int j = 0;
-                    while (team == null && j < full.size()) {
-                        TeamRanking rank = full.get(j);
-                        if (!selectedIds.contains(rank.getTeam().getId())) {
-                            team = rank;
-                            selectedIds.add(team.getTeam().getId());
-                            selected.add(team);
-                        }
-                        j++;
-                    }
-                }
-            }
+            // TODO later if really needed
         }
 
     }
@@ -202,6 +163,13 @@ public class RunService {
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
+        buildNominalFirstRound(tournament, finalPhase, startingRound);
+        
+
+    }
+
+
+    private void buildNominalFirstRound(Tournament tournament, FinalPhase finalPhase, int startingRound) {
         Round start = new Round();
         start.setPhase(finalPhase);
 
@@ -210,29 +178,26 @@ public class RunService {
             Group leftGroup = tournament.getGroups().get(i);
             Group rightGroup = tournament.getGroups().get(startingRound - i - 1);
 
-            String leftGroupPath = String.format("/groups/group/%s/", leftGroup.getName());
-            String rightGroupPath = String.format("/groups/group/%s/", rightGroup.getName());
-
             Match match1 = new Match();
-            match1.setLeftTeamReference(leftGroupPath + "0");
-            match1.setRightTeamReference(rightGroupPath + "1");
+            match1.setLeftTeamReference(buildMatchPath(leftGroup, 0));
+            match1.setRightTeamReference(buildMatchPath(rightGroup, 1));
             match1 = matchDao.save(match1);
 
             Match match2 = new Match();
-            match2.setLeftTeamReference(leftGroupPath + "1");
-            match2.setRightTeamReference(rightGroupPath + "0");
+            match2.setLeftTeamReference(buildMatchPath(rightGroup, 0));
+            match2.setRightTeamReference(buildMatchPath(leftGroup, 1));
             match2 = matchDao.save(match2);
 
             start.addMatch(match1);
             start.addMatch(match2);
 
             start = roundDao.save(start);
-            
 
         }
         finalPhase.addRound(start);
         finalPhase = finalPhaseDao.save(finalPhase);
 
+        
     }
 
     /*
@@ -261,9 +226,9 @@ public class RunService {
     public static String roundPath = "round";
     public static String matchPath = "match";
 
-    public String buildMatchPath(GroupPlay group, int rank) {
+    public String buildMatchPath(Group group, int rank) {
         PathBuilder pathBuilder = new PathBuilder();
-        pathBuilder.append(groupsPath).append(groupPath).append(group.getGroup().getName()).append(rank);
+        pathBuilder.append(groupsPath).append(groupPath).append(group.getName()).append(rank);
         return pathBuilder.toString();
     }
 
