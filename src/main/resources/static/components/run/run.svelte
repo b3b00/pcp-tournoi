@@ -36,10 +36,11 @@
 
     let currentItem;
 
+
     onMount(async () => {        
         currentBreadCrumb = [
             {
-                "name": "tournoi", "label": "tournoi", "path": "tournoi", "id": "1"
+                "name": "boards", "label": "tournoi", "path": "boards", "id": "1"
             }
         ];
         if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {
@@ -92,6 +93,9 @@
             }
             if (item.name == "group") {       
                 group = tournament.run.groupPhase.groups.filter(g => g.id == item.id)[0];
+            }
+            if (item.name == "board") {
+                board = tournament.run.board.boards.filter(b => b.id == item.id)[0];
             }
         });
         currentItem = newBreadCrumb[newBreadCrumb.length - 1];

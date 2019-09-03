@@ -14,10 +14,10 @@
 
   export let tournamentId;
 
-  //let moveMe;
+  let moveMe;
 
   onMount(async () => {
-    //moveMe = tools.mover(dispatch);
+    moveMe = tools.mover(dispatch);
     console.log(tournament);
     tournament = await tools.fetchTournament(id);
   });
@@ -50,7 +50,9 @@
 {:else}
 tableaux disponibles :: <br>
 {#each tournament.run.board.boards as board}
+<li style="cursor:pointer" on:click={() => {moveMe("board", "tableau "+board.name,"board",board.id);}}>
 {board.id} - {board.name}
+</li>
 {/each}
 <p>to be started soon!</p>
 {/if}

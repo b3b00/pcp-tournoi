@@ -18,10 +18,6 @@
   onMount(() => {
         moveMe = tools.mover(dispatch);
     });
-
-    function onclickGroup(group) {        
-        moveMe("group "+group.name, "group "+group.name,"group",group.id);
-    }
   
   export let phase;
 
