@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
+import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.*;
+import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -17,7 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MatchPathTests {
 
 
-  
+    @Autowired
+    TournamentDao tournamentDao;
+
+    @Autowired
+    RunService runService;
 
     @Autowired
     DBInitializer dbInitializer;
@@ -28,7 +34,11 @@ public class MatchPathTests {
         System.out.println("dummy passing - in");
         Tournament tournament = dbInitializer.InitTournament();        
         assertNotNull(tournament);
-        System.out.println("dummy passing - out");
+        tournament = runService.buildGroupPhase(tournament);
+        runService.buildBoard(tournament, 4);
+        tournament = tournamentDao.findById(tournament.getId());
+        
+        ;
     }
 
     
