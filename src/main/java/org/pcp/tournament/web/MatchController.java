@@ -7,6 +7,7 @@ import org.pcp.tournament.model.Match;
 import org.pcp.tournament.model.MatchSet;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.service.MatchService;
+import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,9 @@ import javassist.NotFoundException;
 
 @RestController
 public class MatchController {
+
+    @Autowired
+    RunService runService;
 
     @Autowired
     MatchDao matchDao;
@@ -69,7 +73,8 @@ public class MatchController {
                     matchSetDao.save(set);
                 }
                 newMatch = matchDao.save(match);
-                newMatch.compute(tournament.getOptions());
+                newMatch.compute(tournament.getOptions());                
+                runService.InjectTeams(tournament);
                 return newMatch;
             }
             throw new NotFoundException("match not found");
