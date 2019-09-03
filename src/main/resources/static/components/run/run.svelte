@@ -111,7 +111,11 @@
     {:else if (currentItem.name == "board")}        
        <Board tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Board> 
     {:else}
-        <span style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</span>
+    <ul>
+    <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
+
+    <li style="cursor:pointer" on:click={() => {moveMe("board","tableaux","board",null)}}>board</li>
+    </ul>
     {/if}
 {:else}
 <ul>
