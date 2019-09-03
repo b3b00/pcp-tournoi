@@ -77,7 +77,7 @@ public class GroupPlayController {
         if (tournament != null) {
             try {
                 tournament = runService.buildGroupPhase(tournament);
-                return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+                                return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<String>("error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }

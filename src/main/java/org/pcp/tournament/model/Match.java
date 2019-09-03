@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Entity
-public class Match implements IPingModel  {
+public class Match implements IPingModel {
 
     @Id
     @GeneratedValue
@@ -179,16 +179,18 @@ public class Match implements IPingModel  {
 
     private String getTeamReferenceLabel(String reference) {
         String label = "";
-        String groupPrefix = "/groups/group/";
-        if (reference.startsWith(groupPrefix)) {
-            String t = reference.replace(groupPrefix, "");
-            String[] items = t.split("\\/");
-            if (items[1].equals("0")) {
-                label = "1er";
-            } else if (items[1].equals("1")) {
-                label = "2ème";
+        if (reference != null) {
+            String groupPrefix = "/groups/group/";
+            if (reference.startsWith(groupPrefix)) {
+                String t = reference.replace(groupPrefix, "");
+                String[] items = t.split("\\/");
+                if (items[1].equals("0")) {
+                    label = "1er";
+                } else if (items[1].equals("1")) {
+                    label = "2ème";
+                }
+                label += " du groupe " + items[0];
             }
-            label += " du groupe " + items[0];
         }
         return label;
     }
