@@ -42,7 +42,6 @@ public class Match implements IPingModel  {
     @JsonInclude
     private int leftPoints = 0;
 
-
     @OneToMany(mappedBy = "match")
     private List<MatchSet> score;
 
@@ -59,7 +58,6 @@ public class Match implements IPingModel  {
 
     @JsonIgnore
     private String rightTeamReference;
-
 
     public Match() {
         score = new ArrayList<MatchSet>();
@@ -120,6 +118,16 @@ public class Match implements IPingModel  {
         return winner;
     }
 
+    public Team getLoser() {
+        if (winner != null) {
+            if (winner.getId() == leftTeam.getId()) {
+                return rightTeam;
+            }
+            return leftTeam;
+        }
+        return null;
+    }
+
     /**
      * @param winner the winner to set
      */
@@ -177,11 +185,10 @@ public class Match implements IPingModel  {
             String[] items = t.split("\\/");
             if (items[1].equals("0")) {
                 label = "1er";
-            }
-            else if (items[1].equals("1")) {
+            } else if (items[1].equals("1")) {
                 label = "2ème";
             }
-            label += " du groupe "+items[0];
+            label += " du groupe " + items[0];
         }
         return label;
     }
@@ -206,11 +213,10 @@ public class Match implements IPingModel  {
         this.rightTeamReference = rightTeamReference;
     }
 
-
     private int leftPointDifference() {
         int diff = 0;
-            for (MatchSet matchSet : getScore()) {
-            diff += matchSet.getLeft() - matchSet.getRight();            
+        for (MatchSet matchSet : getScore()) {
+            diff += matchSet.getLeft() - matchSet.getRight();
         }
         return diff;
     }
@@ -231,8 +237,7 @@ public class Match implements IPingModel  {
             if (setWinner != null) {
                 if (setWinner.getId() == getLeft().getId()) {
                     leftWonSet++;
-                }
-                else {
+                } else {
                     rightWonSet++;
                 }
             }
@@ -248,7 +253,7 @@ public class Match implements IPingModel  {
             setWinner(getRight());
             setIsEnded(true);
         }
-        
+
     }
 
     private Team winner(MatchSet set, Options options) {
@@ -258,16 +263,14 @@ public class Match implements IPingModel  {
         if (left >= len && (left - right) >= 2) {
             return getLeft();
         }
-        if (right >= len && (right-left) >= 2) {
+        if (right >= len && (right - left) >= 2) {
             return getRight();
         }
         return null;
     }
 
-    
-
-    public String  toString() {
-        return getLeft().getName()+" - "+getRight().getName();
+    public String toString() {
+        return getLeft().getName() + " - " + getRight().getName();
     }
 
 }

@@ -43,6 +43,7 @@ public class MatchPathTests {
         assertNotNull(tournament.getRun());
         Run run = tournament.getRun();
         assertNotNull(run.getBoard());
+        
         TournamentBoard board = run.getBoard();
         assertNotNull(board.getBoards());
         FinalPhase phase = board.getBoard("I");
@@ -53,6 +54,9 @@ public class MatchPathTests {
         }
         assertNotNull(phase);
         assertEquals(4, phase.getRounds().size());
+
+        runService.InjectTeams(tournament);
+
         ;
     }
 

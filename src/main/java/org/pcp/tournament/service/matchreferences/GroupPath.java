@@ -14,7 +14,8 @@ public class GroupPath implements IMatchPath {
 
     public IPingModel accept(IPingModel model) throws MatchPathException {
         if (model instanceof GroupPhase) {
-            GroupPhase phase = (GroupPhase)model;            
+            GroupPhase phase = (GroupPhase)model;  
+                    
             GroupPlay play =  phase.getGroups().stream()
                 .filter(p -> p.getGroup().getName().equals(groupName))
                 .findAny()

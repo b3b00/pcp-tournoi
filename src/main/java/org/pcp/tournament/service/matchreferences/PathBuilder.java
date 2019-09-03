@@ -4,12 +4,14 @@ public class PathBuilder {
     StringBuilder builder;
 
     public PathBuilder() {
-        builder = new StringBuilder();        
-    } 
+        builder = new StringBuilder();
+    }
 
     public PathBuilder append(String pathElement) {
-        builder.append("/")
-        .append(pathElement);
+        if (builder.length()> 0) {
+        builder.append("/");
+        }
+        builder.append(pathElement);
         return this;
     }
 

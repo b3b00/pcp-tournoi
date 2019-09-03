@@ -157,32 +157,22 @@ public class GroupPlay implements IPingModel  {
             tr2 = updateRanking(tr2, match.getRight(), match, options);
             rankingByTeam.put(match.getRight(), tr2);
         }
-
-        // for (Team team : getGroup().getTeams()) {
-
-        // List<Match> matches = getMatches().stream().filter((Match m) -> {
-        // return (m.getLeft().getId() == team.getId() ||
-        // m.getRight().getId() == team.getId());
-        // }).collect(Collectors.toList());
-        // int points = 0;
-        // int difference = 0;
-        // for (Match match : matches) {
-        // match.compute(getGroup().getTournament().getOptions());
-        // Team winner = match.getWinner();
-        // if (match.getIsEnded() && winner != null ) {
-        // if (winner.getId() == team.getId()) {
-        // points ++;
-        // }
-        // difference += match.pointDifference(team);
-        // }
-        // }
-
-        // TeamRanking ranking = new TeamRanking(team, points, difference);
-        // rankings.add(ranking);
-        // Collections.sort(rankings);
-        // }
+       
         rankings.addAll(rankingByTeam.values());
         Collections.sort(rankings);
+    }
+
+    public boolean hasStarted() {
+        for (Match match : matches) {
+            if (match.getScore().size() > 0) {
+                for (MatchSet set : match.getScore()) {
+                    if (set.getLeft()+set.getRight() > 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
