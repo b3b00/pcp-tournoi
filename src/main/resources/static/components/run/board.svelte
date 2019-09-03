@@ -15,9 +15,10 @@
 
   let moveMe;
 
-  onMount(() => {
+  onMount(async () => {
     moveMe = tools.mover(dispatch);
     console.log(tournament);
+    tournament = await tools.fetchTournament(id);
   });
 
 
@@ -41,6 +42,10 @@
 
 </script>
 
+{#if (tournament.run.board == null || tournament.run.board == undefined)}
 <input type="text" bind:value={startingRound}/>
 <br>
 <button on:click={build}>Build Me !</button>
+{:else}
+<p>to be started soon!</p>
+{/if}
