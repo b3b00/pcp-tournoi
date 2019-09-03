@@ -1,23 +1,16 @@
 package org.pcp.tournament.web;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pcp.tournament.dao.GroupDao;
 import org.pcp.tournament.dao.GroupPhaseDao;
 import org.pcp.tournament.dao.GroupPlayDao;
 import org.pcp.tournament.dao.MatchDao;
 import org.pcp.tournament.dao.RunDao;
 import org.pcp.tournament.dao.TournamentDao;
-import org.pcp.tournament.model.Group;
 import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
-import org.pcp.tournament.model.Match;
-import org.pcp.tournament.model.Options;
-import org.pcp.tournament.model.Run;
-import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.service.MatchService;
+import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +43,9 @@ public class GroupPlayController {
     @Autowired
     MatchService matchService;
 
+    @Autowired
+    RunService runService;
+
     // region [GET]
 
     @GetMapping(value = "/groupPlay/{groupPlayId}")
@@ -80,50 +76,12 @@ public class GroupPlayController {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             try {
-                Options options = tournament.getOptions();
-                GroupPhase phase = new GroupPhase();
-                phase = groupPhaseDao.save(phase); // to allow group -> phase linking
-                for (Group group : tournament.getGroups()) {
-                    GroupPlay play = new GroupPlay();
-                    play.setGroup(group);
-
-                    List<Team> teams = group.getTeams();
-                    List<Match> matches = new ArrayList<Match>();
-
-                    int len = teams.size();
-                    for (int i = len - 1; i >= 0; i--) {
-                        for (int j = i - 1; j >= 0; j--) {
-                            Team t1 = teams.get(i);
-                            Team t2 = teams.get(j);
-                            Match match = new Match();
-                            match.setLeft(t1);
-                            match.setRight(t2);
-                            Match newMatch = matchService.createMatch(match, options);
-                            matches.add(newMatch);
-                        }
-                    }
-                    play.setMatches(matches);
-                    play.setPhase(phase);
-                    groupPlayDao.save(play);
-                    phase.addGroupPlay(play);
-                }                
-                phase = groupPhaseDao.save(phase);
-                Run run = tournament.getRun();
-                if (run == null) {
-                    run = new Run(tournament,phase);
-                }
-                run.setGroupPhase(phase);
-                runDao.save(run);
-                phase.setRun(run);
-                groupPhaseDao.save(phase);
-                tournament.setRun(run);
-                tournamentDao.save(tournament);
+                tournament = runService.buildGroupPhase(tournament);
                 return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<String>("error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     }
 

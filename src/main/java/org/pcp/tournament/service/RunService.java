@@ -43,6 +43,9 @@ public class RunService {
     @Autowired
     TournamentBoardDao tournamentBoardDao;
 
+    @Autowired
+    MatchService matchService;
+
     public void deleteRunForTournament(int TournamentId) {
         Tournament tournament = tournamentDao.findById(TournamentId);
         if (tournament != null) {
@@ -89,6 +92,55 @@ public class RunService {
             }
 
         }
+    }
+
+    public Tournament buildGroupPhase(Tournament tournament) {
+        if (tournament != null) {
+            try {
+                Options options = tournament.getOptions();
+                GroupPhase phase = new GroupPhase();
+                phase = groupPhaseDao.save(phase); // to allow group -> phase linking
+                for (Group group : tournament.getGroups()) {
+                    GroupPlay play = new GroupPlay();
+                    play.setGroup(group);
+
+                    List<Team> teams = group.getTeams();
+                    List<Match> matches = new ArrayList<Match>();
+
+                    int len = teams.size();
+                    for (int i = len - 1; i >= 0; i--) {
+                        for (int j = i - 1; j >= 0; j--) {
+                            Team t1 = teams.get(i);
+                            Team t2 = teams.get(j);
+                            Match match = new Match();
+                            match.setLeft(t1);
+                            match.setRight(t2);
+                            Match newMatch = matchService.createMatch(match, options);
+                            matches.add(newMatch);
+                        }
+                    }
+                    play.setMatches(matches);
+                    play.setPhase(phase);
+                    groupPlayDao.save(play);
+                    phase.addGroupPlay(play);
+                }
+                phase = groupPhaseDao.save(phase);
+                Run run = tournament.getRun();
+                if (run == null) {
+                    run = new Run(tournament, phase);
+                }
+                run.setGroupPhase(phase);
+                runDao.save(run);
+                phase.setRun(run);
+                groupPhaseDao.save(phase);
+                tournament.setRun(run);
+                tournament = tournamentDao.save(tournament);
+                return tournament;
+            } catch (Exception e) {
+                throw e;
+            }            
+        }
+        return null;
     }
 
     public void buildBoard(Tournament tournament, int startingRound) {
@@ -142,31 +194,31 @@ public class RunService {
         FinalPhase finalPhase = new FinalPhase();
         TournamentBoard board = new TournamentBoard();
         board = tournamentBoardDao.save(board);
-        finalPhase.setName("I");        
+        finalPhase.setName("I");
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
         Round start = new Round();
         start.setPhase(finalPhase);
 
-        for (int i = 0; i < startingRound/2; i++) {
+        for (int i = 0; i < startingRound / 2; i++) {
 
             Group leftGroup = tournament.getGroups().get(i);
-            Group rightGroup = tournament.getGroups().get(startingRound-i-1);
+            Group rightGroup = tournament.getGroups().get(startingRound - i - 1);
 
-            String leftGroupPath = String.format("/groups/group/%s/",leftGroup.getName());
-            String rightGroupPath = String.format("/groups/group/%s/",rightGroup.getName());
+            String leftGroupPath = String.format("/groups/group/%s/", leftGroup.getName());
+            String rightGroupPath = String.format("/groups/group/%s/", rightGroup.getName());
 
             Match match1 = new Match();
-            match1.setLeftTeamReference(leftGroupPath+"0");
-            match1.setRightTeamReference(rightGroupPath+"1");
+            match1.setLeftTeamReference(leftGroupPath + "0");
+            match1.setRightTeamReference(rightGroupPath + "1");
             match1 = matchDao.save(match1);
 
             Match match2 = new Match();
-            match2.setLeftTeamReference(leftGroupPath+"1");
-            match2.setRightTeamReference(rightGroupPath+"0");
+            match2.setLeftTeamReference(leftGroupPath + "1");
+            match2.setRightTeamReference(rightGroupPath + "0");
             match2 = matchDao.save(match2);
-            
+
             start.addMatch(match1);
             start.addMatch(match2);
 
@@ -174,10 +226,7 @@ public class RunService {
             finalPhase.addRound(start);
             finalPhase = finalPhaseDao.save(finalPhase);
 
-            tournament.getRun().getBoard().getBoard("r");
         }
-        
-        
 
     }
 
