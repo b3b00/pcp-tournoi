@@ -4,7 +4,7 @@
   import { tools } from './tools.js';
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
-  import Board from './board.svelte';
+  import Round from './round.svelte';
 
 
 
@@ -32,8 +32,11 @@
   
 
 </script>
-
-<!-- {#each board.rounds as round}
+{#if board !== null && board!== undefined}
+{#each board.rounds as round}
 <Round round={round} roundId={round.id} tournamentId={tournamentId} tournament={tournament}></Round>
-{/each} -->
+{/each} 
+{:else}
+<p>something's bad !</p>
+{/if}
 <p>TODO</p>

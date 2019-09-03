@@ -43,14 +43,19 @@
 
   let startingRound = 8;
 
-  
+  function refresh() {
+
+  }
 
 </script>
 
-<div class="w3-container">
+<p>ID : {round.id}</p>
+<p>MATCHES : {round.matches.length}</p>
+
+<!-- <div class="w3-container">
     {#each round.matches as match }
     <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
   {/each}
   
 
-</div>
+</div> -->
