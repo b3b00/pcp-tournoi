@@ -1,5 +1,6 @@
 package org.pcp.tournament;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -51,6 +52,7 @@ public class MatchPathTests {
             System.out.println(match.getLeftTeamReferenceLabel()+ " - "+match.getRightTeamReferenceLabel());
         }
         assertNotNull(phase);
+        assertEquals(4, phase.getRounds().size());
         ;
     }
 

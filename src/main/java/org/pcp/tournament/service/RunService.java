@@ -168,20 +168,48 @@ public class RunService {
         {
             previous = buildRoundNominal(tournament, finalPhase, previous, i);
         }
+        buildFinalRound(tournament,finalPhase,previous);
     }
 
-    public Round buildRoundNominal(Tournament tournament,FinalPhase finalPhase, Round previous, int number) {
+    private Round buildFinalRound(Tournament tournament, FinalPhase finalPhase, Round previous) {
+        Round round = new Round();
+        round.setPhase(finalPhase);        
+        
+        Match finalMatch = new Match(); 
+        finalPhase.addRound(round);
+        finalPhaseDao.save(finalPhase);
+        String leftRef = builMatchPath(previous, 0, PlayStatusEnum.WINNER);
+        String rightRef = builMatchPath(previous, 1, PlayStatusEnum.WINNER);
+        finalMatch.setLeftTeamReference(leftRef);
+        finalMatch.setRightTeamReference(rightRef);
+        finalMatch = matchDao.save(finalMatch);
+
+        Match smallFinalMatch = new Match(); 
+        leftRef = builMatchPath(previous, 0, PlayStatusEnum.LOSER);
+        rightRef = builMatchPath(previous, 1, PlayStatusEnum.LOSER);
+        smallFinalMatch.setLeftTeamReference(leftRef);
+        smallFinalMatch.setRightTeamReference(rightRef);
+        smallFinalMatch = matchDao.save(smallFinalMatch);
+
+        round.addMatch(smallFinalMatch);
+
+        return round;
+    }
+
+    private Round buildRoundNominal(Tournament tournament,FinalPhase finalPhase, Round previous, int number) {
         Round round = new Round();
         round.setPhase(finalPhase);
+        finalPhase.addRound(round);
+        finalPhaseDao.save(finalPhase);
         for(int i = 0; i < number; i++) {
             Match match = new Match();
-            // TODO set team references
             String leftRef = builMatchPath(previous, i*2, PlayStatusEnum.WINNER);
             String rightRef = builMatchPath(previous, i*2+1, PlayStatusEnum.WINNER);
             match.setLeftTeamReference(leftRef);
             match.setRightTeamReference(rightRef);
             match = matchDao.save(match);
             round.addMatch(match);
+            
         }
         return round;
     }
@@ -215,7 +243,7 @@ public class RunService {
         finalPhase.addRound(start);
         finalPhase = finalPhaseDao.save(finalPhase);
 
-        
+        return start;
     }
 
     /*
