@@ -163,13 +163,31 @@ public class RunService {
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
-        buildNominalFirstRound(tournament, finalPhase, startingRound);
-        
+        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound);        
+        for (int i = startingRound/2; i > 1; i = i/2 ) 
+        {
+            previous = buildRoundNominal(tournament, finalPhase, previous, i);
+        }
+    }
 
+    public Round buildRoundNominal(Tournament tournament,FinalPhase finalPhase, Round previous, int number) {
+        Round round = new Round();
+        round.setPhase(finalPhase);
+        for(int i = 0; i < number; i++) {
+            Match match = new Match();
+            // TODO set team references
+            String leftRef = builMatchPath(previous, i*2, PlayStatusEnum.WINNER);
+            String rightRef = builMatchPath(previous, i*2+1, PlayStatusEnum.WINNER);
+            match.setLeftTeamReference(leftRef);
+            match.setRightTeamReference(rightRef);
+            match = matchDao.save(match);
+            round.addMatch(match);
+        }
+        return round;
     }
 
 
-    private void buildNominalFirstRound(Tournament tournament, FinalPhase finalPhase, int startingRound) {
+    private Round buildNominalFirstRound(Tournament tournament, FinalPhase finalPhase, int startingRound) {
         Round start = new Round();
         start.setPhase(finalPhase);
 

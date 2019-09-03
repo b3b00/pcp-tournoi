@@ -16,4 +16,8 @@ public class PathBuilder {
     public PathBuilder append(int pathElement) {
         return append(Integer.toString(pathElement));
     }
+
+    public String toString() {
+        return builder.toString();
+    }
 }
