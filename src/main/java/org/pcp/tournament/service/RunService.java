@@ -194,6 +194,10 @@ public class RunService {
         FinalPhase finalPhase = new FinalPhase();
         TournamentBoard board = new TournamentBoard();
         board = tournamentBoardDao.save(board);
+
+        tournament.getRun().setBoard(board);
+        tournament = tournamentDao.save(tournament);
+
         finalPhase.setName("I");
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
@@ -223,10 +227,11 @@ public class RunService {
             start.addMatch(match2);
 
             start = roundDao.save(start);
-            finalPhase.addRound(start);
-            finalPhase = finalPhaseDao.save(finalPhase);
+            
 
         }
+        finalPhase.addRound(start);
+        finalPhase = finalPhaseDao.save(finalPhase);
 
     }
 

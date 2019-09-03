@@ -169,6 +169,31 @@ public class Match implements IPingModel  {
         return leftTeamReference;
     }
 
+    private String getTeamReferenceLabel(String reference) {
+        String label = "";
+        String groupPrefix = "/groups/group/";
+        if (reference.startsWith(groupPrefix)) {
+            String t = reference.replace(groupPrefix, "");
+            String[] items = t.split("\\/");
+            if (items[1].equals("0")) {
+                label = "1er";
+            }
+            else if (items[1].equals("1")) {
+                label = "2ème";
+            }
+            label += " du groupe "+items[0];
+        }
+        return label;
+    }
+
+    public String getLeftTeamReferenceLabel() {
+        return getTeamReferenceLabel(leftTeamReference);
+    }
+
+    public String getRightTeamReferenceLabel() {
+        return getTeamReferenceLabel(rightTeamReference);
+    }
+
     public void setLeftTeamReference(String leftTeamReference) {
         this.leftTeamReference = leftTeamReference;
     }
