@@ -4,6 +4,7 @@
     import BreadCrumb from './breadcrumb.svelte';
     import GroupPhase from './groups.svelte';
     import Group from './group.svelte';
+    import Boards from './boards.svelte';
     import Board from './board.svelte';
     import { tools } from './tools.js';
     import { onMount } from "svelte";
@@ -108,13 +109,15 @@
         <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
     {:else if (currentItem.name == "group")}
         <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
+    {:else if (currentItem.name == "boards")}        
+       <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
     {:else if (currentItem.name == "board")}        
        <Board tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Board> 
     {:else}
     <ul>
     <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
 
-    <li style="cursor:pointer" on:click={() => {moveMe("board","tableaux","board",null)}}>board</li>
+    <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>board</li>
     </ul>
     {/if}
 {:else}
@@ -122,7 +125,7 @@
 
 <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
 
-<li style="cursor:pointer" on:click={() => {moveMe("board","tableaux","board",null)}}>board</li>
+<li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>board</li>
 
 </ul>
 {/if}
