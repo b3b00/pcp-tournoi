@@ -191,14 +191,15 @@ public class RunService {
         String rightRef = builMatchPath(previous, 1, PlayStatusEnum.WINNER);
         finalMatch.setLeftTeamReference(leftRef);
         finalMatch.setRightTeamReference(rightRef);
-        finalMatch = matchDao.save(finalMatch);
+        finalMatch = matchService.createMatch(finalMatch, tournament.getOptions());
+        
 
         Match smallFinalMatch = new Match(); 
         leftRef = builMatchPath(previous, 0, PlayStatusEnum.LOSER);
         rightRef = builMatchPath(previous, 1, PlayStatusEnum.LOSER);
         smallFinalMatch.setLeftTeamReference(leftRef);
         smallFinalMatch.setRightTeamReference(rightRef);
-        smallFinalMatch = matchDao.save(smallFinalMatch);
+        smallFinalMatch = matchService.createMatch(smallFinalMatch, tournament.getOptions());
 
         round.addMatch(finalMatch);
         round.addMatch(smallFinalMatch);
@@ -221,7 +222,7 @@ public class RunService {
             String rightRef = builMatchPath(previous, i*2+1, PlayStatusEnum.WINNER);
             match.setLeftTeamReference(leftRef);
             match.setRightTeamReference(rightRef);
-            match = matchDao.save(match);
+            match = matchService.createMatch(match, tournament.getOptions());
             round.addMatch(match);
             round = roundDao.save(round);            
         }
@@ -244,12 +245,12 @@ public class RunService {
             Match match1 = new Match();
             match1.setLeftTeamReference(buildMatchPath(leftGroup, 0));
             match1.setRightTeamReference(buildMatchPath(rightGroup, 1));
-            match1 = matchDao.save(match1);
+            match1 = matchService.createMatch(match1, tournament.getOptions());
 
             Match match2 = new Match();
             match2.setLeftTeamReference(buildMatchPath(rightGroup, 0));
             match2.setRightTeamReference(buildMatchPath(leftGroup, 1));
-            match2 = matchDao.save(match2);
+            match2 = matchService.createMatch(match2, tournament.getOptions());
 
             start.addMatch(match1);
             start.addMatch(match2);
@@ -453,6 +454,7 @@ private Team getTeam(Tournament tournament,String path) {
 
     // endregion
 
+// region [match labeling]
 
     public void computeTeamReferenceLabels(Tournament tournament) {
         if (tournament != null) {
@@ -477,4 +479,6 @@ private Team getTeam(Tournament tournament,String path) {
         }
 
     }
+
+//endregion
 }

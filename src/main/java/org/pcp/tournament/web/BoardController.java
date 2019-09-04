@@ -24,6 +24,7 @@ public class BoardController {
 
     @PostMapping("/tournaments/{tournamentId}/board/$create")
     public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId,@RequestParam("start")int startingRound) {
+        try {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             runService.buildBoard(tournament, startingRound);
@@ -32,6 +33,11 @@ public class BoardController {
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
         }
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+    }
+    catch(Exception e) {
+        System.out.println("hello "+e.getMessage());
+        return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     } 
 
 }

@@ -8,8 +8,9 @@
 
 <style>
   .match-margin {
-    margin: 8px!important;
+    margin: 8px !important;
   }
+
   span.winner {
     color: lightgreen;
     font-weight: bold;
@@ -28,7 +29,7 @@
 <script>
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
-  import {GroupDisplay} from '../groupDisplay.js';
+  import { GroupDisplay } from '../groupDisplay.js';
 
   import Match from './match.svelte';
 
@@ -77,8 +78,8 @@
         body: JSON.stringify(savedMatch)
       });
     match = await res.json();
-    dispatch('matchSaved',{});
-    setStyle();    
+    dispatch('matchSaved', {});
+    setStyle();
   }
 
 </script>

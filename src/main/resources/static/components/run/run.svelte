@@ -40,7 +40,7 @@
     onMount(async () => {        
         currentBreadCrumb = [
             {
-                "name": "boards", "label": "tournoi", "path": "boards", "id": "1"
+                "name": "tournament", "label": "tournoi", "path": "tournament", "id": "1"
             }
         ];
         if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {

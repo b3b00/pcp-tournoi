@@ -199,7 +199,7 @@ public class Match implements IPingModel {
                 label += " du groupe " + items[0];
             }            
             else if (reference.startsWith(roundPrefix)) {
-                ;
+                label = "&Phi; - &Phi;";
             }
         }
         return label;
