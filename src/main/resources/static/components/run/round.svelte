@@ -23,7 +23,7 @@
   onMount(async () => {
     moveMe = tools.mover(dispatch);
     console.log(tournament);
-    tournament = await tools.fetchTournament(id);
+    tournament = await tools.fetchTournament(tournamentId);
   });
 
 

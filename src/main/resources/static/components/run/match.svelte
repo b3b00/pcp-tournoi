@@ -54,21 +54,27 @@
     <table>
         <tr>
             <td></td>
+                {#if (match!== undefined && match.score !== undefined)}
                 {#each match.score as score,i (score)}
                 <td align="center">{i+1}</td>
                 {/each}
+                {/if}
         </tr>
         <tr>
             <td class="teamName">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)}</td>
+            {#if (match!== undefined && match.score !== undefined)}
             {#each match.score as score (score)}
             <td><input type="text" min="0" placeholder="0" bind:value={score.left} /></td>
             {/each}
+            {/if}
         </tr>
         <tr>
             <td class="teamName">{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}</td>
+            {#if (match!== undefined && match.score !== undefined)}
             {#each match.score as score (score)}
             <td><input type="text" min="0" placeholder="0" bind:value={score.right} /></td>
             {/each}
+            {/if}
         </tr>
     </table>
     <button on:click={save}>close</button>

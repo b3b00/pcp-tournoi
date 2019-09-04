@@ -62,8 +62,10 @@
   })
 
   function openMatch(matchId) {
-    let dial = document.getElementById(`match_${matchId}`);
-    dial.showModal();
+    if (match.left !== null && match.right !== null && match.left !== undefined && match.right !== undefined) {
+      let dial = document.getElementById(`match_${matchId}`);
+      dial.showModal();
+    }
   }
 
   async function saveMatch(savedMatch) {
