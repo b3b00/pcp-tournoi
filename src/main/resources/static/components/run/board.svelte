@@ -32,12 +32,12 @@
   
 
 </script>
+<div class="w3-container">
 {#if board !== null && board!== undefined}
 {#each board.rounds as round}
-<p>round {round.id} - {round.matches.length} - FINAL ? {round.final}</p>
 <Round round={round} roundId={round.id} tournamentId={tournamentId} tournament={tournament}></Round>
 {/each} 
 {:else}
 <p>something's bad !</p>
 {/if}
-<p>TODO</p>
+</div>

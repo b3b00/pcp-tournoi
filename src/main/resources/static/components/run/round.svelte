@@ -37,12 +37,12 @@
 
 
 
-<div class="w3-container">
+<div class="w3-container w3-third">
     {#if round !== null && round !== undefined}
     {#if (round.final)}
-    <h1>Finale</h1>
+    <strong>Finale</strong>
     {:else}
-    <h1>1&nbsp;/&nbsp;{round.matches.length}</h1>
+    <strong>1&nbsp;/&nbsp;{round.matches.length}</strong>
     {/if}
   
     {#each round.matches as match }    
