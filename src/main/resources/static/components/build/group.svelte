@@ -5,7 +5,7 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import SelectableUL from './selectableUL.svelte';
-    import {GroupDisplay} from './groupDisplay.js';
+    import {GroupDisplay} from '../groupDisplay.js';
 
     const dispatch = createEventDispatcher();
 
@@ -50,7 +50,7 @@
 
    
     <li class="w3-display-container">
-        {@html GroupDisplay.getTeamDisplayName(team)} <span on:click="{() => {unGroup(group,team)}}" class="w3-button w3-display-right">&times;</span>
+        {@html GroupDisplay.getTeamDisplayName(team,null)} <span on:click="{() => {unGroup(group,team)}}" class="w3-button w3-display-right">&times;</span>
     </li>
    
    

@@ -59,6 +59,12 @@ public class Match implements IPingModel {
     @JsonIgnore
     private String rightTeamReference;
 
+    @Transient
+    private String leftTeamReferenceLabel;
+
+    @Transient
+    private String rightTeamReferenceLabel;
+
     public Match() {
         score = new ArrayList<MatchSet>();
     }
@@ -180,7 +186,8 @@ public class Match implements IPingModel {
     private String getTeamReferenceLabel(String reference) {
         String label = "";
         if (reference != null) {
-            String groupPrefix = "/groups/group/";
+            String groupPrefix = "groups/group/";
+            String roundPrefix = "boards/board/";
             if (reference.startsWith(groupPrefix)) {
                 String t = reference.replace(groupPrefix, "");
                 String[] items = t.split("\\/");
@@ -190,17 +197,22 @@ public class Match implements IPingModel {
                     label = "2ème";
                 }
                 label += " du groupe " + items[0];
+            }            
+            else if (reference.startsWith(roundPrefix)) {
+                ;
             }
         }
         return label;
     }
 
     public String getLeftTeamReferenceLabel() {
-        return getTeamReferenceLabel(leftTeamReference);
+        leftTeamReferenceLabel = getTeamReferenceLabel(leftTeamReference);
+        return leftTeamReferenceLabel;
     }
 
     public String getRightTeamReferenceLabel() {
-        return getTeamReferenceLabel(rightTeamReference);
+        rightTeamReferenceLabel = getTeamReferenceLabel(rightTeamReference);
+        return rightTeamReferenceLabel;
     }
 
     public void setLeftTeamReference(String leftTeamReference) {

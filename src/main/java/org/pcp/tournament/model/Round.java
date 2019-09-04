@@ -25,9 +25,18 @@ public class Round implements IPingModel  {
     @JsonIgnore
     private FinalPhase phase;
 
+    private boolean isFinal;
 
     public Round() {
         matches = new ArrayList<Match>();
+    }
+
+    public boolean isFinal() {
+        return isFinal;
+    }
+
+    public void setFinal(boolean isFinal) {
+        this.isFinal = isFinal;
     }
 
     /**

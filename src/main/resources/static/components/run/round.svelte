@@ -27,21 +27,7 @@
   });
 
 
-  async function build() {
-    console.log(tournament);
-    console.log(tournamentId);
-    const uri = `/tournaments/${tournamentId}/board/$create?start=${startingRound}`;        
-        const res = await fetch(uri, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST"
-        });
-        tournament = await res.json();
-  }
 
-  let startingRound = 8;
 
   function refresh() {
 
@@ -49,13 +35,19 @@
 
 </script>
 
-<p>ID : {round.id}</p>
-<p>MATCHES : {round.matches.length}</p>
 
-<!-- <div class="w3-container">
-    {#each round.matches as match }
+
+<div class="w3-container">
+    {#if round !== null && round !== undefined}
+    {#if (round.final)}
+    <h1>Finale</h1>
+    {:else}
+    <h1>1&nbsp;/&nbsp;{round.matches.length}</h1>
+    {/if}
+  
+    {#each round.matches as match }    
     <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
   {/each}
-  
+  {/if}
 
-</div> -->
+</div>

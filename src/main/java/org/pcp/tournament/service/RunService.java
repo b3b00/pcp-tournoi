@@ -203,6 +203,7 @@ public class RunService {
         round.addMatch(finalMatch);
         round.addMatch(smallFinalMatch);
         round = roundDao.save(round);
+        round.setFinal(true);
         finalPhase.addRound(round);
         finalPhase = finalPhaseDao.save(finalPhase);
 
@@ -224,6 +225,7 @@ public class RunService {
             round.addMatch(match);
             round = roundDao.save(round);            
         }
+        round.setFinal(false);
         finalPhase.addRound(round);
         finalPhase = finalPhaseDao.save(finalPhase);
         return round;
@@ -251,7 +253,7 @@ public class RunService {
 
             start.addMatch(match1);
             start.addMatch(match2);
-
+            start.setFinal(false);
             start = roundDao.save(start);
 
         }
@@ -451,4 +453,28 @@ private Team getTeam(Tournament tournament,String path) {
 
     // endregion
 
+
+    public void computeTeamReferenceLabels(Tournament tournament) {
+        if (tournament != null) {
+            Run run = tournament.getRun();
+            if (run != null) {
+                TournamentBoard board = run.getBoard();
+                if (board != null) {
+                    for (FinalPhase phase : board.getBoards()) {
+                        if (phase != null) {
+                            for (Round round : phase.getRounds()) {
+                                if (round != null) {
+                                    round.getMatches().stream().forEach(m -> {
+                                        m.getLeftTeamReferenceLabel();
+                                        m.getRightTeamReferenceLabel();
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 }

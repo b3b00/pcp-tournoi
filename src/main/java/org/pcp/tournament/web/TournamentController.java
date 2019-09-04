@@ -52,6 +52,7 @@ public class TournamentController {
     @GetMapping(value = "/tournaments/{id}")
     public Tournament getTournament(@PathVariable int id) {
         Tournament tournament = tournamentDao.findById(id);
+        runService.computeTeamReferenceLabels(tournament);
         if (tournament.getRun() != null && tournament.getRun().getGroupPhase() != null) {
             GroupPhase groupPhase = tournament.getRun().getGroupPhase();
             if (groupPhase.getGroups() != null) {

@@ -43,7 +43,9 @@
 
 </script>
 
-{#if (tournament.run.board == null || tournament.run.board == undefined)}
+{#if (tournament !== undefined && 
+  tournament.run !== undefined && 
+  tournament.run.board == null || tournament.run.board == undefined)}
 <input type="text" bind:value={startingRound}/>
 <br>
 <button on:click={build}>Build Me !</button>

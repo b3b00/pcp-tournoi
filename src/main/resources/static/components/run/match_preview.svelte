@@ -28,7 +28,7 @@
 <script>
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
-  import {GroupDisplay} from '../build/groupDisplay.js';
+  import {GroupDisplay} from '../groupDisplay.js';
 
   import Match from './match.svelte';
 
@@ -83,13 +83,13 @@
 
 </script>
 
-
+{#if (match !== null && match !== undefined)} 
 <div>
   <div on:click={()=> {openMatch(match.id)}} class="w3-card w3-quarter w3-container match-margin w3-padding" style="clear:both">
     <div>
       <div class="w3-quarter">
         <span class=" {leftStyle}">
-            {@html GroupDisplay.getTeamDisplayName(match.left)}          
+            {@html GroupDisplay.getTeamDisplayName(match.left, match.leftTeamReferenceLabel)}          
         </span>
       </div>
       <div class="w3-quarter">
@@ -99,7 +99,7 @@
       </div>
       <div class="w3-quarter">
         <span class=" {rightStyle}">
-            {@html GroupDisplay.getTeamDisplayName(match.right)}
+            {@html GroupDisplay.getTeamDisplayName(match.right, match.rightTeamReferenceLabel)}
         </span>
       </div>
       <div class="w3-quarter">
@@ -118,3 +118,6 @@
 
 
 </div>
+{:else}
+something bad
+{/if}
