@@ -18,14 +18,11 @@
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
-    console.log(tournament);
     tournament = await tools.fetchTournament(tournamentId);
   });
 
 
   async function build() {
-    console.log(tournament);
-    console.log(tournamentId);
     const uri = `/tournaments/${tournamentId}/board/$create?start=${startingRound}`;        
         const res = await fetch(uri, {
             headers: {

@@ -7,10 +7,8 @@
 
 
     function dragstart (team) {
-        console.log(`dragstart event for ${team.id} - ${team.name}`);
         return function(ev) {
             let content = JSON.stringify(team);
-            console.log(`start drag ${content}`);
             ev.dataTransfer.setData("application/json", content);
         }
     }

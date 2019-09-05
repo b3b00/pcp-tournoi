@@ -22,8 +22,6 @@
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
-    console.log(tournament);
-    console.log(board);
   });
 
 
