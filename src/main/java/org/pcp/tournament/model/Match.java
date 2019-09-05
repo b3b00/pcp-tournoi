@@ -65,8 +65,28 @@ public class Match implements IPingModel {
     @Transient
     private String rightTeamReferenceLabel;
 
+    private boolean isFinale;
+
+    private boolean isSemiFinale;
+
     public Match() {
         score = new ArrayList<MatchSet>();
+    }
+
+    public boolean isSemiFinale() {
+        return isSemiFinale;
+    }
+
+    public void setSemiFinale(boolean isSemiFinale) {
+        this.isSemiFinale = isSemiFinale;
+    }
+
+    public boolean isFinale() {
+        return isFinale;
+    }
+
+    public void setFinale(boolean isFinale) {
+        this.isFinale = isFinale;
     }
 
     public int getId() {

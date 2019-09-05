@@ -169,7 +169,7 @@ public class RunService {
         tournament.getRun().setBoard(board);
         tournament = tournamentDao.save(tournament);
 
-        finalPhase.setName("I");
+        finalPhase.setName("tableau principal");
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
@@ -191,6 +191,7 @@ public class RunService {
         String rightRef = builMatchPath(previous, 1, PlayStatusEnum.WINNER);
         finalMatch.setLeftTeamReference(leftRef);
         finalMatch.setRightTeamReference(rightRef);
+        finalMatch.setFinale(true);
         finalMatch = matchService.createMatch(finalMatch, tournament.getOptions());
         
 
@@ -199,6 +200,7 @@ public class RunService {
         rightRef = builMatchPath(previous, 1, PlayStatusEnum.LOSER);
         smallFinalMatch.setLeftTeamReference(leftRef);
         smallFinalMatch.setRightTeamReference(rightRef);
+        smallFinalMatch.setSemiFinale(true);
         smallFinalMatch = matchService.createMatch(smallFinalMatch, tournament.getOptions());
 
         round.addMatch(finalMatch);

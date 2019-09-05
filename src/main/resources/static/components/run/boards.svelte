@@ -48,13 +48,11 @@
   tournament.run.board == null || tournament.run.board == undefined)}
 <input type="text" bind:value={startingRound}/>
 <br>
-<button on:click={build}>Build Me !</button>
+<button on:click={build}>construire le tableau</button>
 {:else}
-tableaux disponibles :: <br>
 {#each tournament.run.board.boards as board}
-<li style="cursor:pointer" on:click={() => {moveMe("board", "tableau "+board.name,"board",board.id);}}>
-{board.id} - {board.name}
+<li style="cursor:pointer" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+{board.name}
 </li>
 {/each}
-<p>to be started soon!</p>
 {/if}
