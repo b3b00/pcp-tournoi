@@ -119,4 +119,14 @@ public class Round implements IPingModel  {
         return groups;
     }
 
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Match match : matches) {
+            builder.append(match.toString());
+            builder.append("\n");            
+        }
+        return builder.toString();
+        
+    }
+
 }
