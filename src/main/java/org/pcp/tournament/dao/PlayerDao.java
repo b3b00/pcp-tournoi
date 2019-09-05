@@ -9,4 +9,6 @@ public interface PlayerDao extends JpaRepository<Player, Integer> {
 
     public Player findById(int id);
 
+    public Player findByName(String name);
+
 }

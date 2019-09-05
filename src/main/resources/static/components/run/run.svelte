@@ -121,7 +121,7 @@
     <ul>
     <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
 
-    <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>board</li>
+    <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
     </ul>
     {/if}
 {:else}
@@ -129,7 +129,7 @@
 
 <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
 
-<li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>board</li>
+<li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
 
 </ul>
 {/if}

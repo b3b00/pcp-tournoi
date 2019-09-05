@@ -42,6 +42,7 @@ public class GroupPlay implements IPingModel  {
     @JsonIgnore
     private GroupPhase phase;
 
+    @Transient  
     private boolean isDone;
 
     /**
@@ -106,7 +107,7 @@ public class GroupPlay implements IPingModel  {
      * @return the isDone
      */
     public boolean getIsDone() {
-        return isDone;
+        return (matches.stream().allMatch(m -> m.getIsEnded()));
     }
 
     /**

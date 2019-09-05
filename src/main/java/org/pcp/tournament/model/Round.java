@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,6 +27,9 @@ public class Round implements IPingModel  {
     private FinalPhase phase;
 
     private boolean isFinal;
+
+    @Transient
+    private List<Match> matchGroups;
 
     public Round() {
         matches = new ArrayList<Match>();
@@ -90,6 +94,29 @@ public class Round implements IPingModel  {
      */
     public void setPhase(FinalPhase phase) {
         this.phase = phase;
+    }
+
+    public boolean isDone() {
+        for (Match match : matches) {
+            if (!match.getIsEnded()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return the matchGroups
+     */
+    public List<List<Match>> getMatchGroups() {
+        List<List<Match>> groups = new ArrayList<List<Match>>();
+        for (int i = 0; i < matches.size()/2; i++) {
+            List<Match> group = new ArrayList<Match>();
+            group.add(matches.get(i*2));
+            group.add(matches.get(i*2+1));
+            groups.add(group);
+        }
+        return groups;
     }
 
 }

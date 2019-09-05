@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pcp.tournament.DataLoader;
+import org.pcp.tournament.dao.GroupDao;
 import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TeamDao;
 import org.pcp.tournament.dao.TournamentDao;
+import org.pcp.tournament.model.Group;
 import org.pcp.tournament.model.Options;
 import org.pcp.tournament.model.Player;
+import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.dto.NameAndOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,11 @@ public class OptionsController {
     @Autowired
     DataLoader dataLoader;
 
+    @Autowired
+    GroupDao groupDao;
+
+  
+
     @GetMapping(value = "/options/preset")
     public List<Options> Preset() {
         dataLoader.loadOptions();
@@ -61,10 +69,10 @@ public class OptionsController {
             tournament.setDate(nameAndOptions.getDate());
             tournament.setOptions(options);
 
-            Tournament tour = tournamentDao.save(tournament);
-            addPlayers(tour, 16);
+            tournament = tournamentDao.save(tournament);
+            tournament = dataLoader.buildFake(tournament, 16);
 
-            return tour.getId();
+            return tournament.getId();
 
         } catch (Exception e) {
             throw new InternalError(e.getMessage());
@@ -72,21 +80,7 @@ public class OptionsController {
         }
     }
 
-    private void addPlayers(Tournament tournament, int count) {
-        List<Player> players = new ArrayList<Player>();
-        for (int i = 0; i < count; i++) {
-            Player pl = new Player("l" + i, true);
-            pl.setTournament(tournament);
-            pl = playerDao.save(pl);
-            Player pn = new Player("n" + i, false);
-            pn.setTournament(tournament);
-            pn = playerDao.save(pn);
-            players.add(pl);
-            players.add(pn);
-        }
-        tournament.setPlayers(players);
-        tournamentDao.save(tournament);
-    }
+   
 
     @PutMapping(value = "/tournament/{id}/options")
     public int PutOptions(@RequestBody NameAndOptions nameAndOptions, @PathVariable int id) {

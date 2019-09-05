@@ -45,14 +45,22 @@
     <strong>1&nbsp;/&nbsp;{round.matches.length}</strong>
     {/if}
   
-    {#each round.matches as match }    
-    {#if match.finale}
+    {#each round.matchGroups as group }
+    <div class="w3-container w3-card">
+    <MatchPreview match={group[0]} tournament={tournament} on:move on:matchSaved={refresh}/>
+    <MatchPreview match={group[1]} tournament={tournament} on:move on:matchSaved={refresh}/>
+  </div>
+
+<!--     
+    {#if group.finale}
+    
     <p>finale</p>
     {/if}
     {#if match.semiFinale}
     <p>petite finale</p>
     {/if}
     <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
+     -->
   {/each}
   {/if}
 

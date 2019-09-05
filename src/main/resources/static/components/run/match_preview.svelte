@@ -86,7 +86,13 @@
 
 </script>
 
-{#if (match !== null && match !== undefined)} 
+{#if (match !== null && match !== undefined)}
+{#if match.finale}
+<p>finale</p> 
+{/if}
+{#if match.semiFinale}
+<p>petite finale</p> 
+{/if}
 <div>
   <div on:click={()=> {openMatch(match.id)}} class="w3-card  w3-container match-margin w3-padding" style="clear:both">
     <div>
