@@ -57,6 +57,15 @@
   }
 
 
+  function getStyle(team) {
+    if (team !== undefined && match !== undefined) {
+      if (match.winner !== undefined && match.winner !== null) {
+        return (match.winner.id == team.id ? "winner" : "loser");
+      }
+    }
+    return "";
+  }
+
   onMount(() => {
     setStyle();
   })
@@ -97,22 +106,22 @@
   <div on:click={()=> {openMatch(match.id)}} class="w3-card  w3-container match-margin w3-padding" style="clear:both">
     <div>
       <div class="w3-quarter">
-        <span class=" {leftStyle}">
+        <span class=" {getStyle(match.left)}">
             {@html GroupDisplay.getTeamDisplayName(match.left, match.leftTeamReferenceLabel)}          
         </span>
       </div>
       <div class="w3-quarter">
-        <span class=" {leftStyle}">
+        <span class=" {getStyle(match.left)}">
           ({match.leftWonSet})
         </span>
       </div>
       <div class="w3-quarter">
-        <span class=" {rightStyle}">
+        <span class=" {getStyle(match.right)}">
             {@html GroupDisplay.getTeamDisplayName(match.right, match.rightTeamReferenceLabel)}
         </span>
       </div>
       <div class="w3-quarter">
-        <span class=" {rightStyle}">
+        <span class=" {getStyle(match.right)}">
           ({match.rightWonSet})
         </span>
       </div>
