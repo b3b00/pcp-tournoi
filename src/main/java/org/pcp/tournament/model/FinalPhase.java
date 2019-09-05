@@ -76,4 +76,10 @@ public class FinalPhase implements IPingModel{
     public void addRound(Round round) {
         this.rounds.add(round);
     }
+
+	public void computeScores(Options options) {
+        for (Round round : rounds) {
+            round.computeScores(options);
+        }
+	}
 }

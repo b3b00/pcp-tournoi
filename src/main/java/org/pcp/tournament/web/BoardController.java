@@ -1,11 +1,14 @@
 package org.pcp.tournament.web;
 
+import org.pcp.tournament.dao.RoundDao;
 import org.pcp.tournament.dao.TournamentDao;
+import org.pcp.tournament.model.Round;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +23,8 @@ public class BoardController {
     @Autowired
     RunService runService;
 
+    @Autowired
+    RoundDao roundDao;
     
 
     @PostMapping("/tournaments/{tournamentId}/board/$create")
@@ -39,5 +44,29 @@ public class BoardController {
         return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
     } 
+
+    @GetMapping("/tournament/{tournamentId}/round/{roundId}")
+    public ResponseEntity<?> getRound(@PathVariable int tournamentId,@PathVariable int roundId) {
+        try {
+            Tournament tournament = tournamentDao.findById(tournamentId);
+            runService.InjectTeams(tournament);
+            runService.computeTeamReferenceLabels(tournament);            
+            Round round = roundDao.findById(roundId);
+            if (round != null) {
+                round.getMatches().stream().forEach(m -> {
+                    m.compute(tournament.getOptions());
+                });
+                return new ResponseEntity<Round>(round, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<String>("round not found",HttpStatus.NOT_FOUND);
+            }
+        }
+        catch(Exception e) {
+            System.out.println("hello "+e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 
 }

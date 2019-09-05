@@ -129,4 +129,10 @@ public class Round implements IPingModel  {
         
     }
 
+	public void computeScores(Options options) {
+        for (Match match : matches) {
+                match.compute(options);
+        }
+	}
+
 }

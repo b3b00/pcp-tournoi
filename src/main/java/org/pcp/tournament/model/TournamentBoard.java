@@ -63,4 +63,10 @@ public class TournamentBoard implements IPingModel  {
         this.boards = boards;
     }
 
+	public void computeScores(Options options) {
+        for (FinalPhase board : boards) {
+            board.computeScores(options);
+        }
+	}
+
 }

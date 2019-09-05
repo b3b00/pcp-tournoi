@@ -28,8 +28,10 @@
 
 
 
-  function refresh() {
-
+  async function refresh() {
+    let roundId = round.id;
+    let newRound = await tools.fetchRound(tournamentId, roundId);
+    round = newRound;
   }
 
 </script>

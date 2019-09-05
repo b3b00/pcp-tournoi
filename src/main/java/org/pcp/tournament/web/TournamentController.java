@@ -62,6 +62,9 @@ public class TournamentController {
                     }
                 }
             }
+            if (tournament.getRun().getBoard() != null) {
+                tournament.getRun().getBoard().computeScores(tournament.getOptions());
+            }
         }
         return tournament;
     }

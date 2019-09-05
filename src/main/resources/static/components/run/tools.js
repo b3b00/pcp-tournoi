@@ -23,6 +23,12 @@ export const tools = {
     const res = await fetch(`/groupPlay/${groupPlayId}`);
     let group = await res.json();
     return group;
+  },
+
+  fetchRound : async function(tournamentId, roundId) {
+    const res = await fetch(`/tournament/${tournamentId}/round/${roundId}`);
+    let round = await res.json();
+    return round;
   }
 
 }
