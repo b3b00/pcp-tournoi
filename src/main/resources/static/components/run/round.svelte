@@ -29,9 +29,7 @@
 
 
   async function refresh() {
-    let roundId = round.id;
-    let newRound = await tools.fetchRound(tournamentId, roundId);
-    round = newRound;
+    dispatch("refresh",{});
   }
 
 </script>
@@ -41,9 +39,9 @@
 <div class="w3-container w3-third">
     {#if round !== null && round !== undefined}
     {#if (round.final)}
-    <strong>Finale</strong>
+    <p style="text-align: center; font-weight: bold;">Finale</p>
     {:else}
-    <strong>1&nbsp;/&nbsp;{round.matches.length}</strong>
+    <p style="text-align: center; font-weight: bold;">1&nbsp;/&nbsp;{round.matches.length}</p>    
     {/if}
   
     {#each round.matchGroups as group }

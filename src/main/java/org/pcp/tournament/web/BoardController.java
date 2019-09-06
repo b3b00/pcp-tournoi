@@ -1,7 +1,9 @@
 package org.pcp.tournament.web;
 
+import org.pcp.tournament.dao.FinalPhaseDao;
 import org.pcp.tournament.dao.RoundDao;
 import org.pcp.tournament.dao.TournamentDao;
+import org.pcp.tournament.model.FinalPhase;
 import org.pcp.tournament.model.Round;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.service.RunService;
@@ -25,6 +27,9 @@ public class BoardController {
 
     @Autowired
     RoundDao roundDao;
+
+    @Autowired
+    FinalPhaseDao boardDao;
     
 
     @PostMapping("/tournaments/{tournamentId}/board/$create")
@@ -64,6 +69,30 @@ public class BoardController {
         }
         catch(Exception e) {
             System.out.println("hello "+e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/tournament/{tournamentId}/board/{boardId}")
+    public ResponseEntity<?> getBoard(@PathVariable int tournamentId,@PathVariable int boardId) {
+        try {
+            Tournament tournament = tournamentDao.findById(tournamentId);
+            runService.computeTeamReferenceLabels(tournament);
+            runService.InjectTeams(tournament);
+            runService.computeTeamReferenceLabels(tournament);            
+            FinalPhase board = boardDao.findById(boardId);
+            if (board != null) {
+                // board.getRounds().stream().forEach(m -> {                    
+                //     m.computeScores(tournament.getOptions());
+                // });
+                return new ResponseEntity<FinalPhase>(board, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<String>("board not found",HttpStatus.NOT_FOUND);
+            }
+        }
+        catch(Exception e) {
             return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

@@ -29,6 +29,12 @@ export const tools = {
     const res = await fetch(`/tournament/${tournamentId}/round/${roundId}`);
     let round = await res.json();
     return round;
+  },
+
+  fetchBoard : async function(tournamentId, boardId) {
+    const res = await fetch(`/tournament/${tournamentId}/board/${boardId}`);
+    let board = await res.json();
+    return board;
   }
 
 }

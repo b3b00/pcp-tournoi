@@ -158,6 +158,8 @@ public class RunService {
         } else {
             // TODO later if really needed
         }
+        InjectTeams(tournament);
+        computeTeamReferenceLabels(tournament);
 
     }
 
@@ -292,18 +294,18 @@ private void InjectTeams(Tournament tournament, FinalPhase phase) {
 private void InjectTeams(Tournament tournament, Round round) {
     for (Match match : round.getMatches()) {
         match.compute(tournament.getOptions());
-        if (match.getLeft() == null && match.getLeftTeamReference() != null) {
+        if (match.getLeftTeamReference() != null) {
             Team team = getTeam(tournament,match.getLeftTeamReference());
             if (team != null) {
                 match.setLeft(team);
-                matchDao.save(match);
+                match = matchDao.save(match);
             }
         } 
-        if (match.getRight() == null && match.getRightTeamReference() != null) {
+        if (match.getRightTeamReference() != null) {
             Team team = getTeam(tournament,match.getRightTeamReference());
             if (team != null) {
                 match.setRight(team);
-                matchDao.save(match);
+                match = matchDao.save(match);
             }
         }      
     }

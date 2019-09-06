@@ -1,6 +1,5 @@
 package org.pcp.tournament.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.pcp.tournament.DataLoader;
@@ -9,10 +8,7 @@ import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TeamDao;
 import org.pcp.tournament.dao.TournamentDao;
-import org.pcp.tournament.model.Group;
 import org.pcp.tournament.model.Options;
-import org.pcp.tournament.model.Player;
-import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.dto.NameAndOptions;
 import org.springframework.beans.factory.annotation.Autowired;
