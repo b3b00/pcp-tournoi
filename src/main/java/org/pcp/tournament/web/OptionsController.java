@@ -66,7 +66,7 @@ public class OptionsController {
             tournament.setOptions(options);
 
             tournament = tournamentDao.save(tournament);
-            tournament = dataLoader.buildFake(tournament, 16);
+            //tournament = dataLoader.buildFake(tournament, 16);
 
             return tournament.getId();
 
