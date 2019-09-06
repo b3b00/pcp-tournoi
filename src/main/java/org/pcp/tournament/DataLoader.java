@@ -82,11 +82,12 @@ public class DataLoader {
 
     public Tournament buildFake(Tournament tournament, int count) {
         List<Player> players = new ArrayList<Player>();
+        int id = tournament.getId();
         for (int i = 0; i < count; i++) {
-            Player pl = new Player("l" + i, true);
+            Player pl = new Player(id+"l" + i, true);
             pl.setTournament(tournament);
             pl = playerDao.save(pl);
-            Player pn = new Player("n" + i, false);
+            Player pn = new Player(id+"n" + i, false);
             pn.setTournament(tournament);
             pn = playerDao.save(pn);
             players.add(pl);
@@ -97,8 +98,8 @@ public class DataLoader {
 
         List<Team> teams = new ArrayList<Team>();
         for (int i = 0; i < count; i++) {
-            Player p1 = playerDao.findByName("l"+String.valueOf(i));
-            Player p2 = playerDao.findByName("n"+String.valueOf(i));
+            Player p1 = playerDao.findByName(id+"l"+String.valueOf(i));
+            Player p2 = playerDao.findByName(id+"n"+String.valueOf(i));
 
             Team team = new Team(p1,p2);
             team.setTournament(tournament);

@@ -1,5 +1,6 @@
 package org.pcp.tournament.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ public class FinalPhase implements IPingModel{
 
     private String name;
 
-    @OneToMany(mappedBy = "phase")
+    @OneToMany(mappedBy = "phase",cascade = CascadeType.REMOVE)
     private List<Round> rounds;
 
 

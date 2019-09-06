@@ -2,6 +2,7 @@ package org.pcp.tournament.model;
 
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ public class MatchSet implements IPingModel  {
     private int right;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Match match;
 
 

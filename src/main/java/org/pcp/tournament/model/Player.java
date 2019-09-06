@@ -1,5 +1,6 @@
 package org.pcp.tournament.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,7 +21,7 @@ public class Player implements IPingModel  {
     private Boolean isLicensed;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Tournament tournament;
     
     public Player() {

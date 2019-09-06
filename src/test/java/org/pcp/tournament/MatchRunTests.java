@@ -2,6 +2,7 @@ package org.pcp.tournament;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -44,6 +45,22 @@ public class MatchRunTests {
 
     @Autowired
     MatchDao matchDao;
+
+    @Test
+    @Transactional
+    public void testTournamentDelete() {
+        Options options = optionsDao.findByMode(Mode.DOUBLE);
+        Tournament tournament = new Tournament("testingrun");
+        tournament.setOptions(options);
+        tournament = tournamentDao.save(tournament);
+        tournament = dataLoader.buildFake(tournament, 16);
+        int id = tournament.getId();
+
+        tournamentDao.deleteById(id);
+
+        tournament = tournamentDao.findById(id);
+        assertNull(tournament);
+    }
 
     @Test    
     @Transactional

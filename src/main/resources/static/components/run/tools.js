@@ -17,6 +17,16 @@ export const tools = {
     const res = await fetch(`/tournaments/${tournamentId}`);
     let tournament = await res.json();
     return tournament;
+  },
+
+  deleteTournament : async function(tournamentId) {
+    const res = await fetch(`/tournament/${tournamentId}`,{
+    headers: {      
+    },
+    method: "DELETE"}
+    );
+    let tournaments = await res.json();
+    return tournaments;
   }
   ,
   fetchGroupPlay : async function(groupPlayId) {

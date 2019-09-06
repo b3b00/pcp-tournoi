@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.persistence.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,10 +20,10 @@ public class Round implements IPingModel  {
     @GeneratedValue
     private int id;
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.REMOVE)
     private List<Match> matches;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JsonIgnore
     private FinalPhase phase;
 

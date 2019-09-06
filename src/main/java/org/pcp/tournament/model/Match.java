@@ -2,6 +2,7 @@ package org.pcp.tournament.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -20,14 +21,14 @@ public class Match implements IPingModel {
     @GeneratedValue
     private int id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Team leftTeam;
 
     @Transient
     @JsonInclude
     private int leftWonSet = 0;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Team rightTeam;
 
     @Transient
@@ -42,7 +43,7 @@ public class Match implements IPingModel {
     @JsonInclude
     private int leftPoints = 0;
 
-    @OneToMany(mappedBy = "match")
+    @OneToMany(mappedBy = "match",cascade=CascadeType.REMOVE)
     private List<MatchSet> score;
 
     @Transient

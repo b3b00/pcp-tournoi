@@ -1,5 +1,6 @@
 package org.pcp.tournament.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,17 +25,17 @@ public class Tournament implements IPingModel  {
 
     private String name;
 
-    @OneToMany(mappedBy = "tournament")    
+    @OneToMany(mappedBy = "tournament",cascade=CascadeType.REMOVE)
     private List<Player> players;
 
     
-    @OneToMany(mappedBy = "tournament")
+    @OneToMany(mappedBy = "tournament",cascade=CascadeType.REMOVE)
     private List<Team> teams;
 
-    @OneToMany(mappedBy="tournament")
+    @OneToMany(mappedBy="tournament",cascade=CascadeType.REMOVE)
     private List<Group> groups;
 
-    @OneToOne(mappedBy="tournament")
+    @OneToOne(mappedBy="tournament",cascade=CascadeType.REMOVE)
     private Run run;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

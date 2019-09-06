@@ -79,6 +79,12 @@ public class TournamentController {
         return tournamentDao.findById(tournamentId);
     }
 
+    @DeleteMapping("/tournament/{tournamentId}")
+    public List<Tournament> deleteTournament(@PathVariable int tournamentId) {
+        tournamentDao.deleteById(tournamentId);
+        return all();
+    }
+
     @GetMapping("/tournaments/deleteAll")
     public void deleteAll() {
         try {

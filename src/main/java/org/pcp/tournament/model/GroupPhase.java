@@ -2,6 +2,7 @@ package org.pcp.tournament.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -26,7 +27,7 @@ public class GroupPhase implements IPingModel  {
     @GeneratedValue
     private int id;
 
-    @OneToMany(mappedBy = "phase")
+    @OneToMany(mappedBy = "phase",cascade=CascadeType.REMOVE)
     @OrderBy("id ASC")
     private List<GroupPlay> groups;
 
