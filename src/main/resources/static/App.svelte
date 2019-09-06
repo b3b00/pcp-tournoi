@@ -55,7 +55,7 @@
 	}
 
 	async function changeState(newState) {
-		if (state == STATE.HOME) {
+		if (newState == STATE.HOME) {
 			await  fetchTournaments();
 		}
 		state = newState;
