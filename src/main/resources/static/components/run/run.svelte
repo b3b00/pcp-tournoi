@@ -22,6 +22,7 @@
         };
         currentBreadCrumb = [...currentBreadCrumb, s];
         currentItem = currentBreadCrumb[currentBreadCrumb.length - 1];
+        navigator(null);
     }
 
     export let tournamentId;
