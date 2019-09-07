@@ -38,7 +38,7 @@ public class MatchPathTests {
         Tournament tournament = dbInitializer.InitTournament();        
         assertNotNull(tournament);
         tournament = runService.buildGroupPhase(tournament);
-        runService.buildBoard(tournament, 8);
+        runService.buildMainBoard(tournament, 8);
         tournament = tournamentDao.findById(tournament.getId());
         assertNotNull(tournament.getRun());
         Run run = tournament.getRun();

@@ -102,6 +102,7 @@ public class RunService {
 
 //region [building with references]
 
+//region [groups]
     public Tournament buildGroupPhase(Tournament tournament) {
         if (tournament != null) {
             try {
@@ -151,17 +152,45 @@ public class RunService {
         return null;
     }
 
-    public void buildBoard(Tournament tournament, int startingRound) {
+// endregion
 
-        if (tournament.getGroups().size() == startingRound) {
-            buildBoardNominal(tournament, startingRound);
+// region [boards]
+
+    public boolean boardMatchNominalMainCase(Tournament tournament, int startingRound) {
+        boolean matchGroupNumber = tournament.getGroups().size() == startingRound;
+        boolean matchPlayerNumber = true;
+        for (Group group : tournament.getGroups()) {
+            matchPlayerNumber = matchPlayerNumber && group.getTeams().size() >= 2;
+        }
+        return matchGroupNumber && matchPlayerNumber;
+    }
+
+    public boolean boardMatchNominaleSecondCase(Tournament tournament, int startingRound) {
+        boolean matchGroupNumber = tournament.getGroups().size() == startingRound;
+        boolean matchPlayerNumber = true;
+        for (Group group : tournament.getGroups()) {
+            matchPlayerNumber = matchPlayerNumber && group.getTeams().size() >= 4;
+        }
+        return matchGroupNumber && matchPlayerNumber;
+    }
+
+    public void buildMainBoard(Tournament tournament, int startingRound) {
+
+        
+        if (boardMatchNominalMainCase(tournament,startingRound)) {
+            buildMainBoardNominal(tournament, startingRound);
         } else {
             // TODO later if really needed
         }
 
     }
 
-    public void buildBoardNominal(Tournament tournament, int startingRound) {
+    public void buildSecondBoard(Tournament tournament , int startingRound) {
+        // TODO
+    }
+
+
+    public void buildMainBoardNominal(Tournament tournament, int startingRound) {
         FinalPhase finalPhase = new FinalPhase();
         TournamentBoard board = new TournamentBoard();
         board = tournamentBoardDao.save(board);

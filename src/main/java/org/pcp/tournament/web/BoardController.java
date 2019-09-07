@@ -26,7 +26,7 @@ public class BoardController {
     public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId,@RequestParam("start")int startingRound) {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
-            runService.buildBoard(tournament, startingRound);
+            runService.buildMainBoard(tournament, startingRound);
             tournament = tournamentDao.findById(tournamentId);
             
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
