@@ -17,12 +17,34 @@ export const tools = {
     const res = await fetch(`/tournaments/${tournamentId}`);
     let tournament = await res.json();
     return tournament;
+  },
+
+  deleteTournament : async function(tournamentId) {
+    const res = await fetch(`/tournament/${tournamentId}`,{
+    headers: {      
+    },
+    method: "DELETE"}
+    );
+    let tournaments = await res.json();
+    return tournaments;
   }
   ,
   fetchGroupPlay : async function(groupPlayId) {
     const res = await fetch(`/groupPlay/${groupPlayId}`);
     let group = await res.json();
     return group;
+  },
+
+  fetchRound : async function(tournamentId, roundId) {
+    const res = await fetch(`/tournament/${tournamentId}/round/${roundId}`);
+    let round = await res.json();
+    return round;
+  },
+
+  fetchBoard : async function(tournamentId, boardId) {
+    const res = await fetch(`/tournament/${tournamentId}/board/${boardId}`);
+    let board = await res.json();
+    return board;
   }
 
 }

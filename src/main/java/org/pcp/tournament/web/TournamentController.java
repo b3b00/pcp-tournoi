@@ -52,6 +52,7 @@ public class TournamentController {
     @GetMapping(value = "/tournaments/{id}")
     public Tournament getTournament(@PathVariable int id) {
         Tournament tournament = tournamentDao.findById(id);
+        runService.computeTeamReferenceLabels(tournament);
         if (tournament.getRun() != null && tournament.getRun().getGroupPhase() != null) {
             GroupPhase groupPhase = tournament.getRun().getGroupPhase();
             if (groupPhase.getGroups() != null) {
@@ -60,6 +61,12 @@ public class TournamentController {
                         group.computeRanking();
                     }
                 }
+            }
+            if (tournament.getRun().getBoard() != null) {
+                tournament.getRun().getBoard().computeScores(tournament.getOptions());
+                runService.InjectTeams(tournament);
+                runService.computeTeamReferenceLabels(tournament);
+                tournament = tournamentDao.findById(tournament.getId());
             }
         }
         return tournament;
@@ -70,6 +77,12 @@ public class TournamentController {
     public Tournament deleteRun(@PathVariable int tournamentId) {
         runService.deleteRunForTournament(tournamentId);
         return tournamentDao.findById(tournamentId);
+    }
+
+    @DeleteMapping("/tournament/{tournamentId}")
+    public List<Tournament> deleteTournament(@PathVariable int tournamentId) {
+        tournamentDao.deleteById(tournamentId);
+        return all();
     }
 
     @GetMapping("/tournaments/deleteAll")

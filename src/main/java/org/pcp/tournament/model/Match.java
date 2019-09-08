@@ -2,6 +2,7 @@ package org.pcp.tournament.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -20,14 +21,14 @@ public class Match implements IPingModel {
     @GeneratedValue
     private int id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Team leftTeam;
 
     @Transient
     @JsonInclude
     private int leftWonSet = 0;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Team rightTeam;
 
     @Transient
@@ -42,7 +43,7 @@ public class Match implements IPingModel {
     @JsonInclude
     private int leftPoints = 0;
 
-    @OneToMany(mappedBy = "match")
+    @OneToMany(mappedBy = "match",cascade=CascadeType.REMOVE)
     private List<MatchSet> score;
 
     @Transient
@@ -59,8 +60,34 @@ public class Match implements IPingModel {
     @JsonIgnore
     private String rightTeamReference;
 
+    @Transient
+    private String leftTeamReferenceLabel;
+
+    @Transient
+    private String rightTeamReferenceLabel;
+
+    private boolean isFinale;
+
+    private boolean isSemiFinale;
+
     public Match() {
         score = new ArrayList<MatchSet>();
+    }
+
+    public boolean isSemiFinale() {
+        return isSemiFinale;
+    }
+
+    public void setSemiFinale(boolean isSemiFinale) {
+        this.isSemiFinale = isSemiFinale;
+    }
+
+    public boolean isFinale() {
+        return isFinale;
+    }
+
+    public void setFinale(boolean isFinale) {
+        this.isFinale = isFinale;
     }
 
     public int getId() {
@@ -180,7 +207,8 @@ public class Match implements IPingModel {
     private String getTeamReferenceLabel(String reference) {
         String label = "";
         if (reference != null) {
-            String groupPrefix = "/groups/group/";
+            String groupPrefix = "groups/group/";
+            String roundPrefix = "boards/board/";
             if (reference.startsWith(groupPrefix)) {
                 String t = reference.replace(groupPrefix, "");
                 String[] items = t.split("\\/");
@@ -190,17 +218,22 @@ public class Match implements IPingModel {
                     label = "2ème";
                 }
                 label += " du groupe " + items[0];
+            }            
+            else if (reference.startsWith(roundPrefix)) {
+                label = "&Phi; - &Phi;";
             }
         }
         return label;
     }
 
     public String getLeftTeamReferenceLabel() {
-        return getTeamReferenceLabel(leftTeamReference);
+        leftTeamReferenceLabel = getTeamReferenceLabel(leftTeamReference);
+        return leftTeamReferenceLabel;
     }
 
     public String getRightTeamReferenceLabel() {
-        return getTeamReferenceLabel(rightTeamReference);
+        rightTeamReferenceLabel = getTeamReferenceLabel(rightTeamReference);
+        return rightTeamReferenceLabel;
     }
 
     public void setLeftTeamReference(String leftTeamReference) {

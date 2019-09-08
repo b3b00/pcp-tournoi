@@ -15,7 +15,7 @@ import org.javatuples.Pair;
 public class RunService {
 
 //region [dependencies]
-
+    
     @Autowired
     MatchSetDao matchSetDao;
 
@@ -184,6 +184,8 @@ public class RunService {
         } else {
             // TODO later if really needed
         }
+        InjectTeams(tournament);
+        computeTeamReferenceLabels(tournament);
 
     }
 
@@ -199,13 +201,16 @@ public class RunService {
 
     private void buildSecondBoardNominal(Tournament tournament, int startingRound) {
         FinalPhase finalPhase = new FinalPhase();
-        TournamentBoard board = new TournamentBoard();
-        board = tournamentBoardDao.save(board);
+        TournamentBoard board = tournament.getRun().getBoard();
+        
+        if ( board == null) {
+            board = new TournamentBoard();
+            board = tournamentBoardDao.save(board);
+            tournament.getRun().setBoard(board);
+            tournament = tournamentDao.save(tournament);
+        }
 
-        tournament.getRun().setBoard(board);
-        tournament = tournamentDao.save(tournament);
-
-        finalPhase.setName("I");
+        finalPhase.setName("consolante");        
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
@@ -219,8 +224,14 @@ public class RunService {
 
     public void buildMainBoardNominal(Tournament tournament, int startingRound) {
         FinalPhase finalPhase = new FinalPhase();
-        TournamentBoard board = new TournamentBoard();
-        board = tournamentBoardDao.save(board);
+        TournamentBoard board = tournament.getRun().getBoard();
+        
+        if ( board == null) {
+            board = new TournamentBoard();
+            board = tournamentBoardDao.save(board);
+            tournament.getRun().setBoard(board);
+            tournament = tournamentDao.save(tournament);
+        }
 
         tournament.getRun().setBoard(board);
         tournament = tournamentDao.save(tournament);
@@ -247,18 +258,22 @@ public class RunService {
         String rightRef = builMatchPath(previous, 1, PlayStatusEnum.WINNER);
         finalMatch.setLeftTeamReference(leftRef);
         finalMatch.setRightTeamReference(rightRef);
-        finalMatch = matchDao.save(finalMatch);
+        finalMatch.setFinale(true);
+        finalMatch = matchService.createMatch(finalMatch, tournament.getOptions());
+        
 
         Match smallFinalMatch = new Match(); 
         leftRef = builMatchPath(previous, 0, PlayStatusEnum.LOSER);
         rightRef = builMatchPath(previous, 1, PlayStatusEnum.LOSER);
         smallFinalMatch.setLeftTeamReference(leftRef);
         smallFinalMatch.setRightTeamReference(rightRef);
-        smallFinalMatch = matchDao.save(smallFinalMatch);
+        smallFinalMatch.setSemiFinale(true);
+        smallFinalMatch = matchService.createMatch(smallFinalMatch, tournament.getOptions());
 
         round.addMatch(finalMatch);
         round.addMatch(smallFinalMatch);
         round = roundDao.save(round);
+        round.setFinal(true);
         finalPhase.addRound(round);
         finalPhase = finalPhaseDao.save(finalPhase);
 
@@ -276,10 +291,11 @@ public class RunService {
             String rightRef = builMatchPath(previous, i*2+1, PlayStatusEnum.WINNER);
             match.setLeftTeamReference(leftRef);
             match.setRightTeamReference(rightRef);
-            match = matchDao.save(match);
+            match = matchService.createMatch(match, tournament.getOptions());
             round.addMatch(match);
             round = roundDao.save(round);            
         }
+        round.setFinal(false);
         finalPhase.addRound(round);
         finalPhase = finalPhaseDao.save(finalPhase);
         return round;
@@ -305,9 +321,10 @@ public class RunService {
             match2.setRightTeamReference(buildMatchPath(leftGroup, rankSecond));
             match2 = matchDao.save(match2);
 
+
             start.addMatch(match1);
             start.addMatch(match2);
-
+            start.setFinal(false);
             start = roundDao.save(start);
 
         }
@@ -343,18 +360,18 @@ private void InjectTeams(Tournament tournament, FinalPhase phase) {
 private void InjectTeams(Tournament tournament, Round round) {
     for (Match match : round.getMatches()) {
         match.compute(tournament.getOptions());
-        if (match.getLeft() == null && match.getLeftTeamReference() != null) {
+        if (match.getLeftTeamReference() != null) {
             Team team = getTeam(tournament,match.getLeftTeamReference());
             if (team != null) {
                 match.setLeft(team);
-                matchDao.save(match);
+                match = matchDao.save(match);
             }
         } 
-        if (match.getRight() == null && match.getRightTeamReference() != null) {
+        if (match.getRightTeamReference() != null) {
             Team team = getTeam(tournament,match.getRightTeamReference());
             if (team != null) {
                 match.setRight(team);
-                matchDao.save(match);
+                match = matchDao.save(match);
             }
         }      
     }
@@ -507,4 +524,31 @@ private Team getTeam(Tournament tournament,String path) {
 
     // endregion
 
+// region [match labeling]
+
+    public void computeTeamReferenceLabels(Tournament tournament) {
+        if (tournament != null) {
+            Run run = tournament.getRun();
+            if (run != null) {
+                TournamentBoard board = run.getBoard();
+                if (board != null) {
+                    for (FinalPhase phase : board.getBoards()) {
+                        if (phase != null) {
+                            for (Round round : phase.getRounds()) {
+                                if (round != null) {
+                                    round.getMatches().stream().forEach(m -> {
+                                        m.getLeftTeamReferenceLabel();
+                                        m.getRightTeamReferenceLabel();
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+//endregion
 }

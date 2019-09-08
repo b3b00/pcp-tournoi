@@ -8,8 +8,9 @@
 
 <style>
   .match-margin {
-    margin: 8px!important;
+    margin: 8px !important;
   }
+
   span.winner {
     color: lightgreen;
     font-weight: bold;
@@ -28,7 +29,7 @@
 <script>
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
-  import {GroupDisplay} from '../build/groupDisplay.js';
+  import { GroupDisplay } from '../groupDisplay.js';
 
   import Match from './match.svelte';
 
@@ -56,13 +57,24 @@
   }
 
 
+  function getStyle(team) {
+    if (team !== undefined && match !== undefined) {
+      if (match.winner !== undefined && match.winner !== null) {
+        return (match.winner.id == team.id ? "winner" : "loser");
+      }
+    }
+    return "";
+  }
+
   onMount(() => {
     setStyle();
   })
 
   function openMatch(matchId) {
-    let dial = document.getElementById(`match_${matchId}`);
-    dial.showModal();
+    if (match.left !== null && match.right !== null && match.left !== undefined && match.right !== undefined) {
+      let dial = document.getElementById(`match_${matchId}`);
+      dial.showModal();
+    }
   }
 
   async function saveMatch(savedMatch) {
@@ -77,33 +89,39 @@
         body: JSON.stringify(savedMatch)
       });
     match = await res.json();
-    dispatch('matchSaved',{});
-    setStyle();    
+    dispatch('matchSaved', {});
+    setStyle();
   }
 
 </script>
 
-
+{#if (match !== null && match !== undefined)}
+{#if match.finale}
+<p>finale</p> 
+{/if}
+{#if match.semiFinale}
+<p>petite finale</p> 
+{/if}
 <div>
-  <div on:click={()=> {openMatch(match.id)}} class="w3-card w3-quarter w3-container match-margin w3-padding" style="clear:both">
+  <div on:click={()=> {openMatch(match.id)}} class="w3-card  w3-container match-margin w3-padding" style="clear:both">
     <div>
       <div class="w3-quarter">
-        <span class=" {leftStyle}">
-            {@html GroupDisplay.getTeamDisplayName(match.left)}          
+        <span class=" {getStyle(match.left)}">
+            {@html GroupDisplay.getTeamDisplayName(match.left, match.leftTeamReferenceLabel)}          
         </span>
       </div>
       <div class="w3-quarter">
-        <span class=" {leftStyle}">
+        <span class=" {getStyle(match.left)}">
           ({match.leftWonSet})
         </span>
       </div>
       <div class="w3-quarter">
-        <span class=" {rightStyle}">
-            {@html GroupDisplay.getTeamDisplayName(match.right)}
+        <span class=" {getStyle(match.right)}">
+            {@html GroupDisplay.getTeamDisplayName(match.right, match.rightTeamReferenceLabel)}
         </span>
       </div>
       <div class="w3-quarter">
-        <span class=" {rightStyle}">
+        <span class=" {getStyle(match.right)}">
           ({match.rightWonSet})
         </span>
       </div>
@@ -118,3 +136,6 @@
 
 
 </div>
+{:else}
+something bad
+{/if}

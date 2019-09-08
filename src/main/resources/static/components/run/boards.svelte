@@ -18,14 +18,11 @@
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
-    console.log(tournament);
     tournament = await tools.fetchTournament(tournamentId);
   });
 
 
   async function build() {
-    console.log(tournament);
-    console.log(tournamentId);
     const uri = `/tournaments/${tournamentId}/board/$create?start=${startingRound}`;        
         const res = await fetch(uri, {
             headers: {
@@ -43,16 +40,16 @@
 
 </script>
 
-{#if (tournament.run.board == null || tournament.run.board == undefined)}
+{#if (tournament !== undefined && 
+  tournament.run !== undefined && 
+  tournament.run.board == null || tournament.run.board == undefined)}
 <input type="text" bind:value={startingRound}/>
 <br>
-<button on:click={build}>Build Me !</button>
+<button on:click={build}>construire le tableau</button>
 {:else}
-tableaux disponibles :: <br>
 {#each tournament.run.board.boards as board}
-<li style="cursor:pointer" on:click={() => {moveMe("board", "tableau "+board.name,"board",board.id);}}>
-{board.id} - {board.name}
+<li style="cursor:pointer" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+{board.name}
 </li>
 {/each}
-<p>to be started soon!</p>
 {/if}

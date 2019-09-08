@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
+import javax.persistence.CascadeType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TournamentBoard implements IPingModel  {
         this.id = id;
     }
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.REMOVE)
     private List<FinalPhase> boards;
 
 
@@ -62,5 +62,11 @@ public class TournamentBoard implements IPingModel  {
     public void setBoards(List<FinalPhase> boards) {
         this.boards = boards;
     }
+
+	public void computeScores(Options options) {
+        for (FinalPhase board : boards) {
+            board.computeScores(options);
+        }
+	}
 
 }

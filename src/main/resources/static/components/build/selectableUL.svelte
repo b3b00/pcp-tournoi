@@ -44,8 +44,6 @@
     }
 
     function dropped(ev) {
-        console.log("UL dropped");
-        console.log(ev);
         dispatch("drop",{event:ev,payload:payload});
     }
 

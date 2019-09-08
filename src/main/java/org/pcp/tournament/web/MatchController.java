@@ -64,17 +64,22 @@ public class MatchController {
     public Match updateMatch(@PathVariable int tournamentId, @RequestBody Match match) throws NotFoundException {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
-            Match newMatch = matchDao.save(match);
             Match realMatch = matchDao.findById(match.getId());
+            //Match newMatch = matchDao.save(match);
+            
             if (realMatch != null) {
                 for (int i = 0; i < match.getScore().size(); i++) {
                     MatchSet set = match.getSet(i);
-                    set.setMatch(match);
+                    set.setMatch(realMatch);
                     matchSetDao.save(set);
                 }
-                newMatch = matchDao.save(match);
+                Match newMatch = matchDao.save(realMatch);
                 newMatch.compute(tournament.getOptions());                
                 runService.InjectTeams(tournament);
+                runService.computeTeamReferenceLabels(tournament);
+                newMatch = matchDao.findById(newMatch.getId());
+                newMatch.getLeftTeamReferenceLabel();
+                newMatch.getRightTeamReferenceLabel();
                 return newMatch;
             }
             throw new NotFoundException("match not found");

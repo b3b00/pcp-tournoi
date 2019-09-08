@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+import javax.persistence.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,10 +18,10 @@ public class Team implements IPingModel  {
     @GeneratedValue
     private int id;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.REMOVE)
     private Player player1;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.REMOVE)
     private Player player2;
 
     @JsonInclude()
@@ -28,11 +29,11 @@ public class Team implements IPingModel  {
     private String name;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Group group;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Tournament tournament;
 
     public Team() {

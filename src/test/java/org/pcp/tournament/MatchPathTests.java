@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
+import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.*;
 import org.pcp.tournament.service.RunService;
@@ -31,30 +32,46 @@ public class MatchPathTests {
     @Autowired
     DBInitializer dbInitializer;
 
+    @Autowired
+    DataLoader dataLoader;
+
+    @Autowired
+    OptionsDao optionsDao;
+
     @Test    
     @Transactional
     public void dummyPassing() {
         System.out.println("dummy passing - in");
-        Tournament tournament = dbInitializer.InitTournament();        
-        assertNotNull(tournament);
-        tournament = runService.buildGroupPhase(tournament);
-        runService.buildMainBoard(tournament, 8);
-        runService.buildSecondBoard(tournament, 8);
-        tournament = tournamentDao.findById(tournament.getId());
+
+        Options options = optionsDao.findByMode(Mode.DOUBLE);
+        Tournament tournament = new Tournament("testingrun");
+        tournament.setOptions(options);
+        tournament = tournamentDao.save(tournament);
+        tournament = dataLoader.buildFake(tournament, 16);
+        int id = tournament.getId();
+        runService.buildGroupPhase(tournament);
+        runService.buildMainBoard(tournament, 4);
+
+        tournament = tournamentDao.findById(id);
+
         assertNotNull(tournament.getRun());
         Run run = tournament.getRun();
         assertNotNull(run.getBoard());
         
         TournamentBoard board = run.getBoard();
         assertNotNull(board.getBoards());
-        FinalPhase phase = board.getBoard("tableau principal");
-        Round round = phase.getRounds().get(0);
-        for (int i = 0; i < 8; i++) {
-            Match match = round.getMatches().get(i);
-            System.out.println(match.getLeftTeamReferenceLabel()+ " - "+match.getRightTeamReferenceLabel());
-        }
+
+        FinalPhase phase = board.getBoard("tableau principal");        
         assertNotNull(phase);
-        assertEquals(4, phase.getRounds().size());
+        assertEquals(3, phase.getRounds().size());
+        Round round = phase.getRounds().get(0);
+        assertEquals(4, round.getMatches().size());
+        for (int i = 0; i < 4; i++) {
+            Match match = round.getMatches().get(i);
+            assertNotNull(match.getLeftTeamReference());
+            assertNotNull(match.getRightTeamReference());
+        }
+        
 
         runService.InjectTeams(tournament);
 

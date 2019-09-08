@@ -13,7 +13,7 @@
   import {tools} from './tools.js';
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
-  import {GroupDisplay} from '../build/groupDisplay.js';
+  import {GroupDisplay} from '../groupDisplay.js';
 
   import MatchPreview from './match_preview.svelte';
 
@@ -56,7 +56,7 @@
       <li><h4>classement:</h4></li>
       {#if (ranks != null && ranks !== undefined)}  
         {#each ranks as ranking (ranking.team.id)} 
-          <li>{@html GroupDisplay.getTeamDisplayName(ranking.team)} - {ranking.points} </li>
+          <li>{@html GroupDisplay.getTeamDisplayName(ranking.team,null)} - {ranking.points} </li>
         {/each}
       {/if}     
     </ul>

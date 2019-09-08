@@ -33,6 +33,7 @@
 
 	import Build from './components/build/Build.svelte';
 	import Run from './components/run/run.svelte';
+	import { tools } from './components/run/tools.js';
 
 
 	let tournamentId = -1;
@@ -53,7 +54,10 @@
 		tournaments = await res.json();
 	}
 
-	function changeState(newState) {
+	async function changeState(newState) {
+		if (newState == STATE.HOME) {
+			await  fetchTournaments();
+		}
 		state = newState;
 	}
 
@@ -75,6 +79,10 @@
 			state = STATE.BUILD;
 		}
 		tournaments = tournaments;
+	}
+
+	async function deleteTournament(id) {
+		tournaments = await tools.deleteTournament(id);
 	}
 
 </script>
@@ -104,6 +112,7 @@
 			
 			<span>{tournament.name}</span><br>
 			<span><i>{tournament.date}</i></span>
+			<span on:click="{() => {deleteTournament(tournament.id)}}" class="w3-button" >&times;</span>
 		</li>
 	{/each}
 {/if}

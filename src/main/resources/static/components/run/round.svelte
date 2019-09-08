@@ -22,40 +22,45 @@
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
-    console.log(tournament);
-    tournament = await tools.fetchTournament(id);
+    tournament = await tools.fetchTournament(tournamentId);
   });
 
 
-  async function build() {
-    console.log(tournament);
-    console.log(tournamentId);
-    const uri = `/tournaments/${tournamentId}/board/$create?start=${startingRound}`;        
-        const res = await fetch(uri, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST"
-        });
-        tournament = await res.json();
-  }
 
-  let startingRound = 8;
 
-  function refresh() {
-
+  async function refresh() {
+    dispatch("refresh",{});
   }
 
 </script>
 
-<p>ID : {round.id}</p>
-<p>MATCHES : {round.matches.length}</p>
 
-<!-- <div class="w3-container">
-    {#each round.matches as match }
-    <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
-  {/each}
+
+<div class="w3-container w3-third">
+    {#if round !== null && round !== undefined}
+    {#if (round.final)}
+    <p style="text-align: center; font-weight: bold;">Finale</p>
+    {:else}
+    <p style="text-align: center; font-weight: bold;">1&nbsp;/&nbsp;{round.matches.length}</p>    
+    {/if}
   
+    {#each round.matchGroups as group }
+    <div class="w3-container w3-card">
+    <MatchPreview match={group[0]} tournament={tournament} on:move on:matchSaved={refresh}/>
+    <MatchPreview match={group[1]} tournament={tournament} on:move on:matchSaved={refresh}/>
+  </div>
 
-</div> -->
+<!--     
+    {#if group.finale}
+    
+    <p>finale</p>
+    {/if}
+    {#if match.semiFinale}
+    <p>petite finale</p>
+    {/if}
+    <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
+     -->
+  {/each}
+  {/if}
+
+</div>

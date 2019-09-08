@@ -8,6 +8,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,16 +33,17 @@ public class GroupPlay implements IPingModel  {
     @Transient
     private List<TeamRanking> rankings;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.REMOVE)
     private org.pcp.tournament.model.Group group;
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.REMOVE)
     private List<Match> matches;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JsonIgnore
     private GroupPhase phase;
 
+    @Transient  
     private boolean isDone;
 
     /**
@@ -106,7 +108,7 @@ public class GroupPlay implements IPingModel  {
      * @return the isDone
      */
     public boolean getIsDone() {
-        return isDone;
+        return (matches.stream().allMatch(m -> m.getIsEnded()));
     }
 
     /**

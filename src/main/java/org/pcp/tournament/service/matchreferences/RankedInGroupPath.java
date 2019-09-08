@@ -14,7 +14,7 @@ public class RankedInGroupPath implements IMatchPath {
     public IPingModel accept(IPingModel model) throws MatchPathException {
         if (model instanceof GroupPlay) {
             GroupPlay play = (GroupPlay)model;  
-            if (play.hasStarted() && ranking >= 0 && ranking < play.getRankings().size()) {
+            if (play.getIsDone() &&  ranking >= 0 && ranking < play.getRankings().size()) {
                 return play.getRankings().get(ranking).getTeam();
             }
             else {

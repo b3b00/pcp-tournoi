@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,10 +20,10 @@ public class Run implements IPingModel  {
     @OneToOne
     private Tournament tournament;
 
-    @OneToOne(mappedBy = "run")
+    @OneToOne(mappedBy = "run",cascade=CascadeType.REMOVE)
     private GroupPhase groupPhase;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.REMOVE)
     private TournamentBoard board;
 
     public Run() {

@@ -3,6 +3,7 @@ package org.pcp.tournament.web;
 import java.util.List;
 
 import org.pcp.tournament.DataLoader;
+import org.pcp.tournament.dao.GroupDao;
 import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.dao.TeamDao;
@@ -36,6 +37,11 @@ public class OptionsController {
     @Autowired
     DataLoader dataLoader;
 
+    @Autowired
+    GroupDao groupDao;
+
+  
+
     @GetMapping(value = "/options/preset")
     public List<Options> Preset() {
         dataLoader.loadOptions();
@@ -59,15 +65,18 @@ public class OptionsController {
             tournament.setDate(nameAndOptions.getDate());
             tournament.setOptions(options);
 
-            Tournament tour = tournamentDao.save(tournament);
+            tournament = tournamentDao.save(tournament);
+            //tournament = dataLoader.buildFake(tournament, 16);
 
-            return tour.getId();
+            return tournament.getId();
 
         } catch (Exception e) {
             throw new InternalError(e.getMessage());
 
         }
     }
+
+   
 
     @PutMapping(value = "/tournament/{id}/options")
     public int PutOptions(@RequestBody NameAndOptions nameAndOptions, @PathVariable int id) {
@@ -77,14 +86,13 @@ public class OptionsController {
                 tournament.setDate(nameAndOptions.getDate());
                 tournament.setName(nameAndOptions.getName());
                 Options options = tournament.getOptions();
-                Options newOptions = nameAndOptions.getOptions();                
+                Options newOptions = nameAndOptions.getOptions();
                 if (options.getIsPreset()) {
                     if (newOptions.getIsPreset() && newOptions.getId() != options.getId()) {
-                        newOptions = optionsDao.findById(newOptions.getId());     
-                                           
+                        newOptions = optionsDao.findById(newOptions.getId());
+
                         tournament.setOptions(newOptions);
-                    }
-                    else if(!newOptions.getIsPreset()) {
+                    } else if (!newOptions.getIsPreset()) {
                         Options opts = new Options();
                         opts.setMode(newOptions.getMode());
                         opts.setWinningSets(newOptions.getWinningSets());
@@ -92,8 +100,7 @@ public class OptionsController {
                         opts = optionsDao.save(opts);
                         tournament.setOptions(opts);
                     }
-                }
-                else {
+                } else {
                     options.setMode(newOptions.getMode());
                     options.setWinningSets(newOptions.getWinningSets());
                     options.setSetLength(newOptions.getSetLength());

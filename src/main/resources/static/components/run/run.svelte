@@ -22,6 +22,7 @@
         };
         currentBreadCrumb = [...currentBreadCrumb, s];
         currentItem = currentBreadCrumb[currentBreadCrumb.length - 1];
+        navigator(null);
     }
 
     export let tournamentId;
@@ -40,7 +41,7 @@
     onMount(async () => {        
         currentBreadCrumb = [
             {
-                "name": "boards", "label": "tournoi", "path": "boards", "id": "1"
+                "name": "tournament", "label": "tournoi", "path": "tournament", "id": "1"
             }
         ];
         if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {
@@ -73,21 +74,26 @@
 
     let currentBreadCrumb;
 
-    function moveScreen(data) {
+    async function moveScreen(data) {
         currentBreadCrumb = [...currentBreadCrumb, data.detail];
         currentItem = currentBreadCrumb[currentBreadCrumb.length - 1];
-        navigator(null);
+        await navigator(currentBreadCrumb);
     }
 
     
 
-    function navigator(data) {
+    async function navigator(data) {
         let newBreadCrumb = currentBreadCrumb;
         if (data != null) {
-            newBreadCrumb = data.detail.items;        
+            if (data.detail !== undefined && data.detail !== null) {
+                newBreadCrumb = data.detail.items;        
+            }
+            else {
+                newBreadCrumb = data;
+            }
         }
-        newBreadCrumb.forEach(item => {
-            fetchTournament(tournamentId);
+        newBreadCrumb.forEach(async item => {
+            await fetchTournament(tournamentId);
             if (item.name == "groupPhase") {
                 groupPhase = tournament.run.groupPhase;
             }
@@ -115,13 +121,13 @@
         <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
     {:else if (currentItem.name == "boards")}        
        <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
-    {:else if (currentItem.name == "board")}        
+    {:else if (currentItem.name == "board" && board !== undefined && board !== null)}        
        <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen}></Board> 
     {:else}
     <ul>
     <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
 
-    <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>board</li>
+    <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
     </ul>
     {/if}
 {:else}
@@ -129,7 +135,7 @@
 
 <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
 
-<li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>board</li>
+<li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
 
 </ul>
 {/if}
