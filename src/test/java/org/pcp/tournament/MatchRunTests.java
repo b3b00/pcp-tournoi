@@ -72,19 +72,20 @@ public class MatchRunTests {
         tournament = dataLoader.buildFake(tournament, 16);
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
-        runService.buildBoardNominal(tournament, 4);
+        runService.buildMainBoard(tournament, 4);
+        runService.buildSecondBoard(tournament, 2);
         tournament = tournamentDao.findById(id);
         for (int i = 0; i < 4; i++) {
             playGroup(tournament, i);
         }
-        checkRound(tournament, 0);
-        playRound(tournament, 0);
+        checkRound(tournament,"tableau principal", 0);
+        playRound(tournament,"tableau principal", 0);
 
-        checkRound(tournament, 1);
-        playRound(tournament, 1);
+        checkRound(tournament,"tableau principal", 1);
+        playRound(tournament,"tableau principal", 1);
 
-        checkRound(tournament, 2);
-        playRound(tournament, 2);
+        checkRound(tournament,"tableau principal", 2);
+        playRound(tournament,"tableau principal", 2);
 
         FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
         Round round = board.getRounds().get(2);
@@ -103,6 +104,15 @@ public class MatchRunTests {
         assertTrue("finale ended", smallfinale.getIsEnded());
         Team smallWinner = smallfinale.getWinner();
         assertEquals("l9", smallWinner.getPlayer1().getName());
+
+        checkRound(tournament,"consolante", 0);
+        playRound(tournament,"consolante", 0);
+
+        checkRound(tournament,"consolante", 1);
+        playRound(tournament,"consolante", 1);
+
+        checkRound(tournament,"consolante", 2);
+        playRound(tournament,"consolante", 2);
         
     }
 
@@ -116,16 +126,16 @@ public class MatchRunTests {
         group.computeRanking();
     }
 
-    private void playRound(Tournament tournament, int roundNumber) {
-        FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
+    private void playRound(Tournament tournament, String boardName, int roundNumber) {
+        FinalPhase board = tournament.getRun().getBoard().getBoard(boardName);
         Round round = board.getRounds().get(roundNumber);
         for (Match match : round.getMatches()) {
             playMatch(tournament, match, 0, 50);            
         }
     }
 
-    private void checkRound(Tournament tournament,int roundNumber) {
-        FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
+    private void checkRound(Tournament tournament,String boardName, int roundNumber) {
+        FinalPhase board = tournament.getRun().getBoard().getBoard(boardName);
         Round round = board.getRounds().get(roundNumber);
         for (Match match : round.getMatches()) {
             assertNotNull(match.getLeft());

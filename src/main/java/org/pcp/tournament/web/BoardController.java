@@ -38,6 +38,7 @@ public class BoardController {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             runService.buildMainBoard(tournament, startingRound);
+            runService.buildSecondBoard(tournament, startingRound);
             tournament = tournamentDao.findById(tournamentId);
             
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
