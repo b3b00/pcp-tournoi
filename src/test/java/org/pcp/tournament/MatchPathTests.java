@@ -39,6 +39,7 @@ public class MatchPathTests {
         assertNotNull(tournament);
         tournament = runService.buildGroupPhase(tournament);
         runService.buildMainBoard(tournament, 8);
+        runService.buildSecondBoard(tournament, 8);
         tournament = tournamentDao.findById(tournament.getId());
         assertNotNull(tournament.getRun());
         Run run = tournament.getRun();
@@ -46,7 +47,7 @@ public class MatchPathTests {
         
         TournamentBoard board = run.getBoard();
         assertNotNull(board.getBoards());
-        FinalPhase phase = board.getBoard("I");
+        FinalPhase phase = board.getBoard("tableau principal");
         Round round = phase.getRounds().get(0);
         for (int i = 0; i < 8; i++) {
             Match match = round.getMatches().get(i);

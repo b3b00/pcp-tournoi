@@ -169,25 +169,18 @@ public class RunService {
         boolean matchGroupNumber = tournament.getGroups().size() >= startingRound;
         boolean matchPlayerNumber = true;
         for (Group group : tournament.getGroups()) {
-            matchPlayerNumber = matchPlayerNumber && (group.getTeams().size()-2) >= 2;
-        }
-        return matchGroupNumber && matchPlayerNumber;
-    }
-
-    public boolean boardMatchNominaleSecondCase(Tournament tournament, int startingRound) {
-        boolean matchGroupNumber = tournament.getGroups().size() == startingRound;
-        boolean matchPlayerNumber = true;
-        for (Group group : tournament.getGroups()) {
             matchPlayerNumber = matchPlayerNumber && group.getTeams().size() >= 4;
         }
         return matchGroupNumber && matchPlayerNumber;
     }
 
+   
+
     public void buildMainBoard(Tournament tournament, int startingRound) {
 
         
         if (checkNominalMainBoard(tournament, startingRound)) {
-            buildMainBoardNominal(tournament, startingRound);
+            buildMainBoardNominal(tournament, startingRound);            
         } else {
             // TODO later if really needed
         }
@@ -195,7 +188,6 @@ public class RunService {
     }
 
     public void buildSecondBoard(Tournament tournament , int startingRound) {
-        // TODO
         if (checkNominalSecondBoard(tournament , startingRound)) {
              buildSecondBoardNominal(tournament,startingRound);
         }
@@ -206,10 +198,6 @@ public class RunService {
 
 
     private void buildSecondBoardNominal(Tournament tournament, int startingRound) {
-        // TODO
-    }
-
-    public void buildMainBoardNominal(Tournament tournament, int startingRound) {
         FinalPhase finalPhase = new FinalPhase();
         TournamentBoard board = new TournamentBoard();
         board = tournamentBoardDao.save(board);
@@ -221,7 +209,27 @@ public class RunService {
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
-        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound);        
+        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound,2,3);        
+        for (int i = startingRound/2; i > 1; i = i/2 ) 
+        {
+            previous = buildRoundNominal(tournament, finalPhase, previous, i);            
+        }
+        buildFinalRound(tournament,finalPhase,previous);
+    }
+
+    public void buildMainBoardNominal(Tournament tournament, int startingRound) {
+        FinalPhase finalPhase = new FinalPhase();
+        TournamentBoard board = new TournamentBoard();
+        board = tournamentBoardDao.save(board);
+
+        tournament.getRun().setBoard(board);
+        tournament = tournamentDao.save(tournament);
+
+        finalPhase.setName("tableau principal");
+        finalPhase = finalPhaseDao.save(finalPhase);
+        board.addBoard(finalPhase);
+        board = tournamentBoardDao.save(board);
+        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound,0,1);        
         for (int i = startingRound/2; i > 1; i = i/2 ) 
         {
             previous = buildRoundNominal(tournament, finalPhase, previous, i);            
@@ -278,7 +286,7 @@ public class RunService {
     }
 
 
-    private Round buildNominalFirstRound(Tournament tournament, FinalPhase finalPhase, int startingRound) {
+    private Round buildNominalFirstRound(Tournament tournament, FinalPhase finalPhase, int startingRound, int rankFirst, int rankSecond) {
         Round start = new Round();
         start.setPhase(finalPhase);
 
@@ -288,13 +296,13 @@ public class RunService {
             Group rightGroup = tournament.getGroups().get(startingRound - i - 1);
 
             Match match1 = new Match();
-            match1.setLeftTeamReference(buildMatchPath(leftGroup, 0));
-            match1.setRightTeamReference(buildMatchPath(rightGroup, 1));
+            match1.setLeftTeamReference(buildMatchPath(leftGroup, rankFirst));
+            match1.setRightTeamReference(buildMatchPath(rightGroup, rankSecond));
             match1 = matchDao.save(match1);
 
             Match match2 = new Match();
-            match2.setLeftTeamReference(buildMatchPath(rightGroup, 0));
-            match2.setRightTeamReference(buildMatchPath(leftGroup, 1));
+            match2.setLeftTeamReference(buildMatchPath(rightGroup, rankFirst));
+            match2.setRightTeamReference(buildMatchPath(leftGroup, rankSecond));
             match2 = matchDao.save(match2);
 
             start.addMatch(match1);
