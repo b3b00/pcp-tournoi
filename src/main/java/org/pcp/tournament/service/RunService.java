@@ -156,11 +156,20 @@ public class RunService {
 
 // region [boards]
 
-    public boolean boardMatchNominalMainCase(Tournament tournament, int startingRound) {
-        boolean matchGroupNumber = tournament.getGroups().size() == startingRound;
+    public boolean checkNominalMainBoard(Tournament tournament, int startingRound) {
+        boolean matchGroupNumber = tournament.getGroups().size() >= startingRound;
         boolean matchPlayerNumber = true;
         for (Group group : tournament.getGroups()) {
             matchPlayerNumber = matchPlayerNumber && group.getTeams().size() >= 2;
+        }
+        return matchGroupNumber && matchPlayerNumber;
+    }
+
+    public boolean checkNominalSecondBoard(Tournament tournament, int startingRound) {
+        boolean matchGroupNumber = tournament.getGroups().size() >= startingRound;
+        boolean matchPlayerNumber = true;
+        for (Group group : tournament.getGroups()) {
+            matchPlayerNumber = matchPlayerNumber && (group.getTeams().size()-2) >= 2;
         }
         return matchGroupNumber && matchPlayerNumber;
     }
@@ -177,7 +186,7 @@ public class RunService {
     public void buildMainBoard(Tournament tournament, int startingRound) {
 
         
-        if (boardMatchNominalMainCase(tournament,startingRound)) {
+        if (checkNominalMainBoard(tournament, startingRound)) {
             buildMainBoardNominal(tournament, startingRound);
         } else {
             // TODO later if really needed
@@ -187,8 +196,18 @@ public class RunService {
 
     public void buildSecondBoard(Tournament tournament , int startingRound) {
         // TODO
+        if (checkNominalSecondBoard(tournament , startingRound)) {
+             buildSecondBoardNominal(tournament,startingRound);
+        }
+        else {
+            // TODO later
+        }
     }
 
+
+    private void buildSecondBoardNominal(Tournament tournament, int startingRound) {
+        // TODO
+    }
 
     public void buildMainBoardNominal(Tournament tournament, int startingRound) {
         FinalPhase finalPhase = new FinalPhase();
