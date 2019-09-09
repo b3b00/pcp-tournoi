@@ -311,12 +311,14 @@ public class RunService {
             Group leftGroup = tournament.getGroups().get(i);
             Group rightGroup = tournament.getGroups().get(startingRound - i - 1);
 
-            Match match1 = new Match();
+            Match match1 = new Match(); 
+            match1 = matchService.createMatch(match1, tournament.getOptions());
             match1.setLeftTeamReference(buildMatchPath(leftGroup, rankFirst));
             match1.setRightTeamReference(buildMatchPath(rightGroup, rankSecond));
             match1 = matchDao.save(match1);
 
             Match match2 = new Match();
+            match2 = matchService.createMatch(match2, tournament.getOptions());
             match2.setLeftTeamReference(buildMatchPath(rightGroup, rankFirst));
             match2.setRightTeamReference(buildMatchPath(leftGroup, rankSecond));
             match2 = matchDao.save(match2);
