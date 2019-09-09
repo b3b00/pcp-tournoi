@@ -97,13 +97,13 @@ public class MatchRunTests {
         assertNotNull(finale);
         assertTrue("finale ended", finale.getIsEnded());
         Team winner = finale.getWinner();
-        assertEquals("l5", winner.getPlayer1().getName());
+        assertEquals("3l5", winner.getPlayer1().getName());
 
         Match smallfinale = matches.stream().filter(m -> m.isSemiFinale()).findFirst().get();
         assertNotNull(smallfinale);
         assertTrue("finale ended", smallfinale.getIsEnded());
         Team smallWinner = smallfinale.getWinner();
-        assertEquals("l9", smallWinner.getPlayer1().getName());
+        assertEquals("3l9", smallWinner.getPlayer1().getName());
 
         checkRound(tournament,"consolante", 0);
         playRound(tournament,"consolante", 0);
@@ -111,8 +111,8 @@ public class MatchRunTests {
         checkRound(tournament,"consolante", 1);
         playRound(tournament,"consolante", 1);
 
-        checkRound(tournament,"consolante", 2);
-        playRound(tournament,"consolante", 2);
+        // checkRound(tournament,"consolante", 2);
+        // playRound(tournament,"consolante", 2);
         
     }
 
