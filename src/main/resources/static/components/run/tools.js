@@ -32,7 +32,7 @@ export const tools = {
 
   fetchGroupPhase : async function(groupPhaseId) {
     const res = await fetch(`/groupPhase/${groupPhaseId}`);
-    let group = await res.json();
+    let phase = await res.json();
     return phase;
   }
   ,
