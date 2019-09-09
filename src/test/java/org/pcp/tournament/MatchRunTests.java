@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -97,13 +98,15 @@ public class MatchRunTests {
         assertNotNull(finale);
         assertTrue("finale ended", finale.getIsEnded());
         Team winner = finale.getWinner();
-        assertEquals("3l5", winner.getPlayer1().getName());
+
+        assertTrue("winner check", winner.getPlayer1().getName().endsWith("l5"));
+        //assertEquals("3l5", winner.getPlayer1().getName());
 
         Match smallfinale = matches.stream().filter(m -> m.isSemiFinale()).findFirst().get();
         assertNotNull(smallfinale);
         assertTrue("finale ended", smallfinale.getIsEnded());
         Team smallWinner = smallfinale.getWinner();
-        assertEquals("3l9", smallWinner.getPlayer1().getName());
+        assertTrue("small winner check", smallWinner.getPlayer1().getName().endsWith("l9"));
 
         checkRound(tournament,"consolante", 0);
         playRound(tournament,"consolante", 0);
@@ -111,8 +114,16 @@ public class MatchRunTests {
         checkRound(tournament,"consolante", 1);
         playRound(tournament,"consolante", 1);
 
-        // checkRound(tournament,"consolante", 2);
-        // playRound(tournament,"consolante", 2);
+        FinalPhase consolante = tournament.getRun().getBoard().getBoard("consolante");
+        int roundCount = consolante.getRounds().size();
+        round = consolante.getRounds().get(roundCount-1);
+        Match consollingFinal = round.getMatches().stream().filter(m -> m.isFinale()).collect(Collectors.toList()).get(0);
+        assertTrue("finale ended", smallfinale.getIsEnded());
+        String winnerName = consollingFinal.getWinner().getName();
+        System.out.println("winner "+winnerName);
+        Player p1 = consollingFinal.getWinner().getPlayer1();
+        assertTrue("winner check", p1.getName().endsWith("l3")); 
+              
         
     }
 
