@@ -1,4 +1,11 @@
-
+<style>
+.refresh {
+  cursor:pointer;
+  font-size: x-large;
+  padding-left: 16px;
+  padding-bottom: 16px;
+}
+</style>
 <script>
 
   import { tools } from './tools.js';
@@ -32,6 +39,9 @@
   
 
 </script>
+<div class="w3-container" style="clear:both">
+<span style='' class='fa fa-refresh w3-display-center refresh' on:click={refresh}>&nbsp;</span>
+</div>
 <div class="w3-container">
 {#if board !== null && board!== undefined}
 {#each board.rounds as round}

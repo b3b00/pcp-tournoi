@@ -21,12 +21,19 @@ export const tools = {
 
   deleteTournament : async function(tournamentId) {
     const res = await fetch(`/tournament/${tournamentId}`,{
-    headers: {      
-    },
-    method: "DELETE"}
+      headers: {      
+      },
+      method: "DELETE" 
+    }
     );
     let tournaments = await res.json();
     return tournaments;
+  },
+
+  fetchGroupPhase : async function(groupPhaseId) {
+    const res = await fetch(`/groupPhase/${groupPhaseId}`);
+    let group = await res.json();
+    return phase;
   }
   ,
   fetchGroupPlay : async function(groupPlayId) {
