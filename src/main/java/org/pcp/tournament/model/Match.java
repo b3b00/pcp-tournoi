@@ -214,8 +214,10 @@ public class Match implements IPingModel {
                 String[] items = t.split("\\/");
                 if (items[1].equals("0")) {
                     label = "1er";
-                } else if (items[1].equals("1")) {
-                    label = "2ème";
+                } else {
+                    int i = Integer.parseInt(items[1]);
+                    i++;
+                    label = i+"ème";
                 }
                 label += " du groupe " + items[0];
             }            
