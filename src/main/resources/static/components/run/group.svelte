@@ -45,11 +45,12 @@
 
 </script>
 
-<!-- TODO titre du groupe ? -->
 <div class="w3-half">
+{#if groupPlay !== undefined}
   {#each groupPlay.matches as match }
     <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
   {/each}
+{/if}
 </div>
 <div class="w3-half">
   <ul class="w3-ul w3-border w3-quarter">
