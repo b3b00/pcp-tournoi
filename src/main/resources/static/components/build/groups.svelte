@@ -4,7 +4,7 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import {GroupDisplay} from '../groupDisplay.js';
-    import {tools} from './teams.js';
+    import {tools, modes} from './teams.js';
 
 
     function dragstart (team) {

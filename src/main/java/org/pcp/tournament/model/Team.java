@@ -18,10 +18,10 @@ public class Team implements IPingModel  {
     @GeneratedValue
     private int id;
 
-    @OneToOne(cascade=CascadeType.REMOVE)
+    @OneToOne
     private Player player1;
 
-    @OneToOne(cascade=CascadeType.REMOVE)
+    @OneToOne
     private Player player2;
 
     @JsonInclude()
@@ -33,7 +33,7 @@ public class Team implements IPingModel  {
     private Group group;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private Tournament tournament;
 
     public Team() {

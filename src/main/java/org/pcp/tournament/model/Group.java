@@ -23,11 +23,11 @@ public class Group implements IPingModel {
 
     private String name;
 
-    @OneToMany(mappedBy = "group",cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy = "group")
     private List<Team> teams;
 
     
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JsonIgnore
     private Tournament tournament;
 

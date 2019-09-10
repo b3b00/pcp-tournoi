@@ -57,7 +57,7 @@
 
         if (tournamentId != -1) {
             await load(); 
-            if (tournament != null && tournament.options.mode == "SINGLE") {
+            if (tournament.options.mode == "SINGLE" && (tournament.teams === undefined || tournament.teams === null || tournament.teams.length == 0)) {
                 single();
             }
             else {

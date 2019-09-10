@@ -184,6 +184,9 @@ public class TeamsController {
             if (team != null) {
                 tournament.getTeams().removeIf(t -> t.getId() == teamId);
                 tournament = tournamentDao.save(tournament);
+                team.setPlayer1(null);
+                team.setPlayer2(null);
+                team = teamDao.save(team);
                 teamDao.delete(team);
                 return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
             }
@@ -201,8 +204,16 @@ public class TeamsController {
             List<Integer> teams = tournament.getTeams().stream().map(t -> t.getId()).collect(Collectors.toList());
             tournament.getTeams().clear();
             tournament = tournamentDao.save(tournament);
-            for (int team : teams) {
-                teamDao.deleteById(team);
+            for (int teamId : teams) {
+                Team team = teamDao.findById(teamId);
+                if (team != null) {
+                    team.setPlayer1(null);
+                    team.setPlayer2(null);
+                    team = teamDao.save(team);                    
+                }
+            }
+            for (int teamId : teams) {
+                teamDao.deleteById(teamId);
             }
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
         }
