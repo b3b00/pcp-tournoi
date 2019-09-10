@@ -49,6 +49,8 @@
 
     let tournament = {};
 
+    let possible = true;
+
     onMount(async () => {
         tournament = {
             id: tournamentId,
@@ -60,6 +62,12 @@
             await load(); 
             if (tournament != null && tournament.options.mode == "SINGLE") {
                 single();
+            }
+            else {
+                if (!(tournament !== null && tournament !== undefined && tournament.players !== undefined && tournament.players.length > 0 && tournament.players.length % 2 == 0)) {
+                    window.alert("nombre de joueurs impair");
+                    possible = false;
+                }
             }
         }
 
@@ -281,9 +289,10 @@
 
 </script>
 
+
 {#if (tournament !== null && tournament !== undefined &&
     tournament.options !== null && tournament.options !== undefined && 
-    tournament.options.mode == "DOUBLE")}
+    tournament.options.mode == "DOUBLE" && possible)}
 <br/>
 <hr/>
 <br/>
