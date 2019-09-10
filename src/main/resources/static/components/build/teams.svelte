@@ -31,12 +31,9 @@
     import Team from './team.svelte';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
+    import {tools, modes} from './teams.js';
 
-    const modes = {
-        RANDOM: "RANDOM",
-        MIX: "MIX",
-        SINGLE : "SINGLE"
-    }
+    
 
     const dispatch = createEventDispatcher();
 
@@ -79,68 +76,35 @@
         const res = await fetch(`/tournaments/${tournamentId}`);
         tournament = await res.json();
         if (tournament !== undefined && tournament !== null) {
-            computeUnTeamedPlayers();
+            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
         }
     }
 
-    async function computeUnTeamedPlayers() {
-        unTeamedPlayers = [];
-        let teamed = [];
-        if (tournament.teams !== undefined && tournament.teams !== null) {
-        tournament.teams.forEach(t => {
-            if (t.player1 != null) {
-                teamed.push(t.player1);
-            }
-            if (t.player2 != null) {
-                teamed.push(t.player2);
-            }
-        });
-        }
-        unTeamedPlayers = substract(tournament.players, teamed);
-    }
+    
 
-    function substract(a, b) {    
-        let res = a.filter(aa => !b.find(bb => bb.id == aa.id));
-        return res;
-    }
+   
 
     async  function single() {
-        computeTeams(modes.SINGLE)
+        tournament = await tools.computeTeams(modes.SINGLE, tournament.id);
+        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
     }
 
     async function random() {
-        computeTeams(modes.RANDOM);
+        tournament = await tools.computeTeams(modes.RANDOM, tournament.id);
+        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
     }
 
     async function mix() {
-        computeTeams(modes.MIX);
+        tournament = await tools.computeTeams(modes.MIX, tournament.id);
+        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
     }
 
     async function clear() {
-        const uri = `/tournaments/${tournamentId}/teams`;        
-        const res = await fetch(uri, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "DELETE"
-        });
-        tournament = await res.json();
-        computeUnTeamedPlayers();
+        tournament = await tools.clear(tournament.id);        
+        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
     }
 
-    async function computeTeams(mode) {
-        const uri = `/tournaments/${tournamentId}/teams/$create?mode=${mode}`;        
-        const res = await fetch(uri, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST"
-        });
-        tournament = await res.json();
-        computeUnTeamedPlayers(); // for real
-    }
+    
 
     function onUnTeam(data) {
         let team = data.detail.team;
@@ -172,12 +136,12 @@
                             body:JSON.stringify(t)
                         });
                         tournament = await res.json();
-                        computeUnTeamedPlayers(); 
+                        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
                     }
                 }
             });
             tournament.teams = tournament.teams;
-            computeUnTeamedPlayers();
+            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
         }
     }
 
@@ -192,7 +156,7 @@
                 method: "POST"
             });
             tournament = await res.json();
-            computeUnTeamedPlayers();           
+            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
     }
 
     function isTeamEmpty(team) {
@@ -241,13 +205,13 @@
         if (selectedPlayers.length == 2) {
             await teamPlayers();
             clearSelection();
-            computeUnTeamedPlayers();
+            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
             tournament = tournament;
         }
         else if (selectedPlayers.length == 1 && selectedTeams.length == 1) {
             addPlayerToTeam();
             clearSelection();
-            computeUnTeamedPlayers();
+            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
         }
         else {
             alert(`vous devez sélectionner soit 
@@ -281,7 +245,7 @@
                 method: "PUT"
             });
             tournament = await res.json();
-            computeUnTeamedPlayers();
+            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
     }
 
 

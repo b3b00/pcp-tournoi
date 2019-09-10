@@ -4,6 +4,7 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import {GroupDisplay} from '../groupDisplay.js';
+    import {tools} from './teams.js';
 
 
     function dragstart (team) {
@@ -23,12 +24,7 @@
                 computeUngroupedTeams();
             }
     }
-
-
-    const modes = {
-        RANDOM: "RANDOM",
-        MIX: "MIX"
-    }
+    
 
     const dispatch = createEventDispatcher();
 
@@ -57,10 +53,13 @@
 
     async function load() {
         try {
-        const res = await fetch(`/tournaments/${tournamentId}`);
-        tournament = await res.json(); 
-        computeUngroupedTeams();
-        }        
+            const res = await fetch(`/tournaments/${tournamentId}`);
+            tournament = await res.json(); 
+            computeUngroupedTeams();
+            if (tournament.options.mode == "SINGLE" && (tournament.teams === undefined || tournament.teams === null || tournament.teams.length == 0)) {
+                tournament = tools.computeTeams(modes.SINGLE, tournament.id);
+            }      
+        }  
         catch(error) {       
             console.log(error);
         }
