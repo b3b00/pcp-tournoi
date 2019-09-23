@@ -50,7 +50,7 @@ public class MatchPathTests {
         tournament = dataLoader.buildFake(tournament, 16);
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
-        runService.buildMainBoard(tournament, 4);
+        runService.buildMainBoard(tournament);
 
         tournament = tournamentDao.findById(id);
 

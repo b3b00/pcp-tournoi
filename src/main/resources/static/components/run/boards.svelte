@@ -1,10 +1,9 @@
-
 <script>
 
   import { tools } from './tools.js';
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
-  
+
 
 
 
@@ -19,24 +18,33 @@
   onMount(async () => {
     moveMe = tools.mover(dispatch);
     tournament = await tools.fetchTournament(tournamentId);
+    build();
+    // tseu tseu
   });
 
 
   async function build() {
-    const uri = `/tournaments/${tournamentId}/board/$create?start=${startingRound}`;        
-        const res = await fetch(uri, {
+    if (tournament !== undefined && tournament !== null && tournament.groups !== undefined && tournament.groups !== null) {
+      if (tournament.run.board === undefined || tournament.run.board === null) {
+        let t = (Math.log(tournament.groups.length) / Math.log(2)) % 1 === 0;
+        if (t) {
+          const uri = `/tournaments/${tournamentId}/board/$create`; // ?start=${Math.sqrt(tournament.groups.length)}`;
+          const res = await fetch(uri, {
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
             },
             method: "POST"
-        });
-        tournament = await res.json();
+          });
+          tournament = await res.json();
+        }
+      }
+    }
   }
 
   let startingRound = 8;
 
-  
+
 
 </script>
 

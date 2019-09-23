@@ -73,8 +73,8 @@ public class MatchRunTests {
         tournament = dataLoader.buildFake(tournament, 16);
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
-        runService.buildMainBoard(tournament, 4);
-        runService.buildSecondBoard(tournament, 2);
+        runService.buildMainBoard(tournament);
+        runService.buildSecondBoard(tournament);
         tournament = tournamentDao.findById(id);
         for (int i = 0; i < 4; i++) {
             playGroup(tournament, i);
@@ -85,11 +85,11 @@ public class MatchRunTests {
         checkRound(tournament,"tableau principal", 1);
         playRound(tournament,"tableau principal", 1);
 
-        checkRound(tournament,"tableau principal", 2);
-        playRound(tournament,"tableau principal", 2);
+        // checkRound(tournament,"tableau principal", 2);
+        // playRound(tournament,"tableau principal", 2);
 
         FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
-        Round round = board.getRounds().get(2);
+        Round round = board.getRounds().get(1);
 
         List<Match> matches = round.getMatches();
         assertEquals(2, matches.size());
@@ -99,14 +99,14 @@ public class MatchRunTests {
         assertTrue("finale ended", finale.getIsEnded());
         Team winner = finale.getWinner();
 
-        assertTrue("winner check", winner.getPlayer1().getName().endsWith("l5"));
+        assertTrue("winner check", winner.getPlayer1().getName().endsWith("l1"));
         //assertEquals("3l5", winner.getPlayer1().getName());
 
         Match smallfinale = matches.stream().filter(m -> m.isSemiFinale()).findFirst().get();
         assertNotNull(smallfinale);
         assertTrue("finale ended", smallfinale.getIsEnded());
         Team smallWinner = smallfinale.getWinner();
-        assertTrue("small winner check", smallWinner.getPlayer1().getName().endsWith("l9"));
+        assertTrue("small winner check", smallWinner.getPlayer1().getName().endsWith("l4"));
 
         checkRound(tournament,"consolante", 0);
         playRound(tournament,"consolante", 0);

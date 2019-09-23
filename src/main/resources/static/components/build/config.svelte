@@ -202,7 +202,7 @@
     </div>
 </div>
 
-<label>Mode :</label>
+<label>Type de tournoi :</label>
 {#if tournament !== undefined}
 {#each options as option, y}
 <input class="w3-radio" type="radio" name="mode" on:change="{changeMode}" bind:group={tournamentOptions.mode} value="{option.mode}">{option.label}<br>

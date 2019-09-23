@@ -33,12 +33,12 @@ public class BoardController {
     
 
     @PostMapping("/tournaments/{tournamentId}/board/$create")
-    public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId,@RequestParam("start")int startingRound) {
+    public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId) {//,@RequestParam("start")int startingRound) {
         try {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
-            runService.buildMainBoard(tournament, startingRound);
-            runService.buildSecondBoard(tournament, startingRound);
+            runService.buildMainBoard(tournament);
+            runService.buildSecondBoard(tournament);
             tournament = tournamentDao.findById(tournamentId);
             
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);

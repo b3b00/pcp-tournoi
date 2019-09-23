@@ -14,8 +14,8 @@ import org.javatuples.Pair;
 @Component
 public class RunService {
 
-//region [dependencies]
-    
+    // region [dependencies]
+
     @Autowired
     MatchSetDao matchSetDao;
 
@@ -46,9 +46,9 @@ public class RunService {
     @Autowired
     MatchService matchService;
 
-//endregion
+    // endregion
 
-//region [cleaning]
+    // region [cleaning]
 
     public void deleteRunForTournament(int TournamentId) {
         Tournament tournament = tournamentDao.findById(TournamentId);
@@ -98,11 +98,11 @@ public class RunService {
         }
     }
 
-//endregion
+    // endregion
 
-//region [building with references]
+    // region [building with references]
 
-//region [groups]
+    // region [groups]
     public Tournament buildGroupPhase(Tournament tournament) {
         if (tournament != null) {
             try {
@@ -147,14 +147,14 @@ public class RunService {
                 return tournament;
             } catch (Exception e) {
                 throw e;
-            }            
+            }
         }
         return null;
     }
 
-// endregion
+    // endregion
 
-// region [boards]
+    // region [boards]
 
     public boolean checkNominalMainBoard(Tournament tournament, int startingRound) {
         boolean matchGroupNumber = tournament.getGroups().size() >= startingRound;
@@ -174,59 +174,64 @@ public class RunService {
         return matchGroupNumber && matchPlayerNumber;
     }
 
-   
+    public void buildMainBoard(Tournament tournament) {
 
-    public void buildMainBoard(Tournament tournament, int startingRound) {
+        int startingRound = tournament.getGroups().size();
 
-        
-        if (checkNominalMainBoard(tournament, startingRound)) {
-            buildMainBoardNominal(tournament, startingRound);            
-        } else {
-            // TODO later if really needed
+        if (tournament.getGroups().size() % 2 == 0) {
+            startingRound = startingRound / 2;
+
+            if (checkNominalMainBoard(tournament, startingRound)) {
+                buildMainBoardNominal(tournament, startingRound);
+            } else {
+                // TODO later if really needed
+            }
+            InjectTeams(tournament);
+            computeTeamReferenceLabels(tournament);
         }
-        InjectTeams(tournament);
-        computeTeamReferenceLabels(tournament);
 
     }
 
-    public void buildSecondBoard(Tournament tournament , int startingRound) {
-        if (checkNominalSecondBoard(tournament , startingRound)) {
-             buildSecondBoardNominal(tournament,startingRound);
-        }
-        else {
-            // TODO later
+    public void buildSecondBoard(Tournament tournament) {
+        int startingRound = tournament.getGroups().size();
+
+        if (tournament.getGroups().size() % 2 == 0) {
+            startingRound = startingRound / 2;
+            if (checkNominalSecondBoard(tournament, startingRound)) {
+                buildSecondBoardNominal(tournament, startingRound);
+            } else {
+                // TODO later
+            }
         }
     }
-
 
     private void buildSecondBoardNominal(Tournament tournament, int startingRound) {
         FinalPhase finalPhase = new FinalPhase();
         TournamentBoard board = tournament.getRun().getBoard();
-        
-        if ( board == null) {
+
+        if (board == null) {
             board = new TournamentBoard();
             board = tournamentBoardDao.save(board);
             tournament.getRun().setBoard(board);
             tournament = tournamentDao.save(tournament);
         }
 
-        finalPhase.setName("consolante");        
+        finalPhase.setName("consolante");
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
-        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound,2,3);        
-        for (int i = startingRound/2; i > 1; i = i/2 ) 
-        {
-            previous = buildRoundNominal(tournament, finalPhase, previous, i);            
+        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound, 2, 3);
+        for (int i = startingRound / 2; i > 1; i = i / 2) {
+            previous = buildRoundNominal(tournament, finalPhase, previous, i);
         }
-        buildFinalRound(tournament,finalPhase,previous);
+        buildFinalRound(tournament, finalPhase, previous);
     }
 
     public void buildMainBoardNominal(Tournament tournament, int startingRound) {
         FinalPhase finalPhase = new FinalPhase();
         TournamentBoard board = tournament.getRun().getBoard();
-        
-        if ( board == null) {
+
+        if (board == null) {
             board = new TournamentBoard();
             board = tournamentBoardDao.save(board);
             tournament.getRun().setBoard(board);
@@ -240,19 +245,18 @@ public class RunService {
         finalPhase = finalPhaseDao.save(finalPhase);
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
-        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound,0,1);        
-        for (int i = startingRound/2; i > 1; i = i/2 ) 
-        {
-            previous = buildRoundNominal(tournament, finalPhase, previous, i);            
+        Round previous = buildNominalFirstRound(tournament, finalPhase, startingRound, 0, 1);
+        for (int i = startingRound / 2; i > 1; i = i / 2) {
+            previous = buildRoundNominal(tournament, finalPhase, previous, i);
         }
-        buildFinalRound(tournament,finalPhase,previous);
+        buildFinalRound(tournament, finalPhase, previous);
     }
 
     private Round buildFinalRound(Tournament tournament, FinalPhase finalPhase, Round previous) {
         Round round = new Round();
-        round.setPhase(finalPhase);        
-        
-        Match finalMatch = new Match();         
+        round.setPhase(finalPhase);
+
+        Match finalMatch = new Match();
         finalPhaseDao.save(finalPhase);
         String leftRef = builMatchPath(previous, 0, PlayStatusEnum.WINNER);
         String rightRef = builMatchPath(previous, 1, PlayStatusEnum.WINNER);
@@ -260,9 +264,8 @@ public class RunService {
         finalMatch.setRightTeamReference(rightRef);
         finalMatch.setFinale(true);
         finalMatch = matchService.createMatch(finalMatch, tournament.getOptions());
-        
 
-        Match smallFinalMatch = new Match(); 
+        Match smallFinalMatch = new Match();
         leftRef = builMatchPath(previous, 0, PlayStatusEnum.LOSER);
         rightRef = builMatchPath(previous, 1, PlayStatusEnum.LOSER);
         smallFinalMatch.setLeftTeamReference(leftRef);
@@ -280,20 +283,20 @@ public class RunService {
         return round;
     }
 
-    private Round buildRoundNominal(Tournament tournament,FinalPhase finalPhase, Round previous, int number) {
+    private Round buildRoundNominal(Tournament tournament, FinalPhase finalPhase, Round previous, int number) {
         Round round = new Round();
         round.setPhase(finalPhase);
-        //finalPhase.addRound(round);
+        // finalPhase.addRound(round);
         finalPhaseDao.save(finalPhase);
-        for(int i = 0; i < number; i++) {
+        for (int i = 0; i < number; i++) {
             Match match = new Match();
-            String leftRef = builMatchPath(previous, i*2, PlayStatusEnum.WINNER);
-            String rightRef = builMatchPath(previous, i*2+1, PlayStatusEnum.WINNER);
+            String leftRef = builMatchPath(previous, i * 2, PlayStatusEnum.WINNER);
+            String rightRef = builMatchPath(previous, i * 2 + 1, PlayStatusEnum.WINNER);
             match.setLeftTeamReference(leftRef);
             match.setRightTeamReference(rightRef);
             match = matchService.createMatch(match, tournament.getOptions());
             round.addMatch(match);
-            round = roundDao.save(round);            
+            round = roundDao.save(round);
         }
         round.setFinal(false);
         finalPhase.addRound(round);
@@ -301,17 +304,17 @@ public class RunService {
         return round;
     }
 
-
-    private Round buildNominalFirstRound(Tournament tournament, FinalPhase finalPhase, int startingRound, int rankFirst, int rankSecond) {
+    private Round buildNominalFirstRound(Tournament tournament, FinalPhase finalPhase, int startingRound, int rankFirst,
+            int rankSecond) {
         Round start = new Round();
         start.setPhase(finalPhase);
 
-        for (int i = 0; i < startingRound ; i++) {
+        for (int i = 0; i < startingRound; i++) {
 
             Group leftGroup = tournament.getGroups().get(i);
             Group rightGroup = tournament.getGroups().get(startingRound - i - 1);
 
-            Match match1 = new Match(); 
+            Match match1 = new Match();
             match1 = matchService.createMatch(match1, tournament.getOptions());
             match1.setLeftTeamReference(buildMatchPath(leftGroup, rankFirst));
             match1.setRightTeamReference(buildMatchPath(rightGroup, rankSecond));
@@ -328,74 +331,69 @@ public class RunService {
         return start;
     }
 
-//endregion
-    
+    // endregion
 
-//region [team injection]  
+    // region [team injection]
 
+    public void InjectTeams(Tournament tournament) {
+        Run run = tournament.getRun();
 
-
-public void InjectTeams(Tournament tournament) {
-    Run run = tournament.getRun();
-    
-    TournamentBoard board = run.getBoard();
-    run.getGroupPhase().getFullRanking();
-    for (FinalPhase phase : board.getBoards()) {
-        InjectTeams(tournament,phase);        
+        TournamentBoard board = run.getBoard();
+        run.getGroupPhase().getFullRanking();
+        for (FinalPhase phase : board.getBoards()) {
+            InjectTeams(tournament, phase);
+        }
     }
-}
 
-private void InjectTeams(Tournament tournament, FinalPhase phase) {
-    for (Round round : phase.getRounds()) {
-        InjectTeams(tournament,round);
+    private void InjectTeams(Tournament tournament, FinalPhase phase) {
+        for (Round round : phase.getRounds()) {
+            InjectTeams(tournament, round);
+        }
     }
-}
 
-private void InjectTeams(Tournament tournament, Round round) {
-    for (Match match : round.getMatches()) {
-        match.compute(tournament.getOptions());
-        if (match.getLeftTeamReference() != null) {
-            Team team = getTeam(tournament,match.getLeftTeamReference());
-            if (team != null) {
-                match.setLeft(team);
-                match = matchDao.save(match);
+    private void InjectTeams(Tournament tournament, Round round) {
+        for (Match match : round.getMatches()) {
+            match.compute(tournament.getOptions());
+            if (match.getLeftTeamReference() != null) {
+                Team team = getTeam(tournament, match.getLeftTeamReference());
+                if (team != null) {
+                    match.setLeft(team);
+                    match = matchDao.save(match);
+                }
             }
-        } 
-        if (match.getRightTeamReference() != null) {
-            Team team = getTeam(tournament,match.getRightTeamReference());
-            if (team != null) {
-                match.setRight(team);
-                match = matchDao.save(match);
+            if (match.getRightTeamReference() != null) {
+                Team team = getTeam(tournament, match.getRightTeamReference());
+                if (team != null) {
+                    match.setRight(team);
+                    match = matchDao.save(match);
+                }
             }
-        }      
+        }
     }
-}
 
-private Team getTeam(Tournament tournament,String path) {
-    try {
-        List<IMatchPath> matchPath = parsePath(path, tournament);
-        IPingModel previous = tournament;
-        for (IMatchPath pathElement : matchPath) {
-            previous = pathElement.accept(previous);
-            if (previous == null) {
+    private Team getTeam(Tournament tournament, String path) {
+        try {
+            List<IMatchPath> matchPath = parsePath(path, tournament);
+            IPingModel previous = tournament;
+            for (IMatchPath pathElement : matchPath) {
+                previous = pathElement.accept(previous);
+                if (previous == null) {
+                    return null;
+                }
+            }
+            if (previous instanceof Team) {
+                return (Team) previous;
+            } else {
                 return null;
             }
-        }
-        if (previous instanceof Team) {
-            return (Team)previous;
-        }
-        else {
+        } catch (MatchPathException mpe) {
             return null;
         }
     }
-    catch(MatchPathException mpe) {
-        return null;
-    }
-}
 
-//endregion
+    // endregion
 
-// region [match referencing]
+    // region [match referencing]
 
     public static String groupsPath = "groups";
     public static String groupPath = "group";
@@ -424,9 +422,9 @@ private Team getTeam(Tournament tournament,String path) {
         return pathBuilder.toString();
     }
 
-    public List<IMatchPath>  parsePath(String path, Tournament tournament) throws MatchPathException {
-        String[] elements = path.split("\\/");        
-    
+    public List<IMatchPath> parsePath(String path, Tournament tournament) throws MatchPathException {
+        String[] elements = path.split("\\/");
+
         if (elements != null && elements.length > 1) {
             String start = elements[0];
             if (start.equals(groupsPath)) {
@@ -436,7 +434,7 @@ private Team getTeam(Tournament tournament,String path) {
             }
         }
 
-        throw new MatchPathException(path+" is not a valid match path");
+        throw new MatchPathException(path + " is not a valid match path");
     }
 
     private List<IMatchPath> parseGroupPath(String[] elements, Tournament tournament) throws MatchPathException {
@@ -475,15 +473,14 @@ private Team getTeam(Tournament tournament,String path) {
         return path;
     }
 
-    
-    private List<IMatchPath> parseRoundPath(String[] elements,Tournament tournament) throws MatchPathException {
+    private List<IMatchPath> parseRoundPath(String[] elements, Tournament tournament) throws MatchPathException {
         List<IMatchPath> path = new ArrayList<IMatchPath>();
         path.add(new BoardsPath());
         String boardName = elements[2];
         path.add(new BoardPath(boardName));
         FinalPhase board = tournament.getRun().getBoard().getBoard(boardName);
         if (board == null) {
-            throw new MatchPathException("board "+boardName + " does not exist.");
+            throw new MatchPathException("board " + boardName + " does not exist.");
         }
         Pair<Boolean, Integer> parsedInt = tryParseInt(elements[4]);
         if (parsedInt.getValue0()) {
@@ -497,7 +494,7 @@ private Team getTeam(Tournament tournament,String path) {
         } else {
             throw new MatchPathException(elements[6] + " is not a match");
         }
-        
+
         TeamPath teamPath = new TeamPath(PlayStatusEnum.valueOf(elements[7]));
         path.add(teamPath);
         return path;
@@ -518,7 +515,7 @@ private Team getTeam(Tournament tournament,String path) {
 
     // endregion
 
-// region [match labeling]
+    // region [match labeling]
 
     public void computeTeamReferenceLabels(Tournament tournament) {
         if (tournament != null) {
@@ -544,5 +541,5 @@ private Team getTeam(Tournament tournament,String path) {
 
     }
 
-//endregion
+    // endregion
 }
