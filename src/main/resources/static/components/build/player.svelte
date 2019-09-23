@@ -23,7 +23,7 @@
     let isLicensedOrig;
     let isNewPlayerOrig; 
 
-    let isLicensedClass = "";
+
 
     const save = "fa fa-check";
     const nosave = "hide";
@@ -41,8 +41,7 @@
 
     
 
-    function computeStyles() {
-        isLicensedClass = isLicensed ? licensed : notlicensed;
+    function computeStyles() {        
         saveClass = edited  ? save : nosave;
         cancelClass = edited  ? cancel : nocancel;
         trashClass = isNewPlayer ? notrash : trash;
