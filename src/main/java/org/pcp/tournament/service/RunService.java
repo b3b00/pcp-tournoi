@@ -179,7 +179,7 @@ public class RunService {
         int startingRound = tournament.getGroups().size();
 
         if (tournament.getGroups().size() % 2 == 0) {
-            startingRound = startingRound / 2;
+            //startingRound = startingRound / 2;
 
             if (checkNominalMainBoard(tournament, startingRound)) {
                 buildMainBoardNominal(tournament, startingRound);
