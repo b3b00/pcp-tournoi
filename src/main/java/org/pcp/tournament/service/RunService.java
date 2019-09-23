@@ -306,7 +306,7 @@ public class RunService {
         Round start = new Round();
         start.setPhase(finalPhase);
 
-        for (int i = 0; i < startingRound / 2; i++) {
+        for (int i = 0; i < startingRound ; i++) {
 
             Group leftGroup = tournament.getGroups().get(i);
             Group rightGroup = tournament.getGroups().get(startingRound - i - 1);
@@ -317,15 +317,7 @@ public class RunService {
             match1.setRightTeamReference(buildMatchPath(rightGroup, rankSecond));
             match1 = matchDao.save(match1);
 
-            Match match2 = new Match();
-            match2 = matchService.createMatch(match2, tournament.getOptions());
-            match2.setLeftTeamReference(buildMatchPath(rightGroup, rankFirst));
-            match2.setRightTeamReference(buildMatchPath(leftGroup, rankSecond));
-            match2 = matchDao.save(match2);
-
-
             start.addMatch(match1);
-            start.addMatch(match2);
             start.setFinal(false);
             start = roundDao.save(start);
 
