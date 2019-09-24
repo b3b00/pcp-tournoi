@@ -2,6 +2,8 @@ package org.pcp.tournament.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.pcp.tournament.model.*;
 import org.pcp.tournament.dao.*;
@@ -191,27 +193,108 @@ public class RunService {
 
     }
 
+    private static boolean isPowerOfTwo(int number) {
+
+        return number > 0 && ((number & (number - 1)) == 0);
+
+    }
+
+    private int highestPowerof2(int n) {
+        int res = 0;
+        for (int i = n; i >= 1; i--) {
+            // If i is a power of 2
+            if ((i & (i - 1)) == 0) {
+                res = i;
+                break;
+            }
+        }
+        return res;
+    }
+
     public void buildSecondBoard(Tournament tournament) {
         int startingRound = tournament.getGroups().size();
 
-        List<String> rermainingTeamsPath = new ArrayList<String>();
+        List<String> remainingTeamsPath = new ArrayList<String>();
         for (Group group : tournament.getGroups()) {
             if (group.getTeams().size() > 2) {
                 for (int i = 2; i < group.getTeams().size(); i++) {
                     String path = buildMatchPath(group, i);
-                    rermainingTeamsPath.add(path);
+                    remainingTeamsPath.add(path);
                 }
             }
         }
 
-        if (tournament.getGroups().size() % 2 == 0) {
+        // ICI :
+        // prendre les n premieres équipes tel que n = ^2
+        // -> check inutile si n > 0
+        // -> construire à partir de la liste des n path plutot que des groupes
 
-            if (checkNominalSecondBoard(tournament, startingRound)) {
-                buildSecondBoardNominal(tournament, startingRound);
-            } else {
-                // TODO later
+        int remainingCount = remainingTeamsPath.size();
+
+        if (!isPowerOfTwo(remainingCount)) {
+
+            // if (remainingCount > 0 && remainingCount % 2 == 0) {
+            int count = highestPowerof2(remainingCount);
+            List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
+            buildSecondBoardNominal2(tournament, pathes);
+            // }
+        } else {
+
+            if (tournament.getGroups().size() % 2 == 0) {
+
+                if (checkNominalSecondBoard(tournament, startingRound)) {
+                    buildSecondBoardNominal(tournament, startingRound);
+                } else {
+                    // TODO later
+                }
             }
         }
+    }
+
+    private void buildSecondBoardNominal2(Tournament tournament, List<String> pathes) {
+        FinalPhase finalPhase = new FinalPhase();
+        TournamentBoard board = tournament.getRun().getBoard();
+        int startingRound = pathes.size() / 2;
+
+        if (board == null) {
+            board = new TournamentBoard();
+            board = tournamentBoardDao.save(board);
+            tournament.getRun().setBoard(board);
+            tournament = tournamentDao.save(tournament);
+        }
+
+        finalPhase.setName("consolante");
+        finalPhase = finalPhaseDao.save(finalPhase);
+        board.addBoard(finalPhase);
+        board = tournamentBoardDao.save(board);
+        Round previous = buildNominalFirstRound2(tournament, finalPhase, pathes);
+        for (int i = startingRound / 2; i > 1; i = i / 2) {
+            previous = buildRoundNominal(tournament, finalPhase, previous, i);
+        }
+        buildFinalRound(tournament, finalPhase, previous);
+    }
+
+    private Round buildNominalFirstRound2(Tournament tournament, FinalPhase finalPhase, List<String> pathes) {
+        Round start = new Round();
+        start.setPhase(finalPhase);
+
+        for (int i = 0; i < pathes.size() / 2; i++) {
+
+            Match match = new Match();
+            match = matchService.createMatch(match, tournament.getOptions());
+            match.setLeftTeamReference(pathes.get(i));
+            match.setRightTeamReference(pathes.get(pathes.size() - i - 1));
+            match = matchDao.save(match);
+
+            start.addMatch(match);
+            start.setFinal(false);
+            start = roundDao.save(start);
+
+        }
+        finalPhase.addRound(start);
+        finalPhase = finalPhaseDao.save(finalPhase);
+
+        return start;
     }
 
     private void buildSecondBoardNominal(Tournament tournament, int startingRound) {

@@ -87,6 +87,57 @@ public class MatchRunTests {
         for (int i = 0; i < 4; i++) {
             playGroup(tournament, i);
         }
+
+        // tableau principal
+        checkRound(tournament,"tableau principal", 0);
+        playRound(tournament,"tableau principal", 0);
+
+        checkRound(tournament,"tableau principal", 1);
+        playRound(tournament,"tableau principal", 1);
+
+        checkRound(tournament,"tableau principal", 2);
+        playRound(tournament,"tableau principal", 2);
+
+        FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
+        Round round = board.getRounds().get(2);
+
+        List<Match> matches = round.getMatches();
+        assertEquals(2, matches.size());
+        
+        Match finale = matches.stream().filter(m -> m.isFinale()).findFirst().get();
+        assertNotNull(finale);
+        assertTrue("finale ended", finale.getIsEnded());
+        Team winner = finale.getWinner();
+
+        assertTrue("winner check", winner.getPlayer1().getName().endsWith("l1"));
+
+        // consolante
+
+        checkRound(tournament,"consolante", 0);
+        playRound(tournament,"consolante", 0);
+
+        checkRound(tournament,"consolante", 1);
+        playRound(tournament,"consolante", 1);
+
+        
+
+        FinalPhase consolante = tournament.getRun().getBoard().getBoard("consolante");
+        int roundCount = consolante.getRounds().size();
+        round = consolante.getRounds().get(roundCount-1);
+        Match consollingFinal = round.getMatches().stream().filter(m -> m.isFinale()).collect(Collectors.toList()).get(0);
+        assertTrue("finale ended", consollingFinal.getIsEnded());
+        String winnerName = consollingFinal.getWinner().getName();
+        System.out.println("winner "+winnerName);
+        Player p1 = consollingFinal.getWinner().getPlayer1();
+        assertTrue("winner check", p1.getName().endsWith("l6")); 
+
+        Match smallConsollingFinal = round.getMatches().stream().filter(m -> m.isSmallFinale()).collect(Collectors.toList()).get(0);
+        assertTrue("finale ended", smallConsollingFinal.getIsEnded());
+        String smallWinnerName = smallConsollingFinal.getWinner().getName();
+        System.out.println("winner "+smallWinnerName);
+        Player p1small = smallConsollingFinal.getWinner().getPlayer1();
+        assertTrue("winner check", p1small.getName().endsWith("l3")); 
+
     }
 
 

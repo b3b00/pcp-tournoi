@@ -120,23 +120,7 @@ public class DataLoader {
             group = addTeam(group, teams, i*4+1);
             group = addTeam(group, teams, i*4+2);
             group = addTeam(group, teams, i*4+3);
-
-            // Team t1 = teams.get(i*4);
-            // t1.setGroup(group);
-            // t1 = teamDao.save(t1);
-            // Team t2 = teams.get(i*4+1);
-            // t2.setGroup(group);
-            // t2 = teamDao.save(t2);
-            // Team t3 = teams.get(i*4+2);
-            // t3.setGroup(group);
-            // t3 = teamDao.save(t3);
-            // Team t4 = teams.get(i*4+3);
-            // t4.setGroup(group);
-            // t4 = teamDao.save(t4);
-            // group.addTeam(t1);
-            // group.addTeam(t2);
-            // group.addTeam(t3);
-            // group.addTeam(t4);
+            
             group.setTournament(tournament);
             group = groupDao.save(group);
             groups.add(group);
