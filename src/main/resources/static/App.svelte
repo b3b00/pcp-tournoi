@@ -96,6 +96,7 @@
 			changeState(STATE.BUILD)}>Configuration</button>
 		<button class={(state==STATE.RUN) ? "selected" : "notSelected" } on:click={()=>
 			changeState(STATE.RUN)}>Jeu</button>
+		<a href="help/help.html">Aide ?</a>
 	</p>
 </div>
 
