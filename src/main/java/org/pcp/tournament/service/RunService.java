@@ -456,7 +456,7 @@ public class RunService {
         board = tournamentBoardDao.save(board);
 
         Round round = buildFirstRoundWithTeams(tournament, finalPhase, teamsId);
-        for (int i = teamsId.size() / 2; i > 1; i = i / 2) {
+        for (int i = teamsId.size() / 4; i > 1; i = i / 2) {
             round = buildRoundNominal(tournament, finalPhase, round, i);
         }
         buildFinalRound(tournament, finalPhase, round);
@@ -695,11 +695,6 @@ public class RunService {
                     }
                 }
             }
-
-            // TODO :
-            // pour tout groupPlay
-            // si fini
-            // selectionner p E groupPlay.players tq p n'apparait pas dans le 1er round.
 
             for (GroupPlay group : tournament.getRun().getGroupPhase().getGroups()) {
                 if (group.getIsDone()) {

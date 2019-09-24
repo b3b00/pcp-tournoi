@@ -240,6 +240,52 @@ public class MatchRunTests {
 
     }
 
+    @Test
+    @Transactional
+    public void testingBoardFromTeams() {
+        Options options = optionsDao.findByMode(Mode.DOUBLE);
+        Tournament tournament = new Tournament("testingrun");
+        tournament.setOptions(options);
+        tournament = tournamentDao.save(tournament);
+        tournament = dataLoader.buildFake(tournament, 14);
+        int id = tournament.getId();
+        runService.buildGroupPhase(tournament);
+        runService.buildMainBoard(tournament);
+        runService.buildSecondBoard(tournament);
+
+        tournament = tournamentDao.findById(id);
+        for (int i = 0; i < 4; i++) {
+            playGroup(tournament, i);
+        }
+
+        List<Team> avail = runService.getAvailableTeams(tournament);
+        assertEquals(2, avail.size());
+
+        // tableau principal
+        checkRound(tournament, "tableau principal", 0);
+        playRound(tournament, "tableau principal", 0);
+
+        avail = runService.getAvailableTeams(tournament);
+        assertEquals(6, avail.size());
+
+
+        checkRound(tournament, "consolante", 0);
+        playRound(tournament, "consolante", 0);
+
+        avail = runService.getAvailableTeams(tournament);
+        assertEquals(8, avail.size());
+
+        List<Integer> teamsId = avail.stream().map(t -> t.getId()).collect(Collectors.toList());
+        tournament = runService.buildBoardWithTeams(tournament, teamsId, "new board");
+        assertNotNull(tournament);
+        FinalPhase board = tournament.getRun().getBoard().getBoard("new board");
+        assertNotNull(board);
+
+        List<Round> rounds = board.getRounds();
+        assertEquals(3, rounds.size());
+
+    }
+
     private void playGroup(Tournament tournament, int groupNumber) {
         GroupPhase groups = tournament.getRun().getGroupPhase();
         GroupPlay group = groups.getGroups().get(groupNumber);
