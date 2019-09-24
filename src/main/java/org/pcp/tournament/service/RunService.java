@@ -195,7 +195,7 @@ public class RunService {
         int startingRound = tournament.getGroups().size();
 
         if (tournament.getGroups().size() % 2 == 0) {
-            
+
             if (checkNominalSecondBoard(tournament, startingRound)) {
                 buildSecondBoardNominal(tournament, startingRound);
             } else {
@@ -269,7 +269,7 @@ public class RunService {
         rightRef = builMatchPath(previous, 1, PlayStatusEnum.LOSER);
         smallFinalMatch.setLeftTeamReference(leftRef);
         smallFinalMatch.setRightTeamReference(rightRef);
-        smallFinalMatch.setSemiFinale(true);
+        smallFinalMatch.setSmallFinale(true);
         smallFinalMatch = matchService.createMatch(smallFinalMatch, tournament.getOptions());
 
         round.addMatch(finalMatch);
