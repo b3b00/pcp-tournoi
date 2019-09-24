@@ -111,26 +111,32 @@ public class DataLoader {
 
          List<Group> groups = new ArrayList<Group>();
          teams = tournament.getTeams();
-         for (int i = 0 ; i < count/4; i++ ) {
+         int groupCount = (int)Math.ceil(teams.size() / 4.0);
+         for (int i = 0 ; i < groupCount; i++ ) {
             String name = Character.toString ((char) (i+65));
             Group group = new Group(name);
             group = groupDao.save(group);
-            Team t1 = teams.get(i*4);
-            t1.setGroup(group);
-            t1 = teamDao.save(t1);
-            Team t2 = teams.get(i*4+1);
-            t2.setGroup(group);
-            t2 = teamDao.save(t2);
-            Team t3 = teams.get(i*4+2);
-            t3.setGroup(group);
-            t3 = teamDao.save(t3);
-            Team t4 = teams.get(i*4+3);
-            t4.setGroup(group);
-            t4 = teamDao.save(t4);
-            group.addTeam(t1);
-            group.addTeam(t2);
-            group.addTeam(t3);
-            group.addTeam(t4);
+            group = addTeam(group,teams, i*4);
+            group = addTeam(group, teams, i*4+1);
+            group = addTeam(group, teams, i*4+2);
+            group = addTeam(group, teams, i*4+3);
+
+            // Team t1 = teams.get(i*4);
+            // t1.setGroup(group);
+            // t1 = teamDao.save(t1);
+            // Team t2 = teams.get(i*4+1);
+            // t2.setGroup(group);
+            // t2 = teamDao.save(t2);
+            // Team t3 = teams.get(i*4+2);
+            // t3.setGroup(group);
+            // t3 = teamDao.save(t3);
+            // Team t4 = teams.get(i*4+3);
+            // t4.setGroup(group);
+            // t4 = teamDao.save(t4);
+            // group.addTeam(t1);
+            // group.addTeam(t2);
+            // group.addTeam(t3);
+            // group.addTeam(t4);
             group.setTournament(tournament);
             group = groupDao.save(group);
             groups.add(group);
@@ -138,5 +144,15 @@ public class DataLoader {
          tournament.setGroups(groups);
          tournament = tournamentDao.save(tournament);
          return  tournament;
+    }
+
+    public Group addTeam(Group group,List<Team> teams, int index) {
+        if (index < teams.size()) {
+            Team t = teams.get(index);
+            t.setGroup(group);
+            t = teamDao.save(t);
+            group.addTeam(t);
+        }
+        return group;
     }
 }

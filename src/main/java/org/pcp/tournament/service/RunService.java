@@ -194,6 +194,16 @@ public class RunService {
     public void buildSecondBoard(Tournament tournament) {
         int startingRound = tournament.getGroups().size();
 
+        List<String> rermainingTeamsPath = new ArrayList<String>();
+        for (Group group : tournament.getGroups()) {
+            if (group.getTeams().size() > 2) {
+                for (int i = 2; i < group.getTeams().size(); i++) {
+                    String path = buildMatchPath(group, i);
+                    rermainingTeamsPath.add(path);
+                }
+            }
+        }
+
         if (tournament.getGroups().size() % 2 == 0) {
 
             if (checkNominalSecondBoard(tournament, startingRound)) {

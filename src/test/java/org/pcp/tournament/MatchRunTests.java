@@ -73,7 +73,26 @@ public class MatchRunTests {
 
     @Test    
     @Transactional
-    public void testingRun() {
+    public void testingRunConsoling() {
+        Options options = optionsDao.findByMode(Mode.DOUBLE);
+        Tournament tournament = new Tournament("testingrun");
+        tournament.setOptions(options);
+        tournament = tournamentDao.save(tournament);
+        tournament = dataLoader.buildFake(tournament, 14);
+        int id = tournament.getId();
+        runService.buildGroupPhase(tournament);
+        runService.buildMainBoard(tournament);
+        runService.buildSecondBoard(tournament);
+        tournament = tournamentDao.findById(id);
+        for (int i = 0; i < 4; i++) {
+            playGroup(tournament, i);
+        }
+    }
+
+
+    @Test    
+    @Transactional
+    public void testingRunBestCase() {
         Options options = optionsDao.findByMode(Mode.DOUBLE);
         Tournament tournament = new Tournament("testingrun");
         tournament.setOptions(options);
@@ -108,7 +127,6 @@ public class MatchRunTests {
         Team winner = finale.getWinner();
 
         assertTrue("winner check", winner.getPlayer1().getName().endsWith("l1"));
-        //assertEquals("3l5", winner.getPlayer1().getName());
 
         Match smallfinale = matches.stream().filter(m -> m.isSmallFinale()).findFirst().get();
         assertNotNull(smallfinale);
