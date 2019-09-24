@@ -68,18 +68,18 @@ public class Match implements IPingModel {
 
     private boolean isFinale;
 
-    private boolean isSemiFinale;
+    private boolean isSmallFinale;
 
     public Match() {
         score = new ArrayList<MatchSet>();
     }
 
-    public boolean isSemiFinale() {
-        return isSemiFinale;
+    public boolean isSmallFinale() {
+        return isSmallFinale;
     }
 
-    public void setSemiFinale(boolean isSemiFinale) {
-        this.isSemiFinale = isSemiFinale;
+    public void setSmallFinale(boolean isSmallFinale) {
+        this.isSmallFinale = isSmallFinale;
     }
 
     public boolean isFinale() {
