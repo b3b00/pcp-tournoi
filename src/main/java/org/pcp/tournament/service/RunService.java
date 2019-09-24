@@ -231,24 +231,24 @@ public class RunService {
 
         int remainingCount = remainingTeamsPath.size();
 
-        if (!isPowerOfTwo(remainingCount)) {
+        //if (!isPowerOfTwo(remainingCount)) {
 
             // if (remainingCount > 0 && remainingCount % 2 == 0) {
             int count = highestPowerof2(remainingCount);
             List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
             buildSecondBoardNominal2(tournament, pathes);
             // }
-        } else {
+        // } else {
 
-            if (tournament.getGroups().size() % 2 == 0) {
+        //     if (tournament.getGroups().size() % 2 == 0) {
 
-                if (checkNominalSecondBoard(tournament, startingRound)) {
-                    buildSecondBoardNominal(tournament, startingRound);
-                } else {
-                    // TODO later
-                }
-            }
-        }
+        //         if (checkNominalSecondBoard(tournament, startingRound)) {
+        //             buildSecondBoardNominal(tournament, startingRound);
+        //         } else {
+        //             // TODO later
+        //         }
+        //     }
+        // }
     }
 
     private void buildSecondBoardNominal2(Tournament tournament, List<String> pathes) {
