@@ -192,6 +192,12 @@ public class RunService {
 
     }
 
+    private static boolean isPowerOfTwo(int number) {
+
+        return number > 0 && ((number & (number - 1)) == 0);
+
+    }
+
     private int highestPowerof2(int n) {
         int res = 0;
         for (int i = n; i >= 1; i--) {
@@ -218,10 +224,15 @@ public class RunService {
         }
 
         int remainingCount = remainingTeamsPath.size();
-
-        int count = highestPowerof2(remainingCount);
-        List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
-        buildSecondBoardNominal2(tournament, pathes);
+        
+        if (!isPowerOfTwo(remainingCount)) {
+            int count = highestPowerof2(remainingCount);
+            List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
+            buildSecondBoardNominal2(tournament, pathes);
+        }
+        if (checkNominalSecondBoard(tournament, startingRound)) {
+            buildSecondBoardNominal(tournament, startingRound);
+        } 
     }
 
     private void buildSecondBoardNominal2(Tournament tournament, List<String> pathes) {

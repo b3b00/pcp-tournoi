@@ -222,24 +222,21 @@ public class MatchRunTests {
         }
 
         List<Team> avail = runService.getAvailableTeams(tournament);
-        System.out.println("test");
+        assertEquals(2, avail.size());
 
         // tableau principal
         checkRound(tournament, "tableau principal", 0);
         playRound(tournament, "tableau principal", 0);
 
         avail = runService.getAvailableTeams(tournament);
-        System.out.println("test");
+        assertEquals(6, avail.size());
 
 
         checkRound(tournament, "consolante", 0);
         playRound(tournament, "consolante", 0);
 
         avail = runService.getAvailableTeams(tournament);
-        System.out.println("test");
-
-        // checkRound(tournament, "consolante", 1);
-        // playRound(tournament, "consolante", 1);
+        assertEquals(8, avail.size());
 
     }
 
