@@ -58,7 +58,9 @@
             computeUngroupedTeams();
             if (tournament.options.mode == "SINGLE" && (tournament.teams === undefined || tournament.teams === null || tournament.teams.length == 0 || tournament.teams.length != tournament.players.length)) {
                 tournament = tools.computeTeams(modes.SINGLE, tournament.id);
+                computeUngroupedTeams();
             }      
+
         }  
         catch(error) {       
             console.log(error);
