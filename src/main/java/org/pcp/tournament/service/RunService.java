@@ -285,7 +285,6 @@ public class RunService {
     private Round buildRoundNominal(Tournament tournament, FinalPhase finalPhase, Round previous, int number) {
         Round round = new Round();
         round.setPhase(finalPhase);
-        // finalPhase.addRound(round);
         finalPhaseDao.save(finalPhase);
         for (int i = 0; i < number; i++) {
             Match match = new Match();
