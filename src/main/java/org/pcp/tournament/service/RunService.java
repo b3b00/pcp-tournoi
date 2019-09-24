@@ -39,6 +39,9 @@ public class RunService {
     RunDao runDao;
 
     @Autowired
+    TeamDao teamDao;
+
+    @Autowired
     TournamentDao tournamentDao;
 
     @Autowired
@@ -404,6 +407,61 @@ public class RunService {
         finalPhase = finalPhaseDao.save(finalPhase);
 
         return start;
+    }
+
+
+    private Round buildFirstRoundWithTeams(Tournament tournament, FinalPhase finalPhase, List<Integer> teamsId) {
+        Round start = new Round();
+        start.setPhase(finalPhase);
+
+        for (int i = 0; i < teamsId.size() / 2; i++) {
+            Team team1 = teamDao.findById(teamsId.get(i*2)).get();
+            Team team2 = teamDao.findById(teamsId.get(i*2+1)).get();
+
+            Match match = new Match();
+            match = matchService.createMatch(match, tournament.getOptions());
+            match.setLeft(team1);
+            match.setRight(team2);
+            match = matchDao.save(match);
+
+            start.addMatch(match);
+            start.setFinal(false);
+            start = roundDao.save(start);
+
+        }
+        finalPhase.addRound(start);
+        finalPhase = finalPhaseDao.save(finalPhase);
+
+        return start;
+    }
+
+    public Tournament buildBoardWithTeams(Tournament tournament, List<Integer> teamsId, String name) {
+
+        FinalPhase finalPhase = new FinalPhase();
+        TournamentBoard board = tournament.getRun().getBoard();
+
+        if (board == null) {
+            board = new TournamentBoard();
+            board = tournamentBoardDao.save(board);
+            tournament.getRun().setBoard(board);
+            tournament = tournamentDao.save(tournament);
+        }
+
+        tournament.getRun().setBoard(board);
+        tournament = tournamentDao.save(tournament);
+
+        finalPhase.setName(name);
+        finalPhase = finalPhaseDao.save(finalPhase);
+        board.addBoard(finalPhase);
+        board = tournamentBoardDao.save(board);
+
+        Round round = buildFirstRoundWithTeams(tournament, finalPhase, teamsId);
+        for (int i = teamsId.size() / 2; i > 1; i = i / 2) {
+            round = buildRoundNominal(tournament, finalPhase, round, i);
+        }
+        buildFinalRound(tournament, finalPhase, round);
+
+        return tournament;
     }
 
     // endregion

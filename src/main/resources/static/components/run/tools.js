@@ -52,6 +52,12 @@ export const tools = {
     const res = await fetch(`/tournament/${tournamentId}/board/${boardId}`);
     let board = await res.json();
     return board;
-  }
+  },
+
+  fetchAvailableTeams : async function(tournamentId) {
+    const res = await fetch(`/tournaments/${tournamentId}/availableTeams`);
+    let teams = await res.json();
+    return teams;
+  },
 
 }
