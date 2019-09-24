@@ -207,6 +207,7 @@ public class TeamsController {
             for (int teamId : teams) {
                 Team team = teamDao.findById(teamId);
                 if (team != null) {
+                    team.setGroup(null);
                     team.setPlayer1(null);
                     team.setPlayer2(null);
                     team = teamDao.save(team);                    
