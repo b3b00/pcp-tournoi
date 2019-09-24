@@ -23,12 +23,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MatchRunTests {
-
 
     @Autowired
     TournamentDao tournamentDao;
@@ -64,14 +61,14 @@ public class MatchRunTests {
         tournamentDao.deleteById(id);
 
         tournament = tournamentDao.findById(id);
-        
+
         assertNull(tournament);
 
         List<Player> players = playerDao.findAll();
         assertEquals(0, players.size());
     }
 
-    @Test    
+    @Test
     @Transactional
     public void testingRunConsoling() {
         Options options = optionsDao.findByMode(Mode.DOUBLE);
@@ -89,21 +86,21 @@ public class MatchRunTests {
         }
 
         // tableau principal
-        checkRound(tournament,"tableau principal", 0);
-        playRound(tournament,"tableau principal", 0);
+        checkRound(tournament, "tableau principal", 0);
+        playRound(tournament, "tableau principal", 0);
 
-        checkRound(tournament,"tableau principal", 1);
-        playRound(tournament,"tableau principal", 1);
+        checkRound(tournament, "tableau principal", 1);
+        playRound(tournament, "tableau principal", 1);
 
-        checkRound(tournament,"tableau principal", 2);
-        playRound(tournament,"tableau principal", 2);
+        checkRound(tournament, "tableau principal", 2);
+        playRound(tournament, "tableau principal", 2);
 
         FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
         Round round = board.getRounds().get(2);
 
         List<Match> matches = round.getMatches();
         assertEquals(2, matches.size());
-        
+
         Match finale = matches.stream().filter(m -> m.isFinale()).findFirst().get();
         assertNotNull(finale);
         assertTrue("finale ended", finale.getIsEnded());
@@ -113,35 +110,34 @@ public class MatchRunTests {
 
         // consolante
 
-        checkRound(tournament,"consolante", 0);
-        playRound(tournament,"consolante", 0);
+        checkRound(tournament, "consolante", 0);
+        playRound(tournament, "consolante", 0);
 
-        checkRound(tournament,"consolante", 1);
-        playRound(tournament,"consolante", 1);
-
-        
+        checkRound(tournament, "consolante", 1);
+        playRound(tournament, "consolante", 1);
 
         FinalPhase consolante = tournament.getRun().getBoard().getBoard("consolante");
         int roundCount = consolante.getRounds().size();
-        round = consolante.getRounds().get(roundCount-1);
-        Match consollingFinal = round.getMatches().stream().filter(m -> m.isFinale()).collect(Collectors.toList()).get(0);
+        round = consolante.getRounds().get(roundCount - 1);
+        Match consollingFinal = round.getMatches().stream().filter(m -> m.isFinale()).collect(Collectors.toList())
+                .get(0);
         assertTrue("finale ended", consollingFinal.getIsEnded());
         String winnerName = consollingFinal.getWinner().getName();
-        System.out.println("winner "+winnerName);
+        System.out.println("winner " + winnerName);
         Player p1 = consollingFinal.getWinner().getPlayer1();
-        assertTrue("winner check", p1.getName().endsWith("l6")); 
+        assertTrue("winner check", p1.getName().endsWith("l6"));
 
-        Match smallConsollingFinal = round.getMatches().stream().filter(m -> m.isSmallFinale()).collect(Collectors.toList()).get(0);
+        Match smallConsollingFinal = round.getMatches().stream().filter(m -> m.isSmallFinale())
+                .collect(Collectors.toList()).get(0);
         assertTrue("finale ended", smallConsollingFinal.getIsEnded());
         String smallWinnerName = smallConsollingFinal.getWinner().getName();
-        System.out.println("winner "+smallWinnerName);
+        System.out.println("winner " + smallWinnerName);
         Player p1small = smallConsollingFinal.getWinner().getPlayer1();
-        assertTrue("winner check", p1small.getName().endsWith("l3")); 
+        assertTrue("winner check", p1small.getName().endsWith("l3"));
 
     }
 
-
-    @Test    
+    @Test
     @Transactional
     public void testingRunBestCase() {
         Options options = optionsDao.findByMode(Mode.DOUBLE);
@@ -157,21 +153,21 @@ public class MatchRunTests {
         for (int i = 0; i < 4; i++) {
             playGroup(tournament, i);
         }
-        checkRound(tournament,"tableau principal", 0);
-        playRound(tournament,"tableau principal", 0);
+        checkRound(tournament, "tableau principal", 0);
+        playRound(tournament, "tableau principal", 0);
 
-        checkRound(tournament,"tableau principal", 1);
-        playRound(tournament,"tableau principal", 1);
+        checkRound(tournament, "tableau principal", 1);
+        playRound(tournament, "tableau principal", 1);
 
-        checkRound(tournament,"tableau principal", 2);
-        playRound(tournament,"tableau principal", 2);
+        checkRound(tournament, "tableau principal", 2);
+        playRound(tournament, "tableau principal", 2);
 
         FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
         Round round = board.getRounds().get(2);
 
         List<Match> matches = round.getMatches();
         assertEquals(2, matches.size());
-        
+
         Match finale = matches.stream().filter(m -> m.isFinale()).findFirst().get();
         assertNotNull(finale);
         assertTrue("finale ended", finale.getIsEnded());
@@ -185,26 +181,66 @@ public class MatchRunTests {
         Team smallWinner = smallfinale.getWinner();
         assertTrue("small winner check", smallWinner.getPlayer1().getName().endsWith("l5"));
 
-        checkRound(tournament,"consolante", 0);
-        playRound(tournament,"consolante", 0);
+        checkRound(tournament, "consolante", 0);
+        playRound(tournament, "consolante", 0);
 
-        checkRound(tournament,"consolante", 1);
-        playRound(tournament,"consolante", 1);
+        checkRound(tournament, "consolante", 1);
+        playRound(tournament, "consolante", 1);
 
-        checkRound(tournament,"consolante", 2);
-        playRound(tournament,"consolante", 2);
+        checkRound(tournament, "consolante", 2);
+        playRound(tournament, "consolante", 2);
 
         FinalPhase consolante = tournament.getRun().getBoard().getBoard("consolante");
         int roundCount = consolante.getRounds().size();
-        round = consolante.getRounds().get(roundCount-1);
-        Match consollingFinal = round.getMatches().stream().filter(m -> m.isFinale()).collect(Collectors.toList()).get(0);
+        round = consolante.getRounds().get(roundCount - 1);
+        Match consollingFinal = round.getMatches().stream().filter(m -> m.isFinale()).collect(Collectors.toList())
+                .get(0);
         assertTrue("finale ended", smallfinale.getIsEnded());
         String winnerName = consollingFinal.getWinner().getName();
-        System.out.println("winner "+winnerName);
+        System.out.println("winner " + winnerName);
         Player p1 = consollingFinal.getWinner().getPlayer1();
-        assertTrue("winner check", p1.getName().endsWith("l3")); 
-              
-        
+        assertTrue("winner check", p1.getName().endsWith("l3"));
+
+    }
+
+    @Test
+    @Transactional
+    public void testingAvailability() {
+        Options options = optionsDao.findByMode(Mode.DOUBLE);
+        Tournament tournament = new Tournament("testingrun");
+        tournament.setOptions(options);
+        tournament = tournamentDao.save(tournament);
+        tournament = dataLoader.buildFake(tournament, 14);
+        int id = tournament.getId();
+        runService.buildGroupPhase(tournament);
+        runService.buildMainBoard(tournament);
+        runService.buildSecondBoard(tournament);
+
+        tournament = tournamentDao.findById(id);
+        for (int i = 0; i < 4; i++) {
+            playGroup(tournament, i);
+        }
+
+        List<Team> avail = runService.getAvailableTeams(tournament);
+        System.out.println("test");
+
+        // tableau principal
+        checkRound(tournament, "tableau principal", 0);
+        playRound(tournament, "tableau principal", 0);
+
+        avail = runService.getAvailableTeams(tournament);
+        System.out.println("test");
+
+
+        checkRound(tournament, "consolante", 0);
+        playRound(tournament, "consolante", 0);
+
+        avail = runService.getAvailableTeams(tournament);
+        System.out.println("test");
+
+        // checkRound(tournament, "consolante", 1);
+        // playRound(tournament, "consolante", 1);
+
     }
 
     private void playGroup(Tournament tournament, int groupNumber) {
@@ -221,11 +257,11 @@ public class MatchRunTests {
         FinalPhase board = tournament.getRun().getBoard().getBoard(boardName);
         Round round = board.getRounds().get(roundNumber);
         for (Match match : round.getMatches()) {
-            playMatch(tournament, match, 0, 50);            
+            playMatch(tournament, match, 0, 50);
         }
     }
 
-    private void checkRound(Tournament tournament,String boardName, int roundNumber) {
+    private void checkRound(Tournament tournament, String boardName, int roundNumber) {
         FinalPhase board = tournament.getRun().getBoard().getBoard(boardName);
         Round round = board.getRounds().get(roundNumber);
         for (Match match : round.getMatches()) {
@@ -237,10 +273,11 @@ public class MatchRunTests {
     private void playMatch(Tournament tournament, Match match, int left, int right) {
         MatchSet set = match.getScore().get(0);
         set.setLeft(left);
-        set.setRight(right);
+        set.setRight(right);        
         set = matchSetDao.save(set);
-        match.getScore().set(0,set);
+        match.getScore().set(0, set);
         match = matchDao.save(match);
+        match.compute(tournament.getOptions());
         runService.InjectTeams(tournament);
     }
 

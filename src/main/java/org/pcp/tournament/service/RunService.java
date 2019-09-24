@@ -2,7 +2,6 @@ package org.pcp.tournament.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.pcp.tournament.model.*;
@@ -190,12 +189,6 @@ public class RunService {
             InjectTeams(tournament);
             computeTeamReferenceLabels(tournament);
         }
-
-    }
-
-    private static boolean isPowerOfTwo(int number) {
-
-        return number > 0 && ((number & (number - 1)) == 0);
 
     }
 
@@ -610,6 +603,71 @@ public class RunService {
             }
         }
 
+    }
+
+    // endregion
+
+    // region [available teams]
+
+    public List<Team> getAvailableTeams(Tournament tournament) {
+        List<Team> available = new ArrayList<Team>();
+
+        if (tournament.getRun() != null) {
+            for (FinalPhase phase : tournament.getRun().getBoard().getBoards()) {
+                for (Round round : phase.getRounds()) {
+                    for (Match match : round.getMatches()) {
+                        if (match.getIsEnded()) {
+                            if (match.getWinner() == match.getLeft()) {
+                                available.add(match.getRight());
+                            } else {
+                                available.add(match.getLeft());
+                            }
+                        }
+                    }
+                }
+            }
+
+            // TODO :
+            // pour tout groupPlay
+            // si fini
+            // selectionner p E groupPlay.players tq p n'apparait pas dans le 1er round.
+
+            for (GroupPlay group : tournament.getRun().getGroupPhase().getGroups()) {
+                if (group.getIsDone()) {
+                    for (Team team : group.getGroup().getTeams()) {
+                        if (!isPlayingFinalPhases(tournament, team)) {
+                            available.add(team);
+                        }
+                    }
+                }
+            }
+        }
+
+        return available;
+    }
+
+    public boolean isPlayingFinalPhases(Tournament tournament, Team team) {
+
+        List<FinalPhase> finals = tournament.getRun().getBoard().getBoards();
+        for (FinalPhase finalPhase : finals) {
+            if (finalPhase.getRounds() != null && finalPhase.getRounds().size() > 0) {
+                if (isPlayingRound(finalPhase.getRounds().get(0), team)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isPlayingRound(Round round, Team team) {
+
+        for (Match match : round.getMatches()) {
+            if (match.getLeft() == team || match.getRight() == team) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // endregion
