@@ -15,6 +15,7 @@ import org.pcp.tournament.dao.MatchDao;
 import org.pcp.tournament.dao.MatchSetDao;
 import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.TournamentDao;
+import org.pcp.tournament.dao.PlayerDao;
 import org.pcp.tournament.model.*;
 import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ public class MatchRunTests {
     @Autowired
     MatchDao matchDao;
 
+    @Autowired
+    PlayerDao playerDao;
+
     @Test
     @Transactional
     public void testTournamentDelete() {
@@ -60,7 +64,11 @@ public class MatchRunTests {
         tournamentDao.deleteById(id);
 
         tournament = tournamentDao.findById(id);
+        
         assertNull(tournament);
+
+        List<Player> players = playerDao.findAll();
+        assertEquals(0, players.size());
     }
 
     @Test    
@@ -85,11 +93,11 @@ public class MatchRunTests {
         checkRound(tournament,"tableau principal", 1);
         playRound(tournament,"tableau principal", 1);
 
-        // checkRound(tournament,"tableau principal", 2);
-        // playRound(tournament,"tableau principal", 2);
+        checkRound(tournament,"tableau principal", 2);
+        playRound(tournament,"tableau principal", 2);
 
         FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
-        Round round = board.getRounds().get(1);
+        Round round = board.getRounds().get(2);
 
         List<Match> matches = round.getMatches();
         assertEquals(2, matches.size());
@@ -102,17 +110,20 @@ public class MatchRunTests {
         assertTrue("winner check", winner.getPlayer1().getName().endsWith("l1"));
         //assertEquals("3l5", winner.getPlayer1().getName());
 
-        Match smallfinale = matches.stream().filter(m -> m.isSemiFinale()).findFirst().get();
+        Match smallfinale = matches.stream().filter(m -> m.isSmallFinale()).findFirst().get();
         assertNotNull(smallfinale);
         assertTrue("finale ended", smallfinale.getIsEnded());
         Team smallWinner = smallfinale.getWinner();
-        assertTrue("small winner check", smallWinner.getPlayer1().getName().endsWith("l4"));
+        assertTrue("small winner check", smallWinner.getPlayer1().getName().endsWith("l5"));
 
         checkRound(tournament,"consolante", 0);
         playRound(tournament,"consolante", 0);
 
         checkRound(tournament,"consolante", 1);
         playRound(tournament,"consolante", 1);
+
+        checkRound(tournament,"consolante", 2);
+        playRound(tournament,"consolante", 2);
 
         FinalPhase consolante = tournament.getRun().getBoard().getBoard("consolante");
         int roundCount = consolante.getRounds().size();
