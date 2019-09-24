@@ -224,31 +224,11 @@ public class RunService {
             }
         }
 
-        // ICI :
-        // prendre les n premieres équipes tel que n = ^2
-        // -> check inutile si n > 0
-        // -> construire à partir de la liste des n path plutot que des groupes
-
         int remainingCount = remainingTeamsPath.size();
 
-        //if (!isPowerOfTwo(remainingCount)) {
-
-            // if (remainingCount > 0 && remainingCount % 2 == 0) {
-            int count = highestPowerof2(remainingCount);
-            List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
-            buildSecondBoardNominal2(tournament, pathes);
-            // }
-        // } else {
-
-        //     if (tournament.getGroups().size() % 2 == 0) {
-
-        //         if (checkNominalSecondBoard(tournament, startingRound)) {
-        //             buildSecondBoardNominal(tournament, startingRound);
-        //         } else {
-        //             // TODO later
-        //         }
-        //     }
-        // }
+        int count = highestPowerof2(remainingCount);
+        List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
+        buildSecondBoardNominal2(tournament, pathes);
     }
 
     private void buildSecondBoardNominal2(Tournament tournament, List<String> pathes) {
