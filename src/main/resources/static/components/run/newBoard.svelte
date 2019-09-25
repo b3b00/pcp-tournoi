@@ -51,11 +51,11 @@
         });
     }
 
-    function build() {
-      let selectedTeams = availableTeams.filter(t => t.selected);
+    async function build() {
+      let selectedTeams = availableTeams.filter(t => t.selected).map(t => t.id);
       let powerOfTwo = selectedTeams != undefined && selectedTeams !== null && (Math.log(selectedTeams.length) / Math.log(2)) % 1 === 0;
       if (powerOfTwo && boardName !== undefined && boardName !== null && boardName.length > 0) {
-        
+         tournament  = await tools.createBoardWithTeams(tournament.id,selectedTeams,boardName);
       }
       else {
         window.alert('Vous devez nommer le nouveau tableau\net sélectionner un nombre puissance de 2 d\'équipes.');

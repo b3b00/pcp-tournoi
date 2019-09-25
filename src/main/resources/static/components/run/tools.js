@@ -60,4 +60,18 @@ export const tools = {
     return teams;
   },
 
+  createBoardWithTeams : async function(tournamentId, teams, name) {
+    const res = await fetch(`/tournament/${tournamentId}/$createBoard?name=${name}`,
+    {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(teams)
+    });
+    let tournament = await res.json();
+    return tournament;
+  }
+
 }
