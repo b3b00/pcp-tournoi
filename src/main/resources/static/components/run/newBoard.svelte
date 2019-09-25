@@ -32,7 +32,7 @@
     await refresh();
   });
 
-  async function refresh(data) {
+  async function refresh() {
     availableTeams = await tools.fetchAvailableTeams(tournamentId);
     
   }
@@ -56,6 +56,7 @@
       let powerOfTwo = selectedTeams != undefined && selectedTeams !== null && (Math.log(selectedTeams.length) / Math.log(2)) % 1 === 0;
       if (powerOfTwo && boardName !== undefined && boardName !== null && boardName.length > 0) {
          tournament  = await tools.createBoardWithTeams(tournament.id,selectedTeams,boardName);
+         refresh();
       }
       else {
         window.alert('Vous devez nommer le nouveau tableau\net sélectionner un nombre puissance de 2 d\'équipes.');
