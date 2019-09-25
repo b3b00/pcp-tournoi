@@ -687,11 +687,19 @@ public class RunService {
                     for (Match match : round.getMatches()) {
                         match.compute(tournament.getOptions());
                         if (match.getIsEnded()) {
-                            if (match.getWinner() == match.getLeft()) {
-                                available.add(match.getRight());
-                            } else {
+                            if (match.isFinale() || match.isSmallFinale()) {
                                 available.add(match.getLeft());
+                                available.add(match.getRight());
                             }
+                            else {
+                                if (match.getWinner() == match.getLeft()) {
+                                    available.add(match.getRight());
+                                } else {
+                                    available.add(match.getLeft());
+                                }
+                            }
+
+                            
                         }
                     }
                 }
