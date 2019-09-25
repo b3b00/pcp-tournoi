@@ -2,6 +2,8 @@ package org.pcp.tournament.web;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.pcp.tournament.DataLoader;
 import org.pcp.tournament.dao.GroupDao;
 import org.pcp.tournament.dao.OptionsDao;
@@ -10,8 +12,10 @@ import org.pcp.tournament.dao.TeamDao;
 import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
+import org.pcp.tournament.model.Mode;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
+import org.pcp.tournament.model.Options;
 import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,6 +73,16 @@ public class TournamentController {
                 tournament = tournamentDao.findById(tournament.getId());
             }
         }
+        return tournament;
+    }
+
+    @GetMapping(value="/tournaments/fake")
+    public Tournament fake(@PathParam("count") int count, @PathParam("name")String name) {
+        Options options = optionsDao.findByMode(Mode.SINGLE);
+        Tournament tournament = new Tournament(name);
+        tournament.setOptions(options);
+        tournament = tournamentDao.save(tournament);
+        tournament = dataLoader.buildFake(tournament, count);
         return tournament;
     }
 
