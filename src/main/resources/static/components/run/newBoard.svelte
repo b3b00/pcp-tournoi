@@ -29,11 +29,11 @@
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
-    refresh();
+    await refresh();
   });
 
   async function refresh(data) {
-    availableTeams = tools.fetchAvailableTeams(tournamentId);
+    availableTeams = await tools.fetchAvailableTeams(tournamentId);
     
   }
 
@@ -68,7 +68,7 @@
 
 <div>
   
-
+{@debug availableTeams}
   {#if availableTeams !== undefined && availableTeams !== null && availableTeams.length > 0}
 
     <input type="text" bind:value={boardName}/>

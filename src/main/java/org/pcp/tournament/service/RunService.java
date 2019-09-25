@@ -685,6 +685,7 @@ public class RunService {
             for (FinalPhase phase : tournament.getRun().getBoard().getBoards()) {
                 for (Round round : phase.getRounds()) {
                     for (Match match : round.getMatches()) {
+                        match.compute(tournament.getOptions());
                         if (match.getIsEnded()) {
                             if (match.getWinner() == match.getLeft()) {
                                 available.add(match.getRight());
@@ -697,6 +698,7 @@ public class RunService {
             }
 
             for (GroupPlay group : tournament.getRun().getGroupPhase().getGroups()) {
+                group.computeRanking();
                 if (group.getIsDone()) {
                     for (Team team : group.getGroup().getTeams()) {
                         if (!isPlayingFinalPhases(tournament, team)) {
