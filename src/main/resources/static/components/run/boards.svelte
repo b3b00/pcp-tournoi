@@ -49,9 +49,13 @@
 </script>
 
 {#if (tournament !== undefined && 
+  tournament !== null &&
   tournament.run !== undefined && 
+  tournament.run !== null && 
   tournament.run.board !== undefined && 
-  tournament.run.board.boards !== undefined
+  tournament.run.board !== null && 
+  tournament.run.board.boards !== undefined &&
+  tournament.run.board.boards !== null
   )}
 {#each tournament.run.board.boards as board}
 <li style="cursor:pointer" on:click={() => {moveMe("board", board.name,"board",board.id);}}>

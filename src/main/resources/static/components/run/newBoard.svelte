@@ -13,8 +13,6 @@
   import { createEventDispatcher } from 'svelte';
   import Team from '../build/team.svelte';
   import {teamtools, modes} from '../build/teams.js';
-  
-
 
 
   const dispatch = createEventDispatcher();
@@ -31,6 +29,7 @@
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
+    refresh();
   });
 
   async function refresh(data) {
@@ -68,9 +67,11 @@
 </script>
 
 <div>
-  <input type="text" bind:value={boardName}/>
+  
 
-  {#if availableTeams !== undefined && availableTeams !== null}
+  {#if availableTeams !== undefined && availableTeams !== null && availableTeams.length > 0}
+
+    <input type="text" bind:value={boardName}/>
     <ul class="w3-ul w3-border w3-card">
       {#each availableTeams as team}
           {#if (!teamtools.isTeamEmpty(team))}
@@ -80,8 +81,9 @@
           {/if}
       {/each}
     </ul>  
-
-
+    <button on:click={build}>construire le tableau</button> 
+{:else}
+<span>pas d'équipe disponible</span>
   {/if}
-  <button on:click={build}>construire le tableau</button> 
+  
 </div>

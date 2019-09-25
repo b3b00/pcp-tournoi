@@ -74,7 +74,7 @@
         const res = await fetch(`/tournaments/${tournamentId}`);
         tournament = await res.json();
         if (tournament !== undefined && tournament !== null) {
-            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+            unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
         }
     }
 
