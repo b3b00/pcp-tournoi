@@ -1,5 +1,11 @@
 
 <script>
+
+    import Team from './team.svelte';
+    
+    import { onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
+    import {teamtools, modes} from './teams.js';
         
     function dragstartPlayer (player) {
         return function(ev) {
@@ -26,14 +32,6 @@
             createTeam(sourceplayer,targetplayer);
         }
     } 
-
-
-    import Team from './team.svelte';
-    import { onMount } from 'svelte';
-    import { createEventDispatcher } from 'svelte';
-    import {tools, modes} from './teams.js';
-
-    
 
     const dispatch = createEventDispatcher();
 
@@ -159,9 +157,7 @@
             unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
     }
 
-    function isTeamEmpty(team) {
-        return (team.player1 == null && team.player2 == null);
-    }
+    
     
 
     function selectUnteamedPlayer(player) {
@@ -273,7 +269,7 @@
 {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
     <ul class="w3-ul w3-border w3-card">
     {#each tournament.teams as team}
-        {#if (!isTeamEmpty(team))}
+        {#if (!teamtools.isTeamEmpty(team))}
             <li class="w3-display-container">        
                 <Team on:drop={dropPlayerOnTeam} team={team} on:unteam={onUnTeam} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
             </li>

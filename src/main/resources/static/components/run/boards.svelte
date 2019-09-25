@@ -50,14 +50,15 @@
 
 {#if (tournament !== undefined && 
   tournament.run !== undefined && 
-  tournament.run.board == null || tournament.run.board == undefined)}
-<input type="text" bind:value={startingRound}/>
-<br>
-<button on:click={build}>construire le tableau</button>
-{:else}
+  tournament.run.board !== undefined && 
+  tournament.run.board.boards !== undefined
+  )}
 {#each tournament.run.board.boards as board}
 <li style="cursor:pointer" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
 {board.name}
 </li>
 {/each}
+<li style="cursor:pointer" on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
+  nouveau tableau
+</li>
 {/if}

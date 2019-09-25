@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -115,10 +116,10 @@ public class BoardController {
     }
 
     @PostMapping("/tournament/{tournamentId}/$createBoard")
-    public ResponseEntity<?> createBoard(@PathVariable int tournamentId,@RequestBody List<Integer> teamsId) {
+    public ResponseEntity<?> createBoard(@PathVariable int tournamentId,@RequestBody List<Integer> teamsId,@RequestParam("name"), String boardName) {
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
-            tournament = runService.buildBoardWithTeams(tournament, teamsId);
+            tournament = runService.buildBoardWithTeams(tournament, teamsId ,boardName);
             return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
         }
         catch(Exception e) {

@@ -6,6 +6,7 @@
     import Group from './group.svelte';
     import Boards from './boards.svelte';
     import Board from './board.svelte';
+    import NewBoard from './newBoard.svelte';
     import { tools } from './tools.js';
     import { onMount } from "svelte";
     import { createEventDispatcher } from "svelte";
@@ -122,6 +123,8 @@
     {:else if (currentItem.name == "boards")}        
        <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
     {:else if (currentItem.name == "board" && board !== undefined && board !== null)}        
+       <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen}></Board> 
+    {:else if (currentItem.name == "newboard" && board !== undefined && board !== null)}        
        <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen}></Board> 
     {:else}
     <ul>

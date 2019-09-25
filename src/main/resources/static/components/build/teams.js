@@ -4,7 +4,7 @@ export const modes = {
     SINGLE : "SINGLE"
 }
 
-export const tools = {
+export const teamtools = {
     substract : function (a, b) {    
         let res = a.filter(aa => !b.find(bb => bb.id == aa.id));
         return res;
@@ -52,6 +52,10 @@ export const tools = {
         let tournament = await res.json();
         return tournament;
     },
+
+    isTeamEmpty : function(team) {
+        return (team.player1 == null && team.player2 == null);
+    }
 
 
 }
