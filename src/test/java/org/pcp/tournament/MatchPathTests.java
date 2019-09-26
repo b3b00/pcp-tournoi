@@ -47,7 +47,7 @@ public class MatchPathTests {
         Tournament tournament = new Tournament("testingrun");
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);
-        tournament = dataLoader.buildFake(tournament, 16);
+        tournament = dataLoader.buildFake(tournament, 16,4);
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
         runService.buildMainBoard(tournament);

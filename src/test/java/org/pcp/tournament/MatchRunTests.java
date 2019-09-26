@@ -55,7 +55,7 @@ public class MatchRunTests {
         Tournament tournament = new Tournament("testingrun");
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);
-        tournament = dataLoader.buildFake(tournament, 16);
+        tournament = dataLoader.buildFake(tournament, 16,4);
         int id = tournament.getId();
 
         tournamentDao.deleteById(id);
@@ -75,40 +75,24 @@ public class MatchRunTests {
         Tournament tournament = new Tournament("testingrun");
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);
-        tournament = dataLoader.buildFake(tournament, 14);
+        tournament = dataLoader.buildFake(tournament, 14,4);
+
+        assertEquals(3, tournament.getGroups().size());
+
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
         runService.buildMainBoard(tournament);
         runService.buildSecondBoard(tournament);
         tournament = tournamentDao.findById(id);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             playGroup(tournament, i);
         }
 
-        // tableau principal
-        checkRound(tournament, "tableau principal", 0);
-        playRound(tournament, "tableau principal", 0);
 
-        checkRound(tournament, "tableau principal", 1);
-        playRound(tournament, "tableau principal", 1);
 
-        checkRound(tournament, "tableau principal", 2);
-        playRound(tournament, "tableau principal", 2);
-
-        FinalPhase board = tournament.getRun().getBoard().getBoards().get(0);
-        Round round = board.getRounds().get(2);
-
-        List<Match> matches = round.getMatches();
-        assertEquals(2, matches.size());
-
-        Match finale = matches.stream().filter(m -> m.isFinale()).findFirst().get();
-        assertNotNull(finale);
-        assertTrue("finale ended", finale.getIsEnded());
-        Team winner = finale.getWinner();
-
-        assertTrue("winner check", winner.getPlayer1().getName().endsWith("l1"));
-
-        // consolante
+        // pas de tableau principal dans notre cas : 3 groups != ^2 
+        // mais l'algo pour la consolante produit quelque chose
+        
 
         checkRound(tournament, "consolante", 0);
         playRound(tournament, "consolante", 0);
@@ -118,7 +102,7 @@ public class MatchRunTests {
 
         FinalPhase consolante = tournament.getRun().getBoard().getBoard("consolante");
         int roundCount = consolante.getRounds().size();
-        round = consolante.getRounds().get(roundCount - 1);
+        Round round = consolante.getRounds().get(roundCount - 1);
         Match consollingFinal = round.getMatches().stream().filter(m -> m.isFinale()).collect(Collectors.toList())
                 .get(0);
         assertTrue("finale ended", consollingFinal.getIsEnded());
@@ -133,7 +117,7 @@ public class MatchRunTests {
         String smallWinnerName = smallConsollingFinal.getWinner().getName();
         System.out.println("winner " + smallWinnerName);
         Player p1small = smallConsollingFinal.getWinner().getPlayer1();
-        assertTrue("winner check", p1small.getName().endsWith("l3"));
+        assertTrue("winner check", p1small.getName().endsWith("l5"));
 
     }
 
@@ -144,7 +128,7 @@ public class MatchRunTests {
         Tournament tournament = new Tournament("testingrun");
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);
-        tournament = dataLoader.buildFake(tournament, 16);
+        tournament = dataLoader.buildFake(tournament, 16,4);
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
         runService.buildMainBoard(tournament);
@@ -210,33 +194,28 @@ public class MatchRunTests {
         Tournament tournament = new Tournament("testingrun");
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);
-        tournament = dataLoader.buildFake(tournament, 14);
+        tournament = dataLoader.buildFake(tournament, 14,4);
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
         runService.buildMainBoard(tournament);
         runService.buildSecondBoard(tournament);
 
         tournament = tournamentDao.findById(id);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             playGroup(tournament, i);
         }
 
         List<Team> avail = runService.getAvailableTeams(tournament);
-        assertEquals(2, avail.size());
+        assertEquals(4, avail.size());
 
-        // tableau principal
-        checkRound(tournament, "tableau principal", 0);
-        playRound(tournament, "tableau principal", 0);
-
-        avail = runService.getAvailableTeams(tournament);
-        assertEquals(6, avail.size());
-
+        // pas de tableau principal dans notre cas : 3 groups = ^2 
+        // mais l'algo pour la consolante produit quelque chose
 
         checkRound(tournament, "consolante", 0);
         playRound(tournament, "consolante", 0);
 
         avail = runService.getAvailableTeams(tournament);
-        assertEquals(8, avail.size());
+        assertEquals(7, avail.size());
 
     }
 
@@ -247,33 +226,30 @@ public class MatchRunTests {
         Tournament tournament = new Tournament("testingrun");
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);
-        tournament = dataLoader.buildFake(tournament, 14);
-        int id = tournament.getId();
-        runService.buildGroupPhase(tournament);
-        runService.buildMainBoard(tournament);
-        runService.buildSecondBoard(tournament);
+        tournament = dataLoader.buildFake(tournament, 14,4);
+        tournament = dataLoader.buildFakeRun(tournament, true);
+        // int id = tournament.getId();
+        // runService.buildGroupPhase(tournament);
+        // runService.buildMainBoard(tournament);
+        // runService.buildSecondBoard(tournament);
 
-        tournament = tournamentDao.findById(id);
-        for (int i = 0; i < 4; i++) {
-            playGroup(tournament, i);
-        }
+        // tournament = tournamentDao.findById(id);
+        // for (int i = 0; i < 3; i++) {
+        //     playGroup(tournament, i);
+        // }
 
         List<Team> avail = runService.getAvailableTeams(tournament);
-        assertEquals(2, avail.size());
+        assertEquals(4, avail.size());
 
-        // tableau principal
-        checkRound(tournament, "tableau principal", 0);
-        playRound(tournament, "tableau principal", 0);
-
-        avail = runService.getAvailableTeams(tournament);
-        assertEquals(6, avail.size());
+        // pas de tableau principal dans notre cas : 3 groups = ^2 
+        // mais l'algo pour la consolante produit quelque chose
 
 
         checkRound(tournament, "consolante", 0);
         playRound(tournament, "consolante", 0);
 
         avail = runService.getAvailableTeams(tournament);
-        assertEquals(8, avail.size());
+        assertEquals(7, avail.size());
 
         List<Integer> teamsId = avail.stream().map(t -> t.getId()).collect(Collectors.toList());
         tournament = runService.buildBoardWithTeams(tournament, teamsId, "new board");

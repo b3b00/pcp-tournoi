@@ -77,12 +77,20 @@ public class TournamentController {
     }
 
     @GetMapping(value="/tournaments/fake")
-    public Tournament fake(@PathParam("count") int count, @PathParam("name")String name) {
-        Options options = optionsDao.findByMode(Mode.SINGLE);
+    public Tournament fake(@PathParam("count") int count,
+                           @PathParam("name")String name,
+                           @PathParam("mode") String type,
+                           @PathParam("play") boolean play,
+                           @PathParam("grpsize") int grpsize) {
+        Mode mode = type != null ? (type == "S" ? Mode.SINGLE : Mode.DOUBLE) : Mode.SINGLE;
+        Options options = optionsDao.findByMode(mode);
         Tournament tournament = new Tournament(name);
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);
-        tournament = dataLoader.buildFake(tournament, count);
+        tournament = dataLoader.buildFake(tournament, count, grpsize);        
+        if (play) {
+            tournament = dataLoader.buildFakeRun(tournament, play);
+        }
         return tournament;
     }
 
