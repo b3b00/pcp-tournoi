@@ -77,22 +77,16 @@ public class MatchRunTests {
         tournament = tournamentDao.save(tournament);
         tournament = dataLoader.buildFake(tournament, 14,4);
 
-        assertEquals(3, tournament.getGroups().size());
+        assertEquals(4, tournament.getGroups().size());
 
         int id = tournament.getId();
         runService.buildGroupPhase(tournament);
         runService.buildMainBoard(tournament);
         runService.buildSecondBoard(tournament);
         tournament = tournamentDao.findById(id);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             playGroup(tournament, i);
         }
-
-
-
-        // pas de tableau principal dans notre cas : 3 groups != ^2 
-        // mais l'algo pour la consolante produit quelque chose
-        
 
         checkRound(tournament, "consolante", 0);
         playRound(tournament, "consolante", 0);
@@ -117,7 +111,7 @@ public class MatchRunTests {
         String smallWinnerName = smallConsollingFinal.getWinner().getName();
         System.out.println("winner " + smallWinnerName);
         Player p1small = smallConsollingFinal.getWinner().getPlayer1();
-        assertTrue("winner check", p1small.getName().endsWith("l5"));
+        assertTrue("winner check", p1small.getName().endsWith("l3"));
 
     }
 
@@ -201,21 +195,19 @@ public class MatchRunTests {
         runService.buildSecondBoard(tournament);
 
         tournament = tournamentDao.findById(id);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < tournament.getGroups().size(); i++) {
             playGroup(tournament, i);
         }
 
         List<Team> avail = runService.getAvailableTeams(tournament);
-        assertEquals(4, avail.size());
+        assertEquals(2, avail.size());
 
-        // pas de tableau principal dans notre cas : 3 groups = ^2 
-        // mais l'algo pour la consolante produit quelque chose
 
         checkRound(tournament, "consolante", 0);
         playRound(tournament, "consolante", 0);
 
         avail = runService.getAvailableTeams(tournament);
-        assertEquals(7, avail.size());
+        assertEquals(4, avail.size());
 
     }
 
@@ -228,28 +220,20 @@ public class MatchRunTests {
         tournament = tournamentDao.save(tournament);
         tournament = dataLoader.buildFake(tournament, 14,4);
         tournament = dataLoader.buildFakeRun(tournament, true);
-        // int id = tournament.getId();
-        // runService.buildGroupPhase(tournament);
-        // runService.buildMainBoard(tournament);
-        // runService.buildSecondBoard(tournament);
-
-        // tournament = tournamentDao.findById(id);
-        // for (int i = 0; i < 3; i++) {
-        //     playGroup(tournament, i);
-        // }
-
+        
         List<Team> avail = runService.getAvailableTeams(tournament);
-        assertEquals(4, avail.size());
+        assertEquals(2, avail.size());
 
-        // pas de tableau principal dans notre cas : 3 groups = ^2 
-        // mais l'algo pour la consolante produit quelque chose
-
+        
 
         checkRound(tournament, "consolante", 0);
         playRound(tournament, "consolante", 0);
 
+        checkRound(tournament, "tableau principal", 0);
+        playRound(tournament, "tableau principal", 0);
+
         avail = runService.getAvailableTeams(tournament);
-        assertEquals(7, avail.size());
+        assertEquals(8, avail.size());
 
         List<Integer> teamsId = avail.stream().map(t -> t.getId()).collect(Collectors.toList());
         tournament = runService.buildBoardWithTeams(tournament, teamsId, "new board");

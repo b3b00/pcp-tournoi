@@ -134,14 +134,16 @@ public class DataLoader {
 
          List<Group> groups = new ArrayList<Group>();
          teams = tournament.getTeams();
-         int groupCount = (int)Math.ceil(teams.size() / teamsByGroup);
+         double d = (double)teams.size() / (double)teamsByGroup;
+         double ceil = Math.ceil(d);
+         int groupCount = (int)ceil;
          for (int i = 0 ; i < groupCount; i++ ) {
             String name = Character.toString ((char) (i+65));
             Group group = new Group(name);
             group = groupDao.save(group);
 
             for (int j = 0; j < teamsByGroup; j++) {
-                group = addTeam(group,teams, i*groupCount+j);
+                group = addTeam(group,teams, i*teamsByGroup+j);
             }
 
             // group = addTeam(group,teams, i*4);
