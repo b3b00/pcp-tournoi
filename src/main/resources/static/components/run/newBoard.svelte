@@ -27,6 +27,8 @@
 
   let moveMe;
 
+  let selectedTeamsCount = 0;
+
   onMount(async () => {
     moveMe = tools.mover(dispatch);
     await refresh();
@@ -49,6 +51,7 @@
                 }
             }
         });
+        selectedTeamsCount = availableTeams.filter(t => t.selected).length;
     }
 
     async function build() {
@@ -67,12 +70,24 @@
 
 </script>
 
-<div>
+<div class="w3-container">
   
-{@debug availableTeams}
   {#if availableTeams !== undefined && availableTeams !== null && availableTeams.length > 0}
+  <div>
+  <p>{availableTeams.length} {availableTeams.length> 1 ? "équipe(s) disponible(s)": "équipe disponible"}
+<span>
+    {#if selectedTeamsCount > 0}
+    - {selectedTeamsCount} {selectedTeamsCount > 1 ? "équipes sélectionnées": "équipe sélectionnée"}
+    {/if}
+</span>
 
-    <input type="text" bind:value={boardName}/>
+  </p>
+  
+
+  <input type="text" placeholder="nom du tableau" bind:value={boardName}/>
+  <button on:click={build}>construire le tableau</button> 
+  </div>
+  <div class="w3-card w3-third">     
     <ul class="w3-ul w3-border w3-card">
       {#each availableTeams as team}
           {#if (!teamtools.isTeamEmpty(team))}
@@ -82,9 +97,12 @@
           {/if}
       {/each}
     </ul>  
-    <button on:click={build}>construire le tableau</button> 
+    </div>
+
+
+
 {:else}
-<span>pas d'équipe disponible</span>
+<span>aucune équipe disponible</span>
   {/if}
   
 </div>
