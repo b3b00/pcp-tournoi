@@ -66,7 +66,7 @@ public class GroupPlayController {
                 System.out.println("ranking is ");
                 
                 for (TeamRanking    rank : group.getRankings()) {
-                    System.out.println(rank.toString();
+                    System.out.println(rank.toString());
                 }
             }
             return new ResponseEntity<GroupPhase>(groupPhase, HttpStatus.OK);
