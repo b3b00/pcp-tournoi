@@ -43,11 +43,11 @@
     {:else}
     <p style="text-align: center; font-weight: bold;">1&nbsp;/&nbsp;{round.matches.length}</p>    
     {/if}
-  
     {#each round.matchGroups as group }
     <div class="w3-container w3-card">
-    <MatchPreview match={group[0]} tournament={tournament} on:move on:matchSaved={refresh}/>
-    <MatchPreview match={group[1]} tournament={tournament} on:move on:matchSaved={refresh}/>
+      {#each group as g}
+        <MatchPreview match={g} tournament={tournament} on:move on:matchSaved={refresh}/>
+      {/each}
   </div>
 
 <!--     

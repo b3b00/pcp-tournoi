@@ -92,7 +92,7 @@
       {#each availableTeams as team}
           {#if (!teamtools.isTeamEmpty(team))}
               <li class="w3-display-container">        
-                  <Team team={team} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
+                  <Team team={team} unTeamAble={false} selected={team.selected} on:selectionChanged={(data) => { selectTeam(team,data) }}/>       
               </li>
           {/if}
       {/each}

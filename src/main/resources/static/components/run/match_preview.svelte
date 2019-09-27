@@ -99,7 +99,7 @@
 {#if match.finale}
 <p>finale</p> 
 {/if}
-{#if match.semiFinale}
+{#if match.smallFinale}
 <p>petite finale</p> 
 {/if}
 <div>

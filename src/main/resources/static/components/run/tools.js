@@ -70,8 +70,15 @@ export const tools = {
       method: "POST",
       body: JSON.stringify(teams)
     });
-    let tournament = await res.json();
-    return tournament;
+    if (res.status >= 200 && res.status <= 299) {
+      let tournament = await res.json();
+      return tournament;
+    }
+    else {
+      window.alert("Erreur lors de la création du tournoi : "+res.status+"\n"+
+      (await res.body));
+      return await this.fetchTournament(tournamentId);
+    }
   }
 
 }

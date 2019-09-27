@@ -84,6 +84,15 @@ public class TournamentController {
                            @PathParam("grpsize") int grpsize) {
         Mode mode = type != null ? (type == "S" ? Mode.SINGLE : Mode.DOUBLE) : Mode.SINGLE;
         Options options = optionsDao.findByMode(mode);
+        Options optionsreal = new Options();
+        if (mode == Mode.SINGLE) {
+            optionsreal.setMode(mode);
+            optionsreal.setWinningSets(1);
+            optionsreal.setSetLength(11);
+            optionsreal = optionsDao.save(optionsreal);
+            options = optionsreal;
+        }
+        
         Tournament tournament = new Tournament(name);
         tournament.setOptions(options);
         tournament = tournamentDao.save(tournament);

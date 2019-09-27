@@ -111,10 +111,13 @@ public class Round implements IPingModel  {
      */
     public List<List<Match>> getMatchGroups() {
         List<List<Match>> groups = new ArrayList<List<Match>>();
-        for (int i = 0; i < matches.size()/2; i++) {
+        int groupCount = (int)(Math.ceil((double)matches.size()/2.0));
+        for (int i = 0; i < groupCount; i++) {
             List<Match> group = new ArrayList<Match>();
             group.add(matches.get(i*2));
-            group.add(matches.get(i*2+1));
+            if (matches.size() > i*2+1) {
+                group.add(matches.get(i*2+1));
+            }
             groups.add(group);
         }
         return groups;

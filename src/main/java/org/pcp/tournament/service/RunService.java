@@ -1,6 +1,7 @@
 package org.pcp.tournament.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -227,18 +228,18 @@ public class RunService {
         }
 
         int remainingCount = remainingTeamsPath.size();
-        
+
         if (checkNominalSecondBoard(tournament, startingRound)) {
             buildSecondBoardNominal(tournament, startingRound);
             return;
-        } 
+        }
         if (!isPowerOfTwo(remainingCount)) {
             int count = highestPowerof2(remainingCount);
             List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
             buildSecondBoardNominal2(tournament, pathes);
             return;
         }
-        
+
     }
 
     private void buildSecondBoardNominal2(Tournament tournament, List<String> pathes) {
@@ -412,14 +413,13 @@ public class RunService {
         return start;
     }
 
-
     private Round buildFirstRoundWithTeams(Tournament tournament, FinalPhase finalPhase, List<Integer> teamsId) {
         Round start = new Round();
         start.setPhase(finalPhase);
 
         for (int i = 0; i < teamsId.size() / 2; i++) {
-            Team team1 = teamDao.findById(teamsId.get(i*2)).get();
-            Team team2 = teamDao.findById(teamsId.get(i*2+1)).get();
+            Team team1 = teamDao.findById(teamsId.get(i * 2)).get();
+            Team team2 = teamDao.findById(teamsId.get(i * 2 + 1)).get();
 
             Match match = new Match();
             match = matchService.createMatch(match, tournament.getOptions());
@@ -436,6 +436,48 @@ public class RunService {
         finalPhase = finalPhaseDao.save(finalPhase);
 
         return start;
+    }
+
+    private Round buildFinalRoundWithTeams(Tournament tournament, FinalPhase finalPhase, List<Integer> teamsId) {
+
+        if (teamsId.size() == 2 || teamsId.size() == 4) {
+
+            Round round = new Round();
+            round.setPhase(finalPhase);
+
+            Match finalMatch = new Match();
+            finalPhaseDao.save(finalPhase);
+
+            Team team1 = teamDao.findById(teamsId.get(0)).get();
+            Team team2 = teamDao.findById(teamsId.get(1)).get();
+
+            
+            finalMatch.setLeft(team1);
+            finalMatch.setRight(team2);
+            finalMatch.setFinale(true);
+            finalMatch = matchService.createMatch(finalMatch, tournament.getOptions());
+            round.addMatch(finalMatch);
+
+            if (teamsId.size() == 4) {
+                Team team3 = teamDao.findById(teamsId.get(2)).get();
+                Team team4 = teamDao.findById(teamsId.get(3)).get();
+
+                Match smallFinalMatch = new Match();
+                smallFinalMatch.setLeft(team3);
+                smallFinalMatch.setRight(team4);
+                smallFinalMatch.setSmallFinale(true);
+                smallFinalMatch = matchService.createMatch(smallFinalMatch, tournament.getOptions());
+                
+                round.addMatch(smallFinalMatch);
+            }
+            round = roundDao.save(round);
+            round.setFinal(true);
+            finalPhase.addRound(round);
+            finalPhase = finalPhaseDao.save(finalPhase);
+
+            return round;
+        }
+        return null;
     }
 
     public Tournament buildBoardWithTeams(Tournament tournament, List<Integer> teamsId, String name) {
@@ -458,11 +500,16 @@ public class RunService {
         board.addBoard(finalPhase);
         board = tournamentBoardDao.save(board);
 
-        Round round = buildFirstRoundWithTeams(tournament, finalPhase, teamsId);
-        for (int i = teamsId.size() / 4; i > 1; i = i / 2) {
-            round = buildRoundNominal(tournament, finalPhase, round, i);
+        if (teamsId.size() == 2 || teamsId.size() == 4) {
+            buildFinalRoundWithTeams(tournament, finalPhase, teamsId);
         }
-        buildFinalRound(tournament, finalPhase, round);
+        else {
+            Round round = buildFirstRoundWithTeams(tournament, finalPhase, teamsId);
+            for (int i = teamsId.size() / 4; i > 1; i = i / 2) {
+                round = buildRoundNominal(tournament, finalPhase, round, i);
+            }
+            buildFinalRound(tournament, finalPhase, round);
+        }
 
         return tournament;
     }
@@ -693,8 +740,7 @@ public class RunService {
                             if (match.isFinale() || match.isSmallFinale()) {
                                 available.add(match.getLeft());
                                 available.add(match.getRight());
-                            }
-                            else {
+                            } else {
                                 if (match.getWinner() == match.getLeft()) {
                                     available.add(match.getRight());
                                 } else {
@@ -702,7 +748,6 @@ public class RunService {
                                 }
                             }
 
-                            
                         }
                     }
                 }
@@ -720,7 +765,9 @@ public class RunService {
             }
         }
 
-        return available;
+        HashSet<Team> set = new HashSet<Team>();
+        set.addAll(available);
+        return new ArrayList<Team>(set);
     }
 
     public boolean isPlayingFinalPhases(Tournament tournament, Team team) {
