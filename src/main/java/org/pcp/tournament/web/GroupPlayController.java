@@ -9,6 +9,7 @@ import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Tournament;
+import org.pcp.tournament.model.dto.TeamRanking;
 import org.pcp.tournament.service.MatchService;
 import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,13 @@ public class GroupPlayController {
         GroupPhase groupPhase = groupPhaseDao.findById(groupPhaseId);
         if (groupPhase != null) {
             for (GroupPlay group : groupPhase.getGroups()) {
+                System.out.println("computing ranking for group "+group.getGroup().getName());
                 group.computeRanking();
+                System.out.println("ranking is ");
+                
+                for (TeamRanking    rank : group.getRankings()) {
+                    System.out.println(rank.toString();
+                }
             }
             return new ResponseEntity<GroupPhase>(groupPhase, HttpStatus.OK);
         }

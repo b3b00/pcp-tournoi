@@ -75,7 +75,7 @@ public class TeamRanking implements Comparable<TeamRanking> {
     }
 
     public String toString() {
-        return team.getName()+" - "+getPoints()+" - "+getSetDifference();
+        return team.getName()+" - "+getPoints()+" - "+getSetDifference()+ " - " + getPointsDifference();
     }
 
 }
