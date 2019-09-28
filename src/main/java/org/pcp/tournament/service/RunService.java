@@ -3,6 +3,7 @@ package org.pcp.tournament.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.pcp.tournament.model.*;
@@ -451,7 +452,6 @@ public class RunService {
             Team team1 = teamDao.findById(teamsId.get(0)).get();
             Team team2 = teamDao.findById(teamsId.get(1)).get();
 
-            
             finalMatch.setLeft(team1);
             finalMatch.setRight(team2);
             finalMatch.setFinale(true);
@@ -467,7 +467,7 @@ public class RunService {
                 smallFinalMatch.setRight(team4);
                 smallFinalMatch.setSmallFinale(true);
                 smallFinalMatch = matchService.createMatch(smallFinalMatch, tournament.getOptions());
-                
+
                 round.addMatch(smallFinalMatch);
             }
             round = roundDao.save(round);
@@ -502,8 +502,7 @@ public class RunService {
 
         if (teamsId.size() == 2 || teamsId.size() == 4) {
             buildFinalRoundWithTeams(tournament, finalPhase, teamsId);
-        }
-        else {
+        } else {
             Round round = buildFirstRoundWithTeams(tournament, finalPhase, teamsId);
             for (int i = teamsId.size() / 4; i > 1; i = i / 2) {
                 round = buildRoundNominal(tournament, finalPhase, round, i);
@@ -729,25 +728,15 @@ public class RunService {
     // region [available teams]
 
     public List<Team> getAvailableTeams(Tournament tournament) {
-        List<Team> available = new ArrayList<Team>();
-
+        Set<Team> nowPlaying = new HashSet<Team>();
         if (tournament.getRun() != null) {
             for (FinalPhase phase : tournament.getRun().getBoard().getBoards()) {
                 for (Round round : phase.getRounds()) {
                     for (Match match : round.getMatches()) {
                         match.compute(tournament.getOptions());
-                        if (match.getIsEnded()) {
-                            if (match.isFinale() || match.isSmallFinale()) {
-                                available.add(match.getLeft());
-                                available.add(match.getRight());
-                            } else {
-                                if (match.getWinner() == match.getLeft()) {
-                                    available.add(match.getRight());
-                                } else {
-                                    available.add(match.getLeft());
-                                }
-                            }
-
+                        if (!match.getIsEnded()) {
+                            nowPlaying.add(match.getLeft());
+                            nowPlaying.add(match.getRight());
                         }
                     }
                 }
@@ -755,21 +744,21 @@ public class RunService {
 
             for (GroupPlay group : tournament.getRun().getGroupPhase().getGroups()) {
                 group.computeRanking();
-                if (group.getIsDone()) {
+                if (!group.getIsDone()) {
                     for (Team team : group.getGroup().getTeams()) {
-                        if (!isPlayingFinalPhases(tournament, team)) {
-                            available.add(team);
-                        }
+                        nowPlaying.addAll(group.getGroup().getTeams());
                     }
                 }
             }
         }
 
-        HashSet<Team> set = new HashSet<Team>();
-        set.addAll(available);
-        return new ArrayList<Team>(set);
+        Set<Team> available = new HashSet<Team>(tournament.getTeams());
+        available.removeAll(nowPlaying);
+
+        return new ArrayList<Team>(available);
     }
 
+    
     public boolean isPlayingFinalPhases(Tournament tournament, Team team) {
 
         List<FinalPhase> finals = tournament.getRun().getBoard().getBoards();

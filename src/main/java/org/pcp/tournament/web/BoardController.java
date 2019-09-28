@@ -84,9 +84,6 @@ public class BoardController {
             runService.computeTeamReferenceLabels(tournament);
             FinalPhase board = boardDao.findById(boardId);
             if (board != null) {
-                // board.getRounds().stream().forEach(m -> {
-                // m.computeScores(tournament.getOptions());
-                // });
                 return new ResponseEntity<FinalPhase>(board, HttpStatus.OK);
             } else {
                 return new ResponseEntity<String>("board not found", HttpStatus.NOT_FOUND);
