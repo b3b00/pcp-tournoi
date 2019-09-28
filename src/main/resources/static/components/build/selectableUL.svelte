@@ -29,12 +29,14 @@
     export let label = "";
 
     function setHeaderStyle() {
+        console.log('styleing for '+selected);
         if (selected) {
             selectClass = "w3-display-container selected header";
         }
         else {
             selectClass = "w3-display-container unselected header";
         }     
+        console.log('styleing for '+selected+ " - > "+selectClass);
     }
 
     function selectItem() {
@@ -49,7 +51,7 @@
 
 </script>
 <ul class="w3-ul w3-border w3-card" on:drop={dropped} on:dragover={(e) => {e.preventDefault();}}>
-    <li class="{selectClass}" on:click={selectItem} >{label != null ? label : "&nbsp;"}
+    <li class="{selected ? "w3-display-container selected header" :"w3-display-container unselected header"}" on:click={selectItem} >{label != null ? label : "&nbsp;"}
 
     </li>
     <slot></slot>

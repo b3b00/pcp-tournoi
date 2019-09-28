@@ -62,9 +62,9 @@ button.notSelected {
 	
 	</script>
 	<p style="display:inline">
-		<button on:click={one} class={classes[0]}>configuration</button>
-		<button on:click={two} class={classes[1]}>joueurs</button>
-		<button on:click={three} class={classes[2]}>équipes</button>
-		<button on:click={four} class={classes[3]}>poules</button>
+		<button on:click={one} class={classes[0]}>Configuration</button>
+		<button on:click={two} class={classes[1]}>Joueurs</button>
+		<button on:click={three} class={classes[2]}>&Eacute;quipes</button>
+		<button on:click={four} class={classes[3]}>Poules</button>
 	</p>
 	

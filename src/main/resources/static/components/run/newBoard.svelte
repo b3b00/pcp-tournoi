@@ -39,6 +39,16 @@
     
   }
 
+  function toggleAll(selection) {
+    availableTeams.forEach(t => {
+      t.selected = selection;
+    });
+    availableTeams = availableTeams;
+    selectedTeamsCount = availableTeams.filter(t => t.selected).length;
+  }
+
+  export let selectAll = true;
+
   function selectTeam(team, data) {
         team.selected = data.detail.state;
         availableTeams.forEach(t => {
@@ -86,6 +96,11 @@
 
   <input type="text" placeholder="nom du tableau" bind:value={boardName}/>
   <button on:click={build}>construire le tableau</button> 
+  
+    <button on:click={() => {toggleAll(true);}}> Tout sélectionner</button>
+  
+  <button on:click={() => {toggleAll(false);}}> Tout désélectionner</button>
+  
   </div>
   <div class="w3-card w3-third">     
     <ul class="w3-ul w3-border w3-card">

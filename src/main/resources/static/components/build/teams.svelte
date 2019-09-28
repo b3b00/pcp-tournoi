@@ -83,23 +83,23 @@
    
 
     async  function single() {
-        tournament = await tools.computeTeams(modes.SINGLE, tournament.id);
-        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+        tournament = await teamtools.computeTeams(modes.SINGLE, tournament.id);
+        unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
     }
 
     async function random() {
-        tournament = await tools.computeTeams(modes.RANDOM, tournament.id);
-        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+        tournament = await teamtools.computeTeams(modes.RANDOM, tournament.id);
+        unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
     }
 
     async function mix() {
-        tournament = await tools.computeTeams(modes.MIX, tournament.id);
-        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+        tournament = await teamtools.computeTeams(modes.MIX, tournament.id);
+        unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
     }
 
     async function clear() {
-        tournament = await tools.clear(tournament.id);        
-        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+        tournament = await teamtools.clear(tournament.id);        
+        unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
     }
 
     
@@ -134,12 +134,12 @@
                             body:JSON.stringify(t)
                         });
                         tournament = await res.json();
-                        unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+                        unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
                     }
                 }
             });
             tournament.teams = tournament.teams;
-            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+            unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
         }
     }
 
@@ -154,7 +154,7 @@
                 method: "POST"
             });
             tournament = await res.json();
-            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+            unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
     }
 
     
@@ -201,13 +201,13 @@
         if (selectedPlayers.length == 2) {
             await teamPlayers();
             clearSelection();
-            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+            unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
             tournament = tournament;
         }
         else if (selectedPlayers.length == 1 && selectedTeams.length == 1) {
             addPlayerToTeam();
             clearSelection();
-            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+            unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
         }
         else {
             alert(`vous devez sélectionner soit 
@@ -241,7 +241,7 @@
                 method: "PUT"
             });
             tournament = await res.json();
-            unTeamedPlayers = tools.computeUnTeamedPlayers(tournament);
+            unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
     }
 
 

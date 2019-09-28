@@ -140,14 +140,6 @@
         tournamentOptions = optionsByName["SINGLE"];
     }
 
-    // async function fetchTournaments() {
-    //     const res = await fetch('/tournaments');
-    //     tournaments = await res.json();
-    //     tournaments.forEach(t => {
-    //         tournamentsById[t.id] = t;
-    //         tournamentItems.push({ "label": `${t.name}`, "value": `${t.id}` });
-    //     })
-    // }
 
     async function fetchTournament(id) {
         const res = await fetch(`/tournaments/${id}`);
@@ -185,8 +177,6 @@
 
 
 <div class="w3-panel w3-card startDialog" >
-
-<button on:click={deleteRun}>delete run</button>
 
 <div class="w3-row-padding">
 
