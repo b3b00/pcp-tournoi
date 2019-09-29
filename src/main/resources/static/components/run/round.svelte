@@ -22,7 +22,6 @@
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
-    tournament = await tools.fetchTournament(tournamentId);
   });
 
 

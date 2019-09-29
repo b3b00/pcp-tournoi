@@ -93,8 +93,8 @@
                 newBreadCrumb = data;
             }
         }
-        newBreadCrumb.forEach(async item => {
-            await fetchTournament(tournamentId);
+        await fetchTournament(tournamentId);
+        newBreadCrumb.forEach(async item => {            
             if (item.name == "groupPhase") {
                 groupPhase = tournament.run.groupPhase;
             }
