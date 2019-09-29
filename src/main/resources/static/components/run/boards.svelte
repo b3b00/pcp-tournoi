@@ -52,12 +52,24 @@
   tournament.run.board.boards !== undefined &&
   tournament.run.board.boards !== null
   )}
+  <p>En cours :</p>
 {#each tournament.run.board.boards as board}
-<li style="cursor:pointer" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+{#if (!board.isDone)}
+<li style="cursor:pointer{board.isDone ? "font-style:italic":"font-weight:bold"}" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
 {board.name}
 </li>
+{/if}
 {/each}
 <li style="cursor:pointer" on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
   nouveau tableau
 </li>
+<br/>
+<p>Finis : </p>
+{#each tournament.run.board.boards as board}
+{#if (board.isDone)}
+<li style="cursor:pointer{board.isDone ? "font-style:italic":"font-weight:bold"}" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+{board.name}
+</li>
+{/if}
+{/each}
 {/if}

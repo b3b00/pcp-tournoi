@@ -16,7 +16,6 @@
 
     const dispatch = createEventDispatcher();
 
-    let selectClass = "w3-display-container unselected header";
 
     onMount(async () => {
         setHeaderStyle();   
@@ -28,20 +27,9 @@
 
     export let label = "";
 
-    function setHeaderStyle() {
-        console.log('styleing for '+selected);
-        if (selected) {
-            selectClass = "w3-display-container selected header";
-        }
-        else {
-            selectClass = "w3-display-container unselected header";
-        }     
-        console.log('styleing for '+selected+ " - > "+selectClass);
-    }
 
     function selectItem() {
         selected = !selected;
-        setHeaderStyle();
         dispatch("selectionChanged",{state:selected});
     }
 
