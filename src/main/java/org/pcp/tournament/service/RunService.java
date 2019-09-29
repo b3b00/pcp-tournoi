@@ -745,9 +745,7 @@ public class RunService {
             for (GroupPlay group : tournament.getRun().getGroupPhase().getGroups()) {
                 group.computeRanking();
                 if (!group.getIsDone()) {
-                    for (Team team : group.getGroup().getTeams()) {
-                        nowPlaying.addAll(group.getGroup().getTeams());
-                    }
+                    nowPlaying.addAll(group.getGroup().getTeams());
                 }
             }
         }
