@@ -82,5 +82,9 @@ public class FinalPhase implements IPingModel{
         for (Round round : rounds) {
             round.computeScores(options);
         }
-	}
+    }
+    
+    public boolean getIsDone() {
+        return getRounds().stream().map(r -> r.isDone()).reduce(true, (x,y) -> x && y);
+    }
 }
