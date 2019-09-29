@@ -36,12 +36,34 @@
     let newBoard = await tools.fetchBoard(tournamentId, boardId);
     board = newBoard;
   }
+
+  function getRanking() {
+    let last = board.rounds[board.rounds.length-1];
+    if (last.matches.length == 2) {
+      let ranking = [null,null,null,null];
+      let f = last.matches.filter(m => m.finale)[0];
+      ranking[0] = f.winner;
+      ranking[1] = f.left.id == f.winner.id ? f.right : f.left;
+      let sf = last.matches.filter(m => m.smallFinale)[0];
+      ranking[2] = sf.winner;
+      ranking[3] = sf.left.id == sf.winner.id ? sf.right : sf.left;
+      return ranking;
+    }
+    return [];
+  }
   
 
 </script>
 <div class="w3-container" style="clear:both">
 <span style='' class='fa fa-refresh w3-display-center refresh' on:click={refresh}>&nbsp;</span>
 </div>
+{#if (board.isDone)}
+<ol>
+  {#each getRanking() as r}
+  <li>{r.name}</li>
+  {/each}
+  </ol>
+{/if}
 <div class="w3-container">
 {#if board !== null && board!== undefined}
 {#each board.rounds as round}
