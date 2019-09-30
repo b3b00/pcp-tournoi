@@ -258,7 +258,7 @@
 <br/>
 <button on:click={random}>hasard total</button>
 
-<button on:click={mix}>1 lcicenci&eacute; - 1 non licenci&eacute;</button>
+<button on:click={mix}>1 confirm&eacute; - 1 d&eacute;butant</button>
 
 <button on:click={clear}>tout supprimer</button>
 

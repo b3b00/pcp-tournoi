@@ -67,7 +67,7 @@ public class TeamStrategies {
     
 
     /**
-     * on commence par faire des paires avec 1 licencié et 1 non licencié
+     * on commence par faire des paires avec 1 confirmé et 1 débutant
      * jsuqu'à épuisement d'1 des 2 groupes 
      * ensuite equipes non mixtes
      * @param players

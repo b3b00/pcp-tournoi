@@ -52,12 +52,12 @@
 
 </script>
 <p>{countLic + countNonLic} joueurs</p>
-<p>{countLic} licenciés</p>
-<p>{countNonLic} non licenciés</p>
+<p>{countLic} confirm&eacute;s</p>
+<p>{countNonLic} d&eacutebutants</p>
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
     <tr>
-        <th>nom</th>
-        <th>licencié ?</th>
+        <th>Nom</th>
+        <th>confirm&eacute; ?</th>
         <th>&nbsp;</th><!-- delete -->
         <th>&nbsp;</th><!-- save -->
         <th>&nbsp;</th><!-- cancel -->
