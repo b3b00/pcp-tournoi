@@ -1,3 +1,8 @@
+<style>
+  .clickable {
+    cursor:pointer;
+  }
+</style>
 <script>
 
   import { tools } from './tools.js';
@@ -53,23 +58,27 @@
   tournament.run.board.boards !== null
   )}
   <p>En cours :</p>
+  <div class="w3-third">
 {#each tournament.run.board.boards as board}
-{#if (!board.isDone)}
-<li style="cursor:pointer{board.isDone ? "font-style:italic":"font-weight:bold"}" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
-{board.name}
-</li>
-{/if}
+  {#if (!board.isDone)}
+    <li class="clickable"  on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+    {board.name}
+    </li>
+  {/if}
 {/each}
+  
 <li style="cursor:pointer" on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
   nouveau tableau
 </li>
-<br/>
+</div>
+<div class="w3-third">
 <p>Finis : </p>
-{#each tournament.run.board.boards as board}
-{#if (board.isDone)}
-<li style="cursor:pointer{board.isDone ? "font-style:italic":"font-weight:bold"}" on:click={() => {moveMe("board", board.name,"board",board.id);}}>
-{board.name}
-</li>
-{/if}
-{/each}
+  {#each tournament.run.board.boards as board}
+    {#if (board.isDone)}
+      <li class="clickable"   on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+      {board.name}
+      </li>
+    {/if}
+  {/each}
+</div>
 {/if}

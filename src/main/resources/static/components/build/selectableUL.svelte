@@ -18,7 +18,6 @@
 
 
     onMount(async () => {
-        setHeaderStyle();   
     });
 
     export let selected = false;
