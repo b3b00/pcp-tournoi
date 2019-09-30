@@ -8,6 +8,8 @@
     margin-right: 5%;
   }
   .item {
+    padding-bottom: 5px;
+    text-decoration: underline;
     text-align: center;
   }
 </style>
@@ -68,23 +70,25 @@
   
   <div  class="column">
       <div class="w3-card item" style="font-weight:bold;">En cours :</div>
+      <div class="item">&nbsp;</div>
 {#each tournament.run.board.boards as board}
   {#if (!board.isDone)}
-    <div class="clickable item w3-card"  on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+    <div class="clickable item "  on:click={() => {moveMe("board", board.name,"board",board.id);}}>
     {board.name}
     </div>
   {/if}
 {/each}
   
-<div class="clickable item w3-card" on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
+<div class="clickable item " on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
   nouveau tableau
 </div>
 </div>
 <div class="column">
 <div class="w3-card item" style="font-weight: bold">Finis : </div>
+<div class="item">&nbsp;</div>
   {#each tournament.run.board.boards as board}
     {#if (board.isDone)}
-      <div class="clickable item w3-card"   on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+      <div class="clickable item "   on:click={() => {moveMe("board", board.name,"board",board.id);}}>
       {board.name}
       </div>
     {/if}
