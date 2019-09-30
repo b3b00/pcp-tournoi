@@ -2,6 +2,14 @@
   .clickable {
     cursor:pointer;
   }
+  .column {
+    width:25%;
+    float:left;
+    margin-right: 5%;
+  }
+  .item {
+    text-align: center;
+  }
 </style>
 <script>
 
@@ -57,27 +65,28 @@
   tournament.run.board.boards !== undefined &&
   tournament.run.board.boards !== null
   )}
-  <p>En cours :</p>
-  <div class="w3-third">
+  
+  <div  class="column">
+      <div class="w3-card item" style="font-weight:bold;">En cours :</div>
 {#each tournament.run.board.boards as board}
   {#if (!board.isDone)}
-    <li class="clickable"  on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+    <div class="clickable item w3-card"  on:click={() => {moveMe("board", board.name,"board",board.id);}}>
     {board.name}
-    </li>
+    </div>
   {/if}
 {/each}
   
-<li style="cursor:pointer" on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
+<div class="clickable item w3-card" on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
   nouveau tableau
-</li>
 </div>
-<div class="w3-third">
-<p>Finis : </p>
+</div>
+<div class="column">
+<div class="w3-card item" style="font-weight: bold">Finis : </div>
   {#each tournament.run.board.boards as board}
     {#if (board.isDone)}
-      <li class="clickable"   on:click={() => {moveMe("board", board.name,"board",board.id);}}>
+      <div class="clickable item w3-card"   on:click={() => {moveMe("board", board.name,"board",board.id);}}>
       {board.name}
-      </li>
+      </div>
     {/if}
   {/each}
 </div>
