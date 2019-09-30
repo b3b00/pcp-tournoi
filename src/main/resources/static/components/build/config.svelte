@@ -12,8 +12,6 @@
     import { createEventDispatcher } from 'svelte';
     import { beforeUpdate, afterUpdate } from 'svelte';    
 
-    import Select from 'svelte-select';
-
     const dispatch = createEventDispatcher();
 
     let options = [];
@@ -182,7 +180,7 @@
 
     <div class="w3-half">  
     <label for="name">Nom : </label>
-    <input type="text" name = "name" id="name" class="w3-input" bind:value={tournamentName}/>
+    <input class="w3-input" type="text" style="width:90%" required bind:value={tournamentName}>    
     </div>
 
 
@@ -192,13 +190,17 @@
     </div>
 </div>
 
+
+<div class="w3-row-padding">
 <label>Type de tournoi :</label>
 {#if tournament !== undefined}
 {#each options as option, y}
 <input class="w3-radio" type="radio" name="mode" on:change="{changeMode}" bind:group={tournamentOptions.mode} value="{option.mode}">{option.label}<br>
 {/each}
 {/if}
-<br/>
+
+</div>
+<p></p>
 
 <div class="w3-row-padding">
 
@@ -214,7 +216,7 @@
 </div>
 </div>
 <br/>
-<button on:click={saveTournament} >Enregistrer</button>
+<button class="w3-button w3-section w3-teal w3-ripple" on:click={saveTournament} ><label>Enregistrer</label></button>
 
 
 </div>

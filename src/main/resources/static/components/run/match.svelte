@@ -64,7 +64,7 @@
             <td class="teamName">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)}</td>
             {#if (match!== undefined && match.score !== undefined)}
             {#each match.score as score (score)}
-            <td><input type="text" min="0" placeholder="0" bind:value={score.left} /></td>
+            <td><input type="text" class="w3-input" min="0" placeholder="0" bind:value={score.left} /></td>
             {/each}
             {/if}
         </tr>
@@ -72,9 +72,9 @@
             <td class="teamName">{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}</td>
             {#if (match!== undefined && match.score !== undefined)}
             {#each match.score as score (score)}
-            <td><input type="text" min="0" placeholder="0" bind:value={score.right} /></td>
+            <td><input type="text"  class="w3-input" min="0" placeholder="0" bind:value={score.right} /></td>
             {/each}
             {/if}
         </tr>
     </table>
-    <button on:click={save}>close</button>
+    <button class="w3-button w3-section w3-teal w3-ripple" on:click={save}>close</button>
