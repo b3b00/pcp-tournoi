@@ -90,13 +90,13 @@
 <div class="w3-panel w3-card startDialog">
 
 	<p style="display:inline">
-		<button class={(state==STATE.HOME) ? "selected" : "notSelected" } on:click={()=>
+		<button class={(state==STATE.HOME) ? "selected w3-quarter" : "notSelected w3-quarter" } on:click={()=>
 			changeState(STATE.HOME)}>Accueil</button>
-		<button class={(state==STATE.BUILD) ? "selected" : "notSelected" } on:click={()=>
+		<button class={(state==STATE.BUILD) ? "selected w3-quarter" : "notSelected w3-quarter" } on:click={()=>
 			changeState(STATE.BUILD)}>Configuration</button>
-		<button class={(state==STATE.RUN) ? "selected" : "notSelected" } on:click={()=>
+		<button class={(state==STATE.RUN) ? "selected w3-quarter" : "notSelected w3-quarter" } on:click={()=>
 			changeState(STATE.RUN)}>Jeu</button>
-		<a href="help/help.html">Aide ?</a>
+		<a href="help/help.html" class="fa fa-question-circle" style="font-size: 28px; margin-left:48px" >&nbsp;</a>
 	</p>
 </div>
 
