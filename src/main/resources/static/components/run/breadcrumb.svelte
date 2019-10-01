@@ -1,4 +1,5 @@
-<style>
+<style type="text/scss">
+   
     .bread-item {
         cursor:pointer;   
         float:left;     
@@ -31,7 +32,7 @@
 {#each items as item,i}
 
     <div class="w3-bar-item w3-cyan bread-item" on:click={() => {onClick(i)}}>
-    <span class="fas fa-angle-right" style="" >&nbsp;</span>
+    <span class="fas fa-angle-right">&nbsp;</span>
     <span>{item.label}</span>
     </div>
 

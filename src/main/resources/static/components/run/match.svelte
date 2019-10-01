@@ -47,13 +47,19 @@
         dispatch("close", { 'tournamentId': tournament.id })
     }
 
+    function close() {
+        let dial = document.getElementById(`match_${match.id}`);
+        dial.style.display = 'none';
+    }
+
     $:{
         tournament = tournament;        
     }
 
 </script>
 <div class="w3-modal-content">
-    <header class="w3-container w3-teal w3-padding-16 w3-large w3-center">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)} &nbsp;-&nbsp;{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}</header>
+    <header class="w3-container w3-teal w3-padding-16 w3-large w3-center">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)} &nbsp;-&nbsp;{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}
+        <span on:click={() => {close()}} class="w3-large" style="float:right;cursor:pointer">&times;</span></header>
     <table>
         <tr>
             <td></td>
