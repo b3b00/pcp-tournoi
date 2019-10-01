@@ -234,7 +234,7 @@ public class RunService {
             buildSecondBoardNominal(tournament, startingRound);
             return;
         }
-        if (!isPowerOfTwo(remainingCount)) {
+        if (!isPowerOfTwo(remainingCount) && remainingCount > 0) {
             int count = highestPowerof2(remainingCount);
             List<String> pathes = remainingTeamsPath.stream().limit(count).collect(Collectors.toList());
             buildSecondBoardNominal2(tournament, pathes);
