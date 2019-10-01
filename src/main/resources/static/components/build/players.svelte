@@ -53,7 +53,7 @@
 </script>
 <p>{countLic + countNonLic} joueurs</p>
 <p>{countLic} confirm&eacute;s</p>
-<p>{countNonLic} d&eacutebutants</p>
+<p>{countNonLic} d&eacute;butants</p>
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
     <tr>
         <th>Nom</th>
