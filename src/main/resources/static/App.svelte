@@ -6,20 +6,10 @@
 	li.selectable {
 		cursor: pointer;
 	}
-
-	button.selected {
-		background-color: lightgray;
-		font-weight: bold;
-	}
-
-	button.notSelected {
-		background-color: white;
-		font-weight: normal;
-	}
 </style>
 <script>
-	const notSelectedStyle = "w3-bar selectable";
-	const selectedStyle = notSelectedStyle + " selected";
+	const notSelectedStyle = "w3-bar-item w3-hover-blue";
+	const selectedStyle = "w3-bar-item w3-blue w3-hover-teal";
 
 	const STATE = {
 		BUILD: "build",
@@ -87,17 +77,17 @@
 
 </script>
 
-<div class="w3-panel w3-card startDialog">
-
-	<p style="display:inline">
-		<button class={(state==STATE.HOME) ? "selected w3-quarter" : "notSelected w3-quarter" } on:click={()=>
-			changeState(STATE.HOME)}>Accueil</button>
-		<button class={(state==STATE.BUILD) ? "selected w3-quarter" : "notSelected w3-quarter" } on:click={()=>
-			changeState(STATE.BUILD)}>Configuration</button>
-		<button class={(state==STATE.RUN) ? "selected w3-quarter" : "notSelected w3-quarter" } on:click={()=>
-			changeState(STATE.RUN)}>Jeu</button>
-		<a href="help/help.html" class="fa fa-question-circle" style="font-size: 28px; margin-left:48px" >&nbsp;</a>
-	</p>
+<div class="w3-bar w3-teal">		
+		<div class={(state==STATE.HOME) ? selectedStyle : notSelectedStyle } on:click={()=>
+			changeState(STATE.HOME)}>Accueil</div>
+		<div class={(state==STATE.BUILD) ? selectedStyle : notSelectedStyle } on:click={()=>
+			changeState(STATE.BUILD)}>Configuration</div>
+		<div class={(state==STATE.RUN) ? selectedStyle : notSelectedStyle } on:click={()=>
+			changeState(STATE.RUN)}>Jeu</div>
+			
+		<a  href="help/help.html" class="w3-bar-item fa fa-question-circle" style="font-size: 28px; margin-left:48px" >&nbsp;</a>
+	
+	
 </div>
 
 
@@ -117,7 +107,7 @@
 		</li>
 	{/each}
 {/if}
-<li on:click={() => {setTournament(-1);}} class={tournamentId == -1 ? selectedStyle : notSelectedStyle}>		
+<li on:click={() => {setTournament(-1);}} class="w3-button">		
 		<span>nouveau tournoi</span><br>		
 	</li>
 </ul>

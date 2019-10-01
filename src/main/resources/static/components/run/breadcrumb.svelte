@@ -1,4 +1,11 @@
 <style>
+    .bread-item {
+        cursor:pointer;   
+        float:left;     
+    }
+    .bread-item:hover {
+        background-color: cyan;
+    }
 </style>
 
 <script>
@@ -19,10 +26,13 @@
 
 </script>
 
+<div class="w3- cyan">
 {#each items as item,i}
 
-    <span>&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>
-    <span style="cursor: pointer" on:click={() => {onClick(i)}}>{item.label}</span>
-    
+    <div class="w3-bar-item w3-cyan bread-item w3-padding-16" on:click={() => {onClick(i)}}>
+    <span class="fas fa-angle-right" style="padding-left: 16px;padding-right: 16px" >&nbsp;</span>
+    <span>{item.label}</span>
+    </div>
 
 {/each}
+</div>

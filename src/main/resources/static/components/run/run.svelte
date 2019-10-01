@@ -113,7 +113,7 @@
 
 <BreadCrumb items={currentBreadCrumb} on:click={navigator}></BreadCrumb>
 <hr>
-
+<hr>
 
 {#if currentItem != null && currentItem !== undefined}
     {#if (currentItem.name == "groupPhase")}
@@ -121,24 +121,28 @@
     {:else if (currentItem.name == "group")}
         <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
     {:else if (currentItem.name == "boards")}        
+        <hr>
        <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
-    {:else if (currentItem.name == "board" && board !== undefined && board !== null)}        
+    {:else if (currentItem.name == "board" && board !== undefined && board !== null)}   
+        <hr>     
        <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen}></Board> 
     {:else if (currentItem.name == "newboard" )}        
        <NewBoard tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></NewBoard> 
     {:else}
-    <ul>
-    <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
-
-    <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
-    </ul>
+        <div styyle="clear:both">
+            <ul>
+                <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
+                <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
+            </ul>
+        </div>
     {/if}
 {:else}
-<ul>
 
-<li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
+<div styyle="clear:both">
+    <ul>
+        <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
+        <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
+    </ul>
+</div>
 
-<li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
-
-</ul>
 {/if}
