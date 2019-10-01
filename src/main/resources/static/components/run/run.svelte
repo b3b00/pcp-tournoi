@@ -112,8 +112,7 @@
 </script>
 
 <BreadCrumb items={currentBreadCrumb} on:click={navigator}></BreadCrumb>
-<hr>
-<hr>
+
 
 {#if currentItem != null && currentItem !== undefined}
     {#if (currentItem.name == "groupPhase")}

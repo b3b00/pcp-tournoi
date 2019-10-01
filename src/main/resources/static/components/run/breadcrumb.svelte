@@ -26,11 +26,12 @@
 
 </script>
 
-<div class="w3- cyan">
+<div class="w3-cyan w3-bar">
+        <div class="w3-bar-item w3-teal w3-hover-cyan" style='font-weight:bold;cursor: pointer;'>Configuration</div>
 {#each items as item,i}
 
-    <div class="w3-bar-item w3-cyan bread-item w3-padding-16" on:click={() => {onClick(i)}}>
-    <span class="fas fa-angle-right" style="padding-left: 16px;padding-right: 16px" >&nbsp;</span>
+    <div class="w3-bar-item w3-cyan bread-item" on:click={() => {onClick(i)}}>
+    <span class="fas fa-angle-right" style="" >&nbsp;</span>
     <span>{item.label}</span>
     </div>
 
