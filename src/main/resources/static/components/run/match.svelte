@@ -30,6 +30,8 @@
     import { createEventDispatcher } from 'svelte';
     import {GroupDisplay} from '../groupDisplay.js';
 
+    const dispatch = createEventDispatcher();
+
     export let tournament;
 
     export let match;
@@ -41,7 +43,8 @@
 
     function save() {
         let dial = document.getElementById(`match_${match.id}`);
-        dial.close();
+        dial.style.display = 'none';
+        dispatch("close", { 'tournamentId': tournament.id })
     }
 
     $:{
@@ -49,8 +52,8 @@
     }
 
 </script>
-
-
+<div class="w3-modal-content">
+    <header class="w3-container w3-teal w3-padding-16 w3-large w3-center">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)} &nbsp;-&nbsp;{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}</header>
     <table>
         <tr>
             <td></td>
@@ -77,4 +80,5 @@
             {/if}
         </tr>
     </table>
-    <button class="w3-button w3-section w3-teal w3-ripple" on:click={save}>close</button>
+    <button style="margin-left:32px" class="w3-button w3-section w3-teal w3-ripple" on:click={save}>close</button>
+</div>

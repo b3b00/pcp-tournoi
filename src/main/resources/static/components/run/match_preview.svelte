@@ -73,7 +73,7 @@
   function openMatch(matchId) {
     if (match.left !== null && match.right !== null && match.left !== undefined && match.right !== undefined) {
       let dial = document.getElementById(`match_${matchId}`);
-      dial.showModal();
+      dial.style.display = 'block';
     }
   }
 
@@ -128,11 +128,10 @@
     </div>
   </div>
 
-
-  <dialog id="match_{match.id}" on:close={()=> {saveMatch(match)}}>
-    <Match match={match} tournament={tournament}>
+<div class="w3-modal" id="match_{match.id}">
+    <Match match={match} tournament={tournament} on:close={() => {saveMatch(match)}}>
     </Match>
-  </dialog>
+</div>
 
 
 </div>
