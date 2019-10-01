@@ -1,10 +1,12 @@
 
 <style>
-button.selected {	
+div.selected {	
 	font-weight: bold;
+	cursor: pointer;
 }
 button.notSelected {
 	font-weight: normal;
+	cursor: pointer;
 }
 </style>
 <script>
@@ -27,9 +29,9 @@ button.notSelected {
 	function setClasses() {
 		classes = []
 		for (let i = 0; i < 4; i++) {
-			let style = "notSelected";
+			let style = "w3-bar-item w3-hover-teal notSelected";
 			if (i == selectedIndex) {
-				style="selected";
+				style="w3-bar-item w3-teal w3-hover-cyan selected";
 			}
 			classes.push(style);
 		}
