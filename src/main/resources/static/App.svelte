@@ -107,12 +107,9 @@
 		</li>
 	{/each}
 {/if}
-<!-- <li on:click={() => {setTournament(-1);}} class="w3-button">		
-		<span>nouveau tournoi</span><br>		
-	</li> -->
 </ul>
 
-<a on:click={() => {setTournament(-1);}} class="w3-button w3-large w3-circle w3-xlarge w3-ripple w3-teal" title="nouveau tournoi" style="z-index:0" href="#">+</a>
+<span on:click={() => {setTournament(-1);}} class="w3-button w3-large w3-circle w3-xlarge w3-ripple w3-teal" title="nouveau tournoi" style="z-index:0;cursor:pointer" href="#">+</span>
 
 {/if}
 
