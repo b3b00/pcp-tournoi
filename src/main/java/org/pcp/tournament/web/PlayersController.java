@@ -32,6 +32,9 @@ public class PlayersController {
     TournamentDao tournamentDao;
 
     @Autowired
+    PlayersService playersService;
+
+    @Autowired
     TeamDao teamDao;
 
     @GetMapping(value = "/tournament/{tournamentId}/players")
