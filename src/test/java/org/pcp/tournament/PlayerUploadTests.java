@@ -38,16 +38,16 @@ public class PlayerUploadTests {
     @Transactional
     public void testPlayersUpload() {
         try {
-        Options options = optionsDao.findByMode(Mode.DOUBLE);
-        Tournament tournament = new Tournament("testingrun");
-        tournament.setOptions(options);
-        tournament = tournamentDao.save(tournament);    
-        ClassPathResource resource = new ClassPathResource("players.csv");    
-        File csvFile = resource.getFile();
-        playersService.ImportPlayers(tournament, csvFile);
-        tournament = tournamentDao.findById(tournament.getId());
-        List<Player> players = tournament.getPlayers();
-        assertEquals(8, players.size());
+            Options options = optionsDao.findByMode(Mode.DOUBLE);
+            Tournament tournament = new Tournament("testingrun");
+            tournament.setOptions(options);
+            tournament = tournamentDao.save(tournament);    
+            ClassPathResource resource = new ClassPathResource("players.csv");    
+            File csvFile = resource.getFile();
+            playersService.ImportPlayers(tournament, csvFile);
+            tournament = tournamentDao.findById(tournament.getId());
+            List<Player> players = tournament.getPlayers();
+            assertEquals(8, players.size());
         // TODO : check players
         }
         catch(Exception e) {

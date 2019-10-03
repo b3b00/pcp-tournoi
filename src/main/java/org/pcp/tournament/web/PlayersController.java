@@ -1,6 +1,8 @@
 package org.pcp.tournament.web;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 import org.pcp.tournament.dao.PlayerDao;
@@ -20,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.core.io.Resource;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 public class PlayersController {
@@ -90,19 +95,32 @@ public class PlayersController {
         }
     }
 
-    @PostMapping("/tournament/{tournamentId}/players/upload")
-    public String uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file) {
+    @PostMapping("/tournaments/{tournamentId}/playersUpload")
+    public ResponseEntity<?> uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file) {
         try {
-            File uploadedFile = file.getResource().getFile();
+            Resource resource = file.getResource();
+            byte[] bytes = file.getBytes();
+            String content = new String(bytes);
             Tournament tournament = tournamentDao.findById(tournamentId);
-            playersService.ImportPlayers(tournament, uploadedFile);
+            playersService.ImportPlayers(tournament, content);
             tournament = tournamentDao.findById(tournamentId);            
+            return new ResponseEntity<Tournament>(tournament,HttpStatus.OK);
+        }
+        catch(DataIntegrityViolationException dive) {
+            return ResponseEntity.badRequest()
+            .body(getErrorJSON("impossible de charger le fichier "+file.getOriginalFilename()+" : mauvais format."));
         }
         catch(Exception e) {
-
+            return ResponseEntity.badRequest()
+            .body(getErrorJSON("impossible de charger le fichier "+file.getOriginalFilename()));
+            
         }
 
-        return "ok";
     }
+
+    public String getErrorJSON(String message) {
+        return "{\"message\":\""+message+"\"}";
+    }
+
 
 }

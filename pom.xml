@@ -19,6 +19,13 @@
   <dependencies>
 
     <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>4.6</version>
+    </dependency>
+
+
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
@@ -55,11 +62,7 @@
       <scope>test</scope>
       <version>1.4.194</version>
     </dependency>
-    <dependency>
-      <groupId>com.opencsv</groupId>
-      <artifactId>opencsv</artifactId>
-      <version>4.0</version>
-    </dependency>
+
 
   </dependencies>
 

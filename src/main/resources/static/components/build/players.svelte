@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import Player from './player.svelte';
+    import Dropzone from "svelte-dropzone/dropzone.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -48,9 +49,37 @@
         return players !== undefined ? players.length - countLic : 0;
 
     }
+    const addedfile = async file => {
+        console.log(file);
+        const formData = new FormData();
 
+        formData.append('file', file);
+
+        const options = {
+            method: 'POST',
+            body: formData,
+        };
+
+        const res = await fetch(`tournaments/${tournamentId}/playersUpload`, options);
+        if (res.status >= 200 && res.status <= 299) {
+            tournament = await res.json();
+            players = tournament.players;
+        }
+        else {
+            body = await res.json();
+            window.alert("Erreur lors de l'import : "+res.status+"\n"+body.message);
+        }
+        
+    }
+  const drop = event => console.log(event.target);
+  const init = () => console.log("dropzone init ! 😍");
 
 </script>
+
+
+  
+
+
 <p>{countLic + countNonLic} joueurs</p>
 <p>{countLic} confirm&eacute;s</p>
 <p>{countNonLic} d&eacute;butants</p>
@@ -71,6 +100,24 @@
     <Player {...p} tournamentId={tournamentId} on:change={load} isNewPlayer={false} edited={false}/>
 </tr>
 
-
 {/each}
+
+<tr>
+    
+    <Dropzone
+  dropzoneClass="dropzoneClass"
+  hooveringClass="hooveringClass"
+  id="id"
+  dropzoneEvents={{ addedfile, drop, init }}
+  options={{ clickable: true, acceptedFiles: "text/plain,text/csv", maxFilesize: 256, init }}>
+  <td>
+  &nbsp;
+</td>
+</Dropzone>
+
+</tr>
 </table>
+
+
+
+
