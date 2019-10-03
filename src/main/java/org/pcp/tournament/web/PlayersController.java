@@ -1,5 +1,6 @@
 package org.pcp.tournament.web;
 
+import java.io.File;
 import java.util.List;
 
 import org.pcp.tournament.dao.PlayerDao;
@@ -8,6 +9,7 @@ import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.Player;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
+import org.pcp.tournament.service.PlayersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 public class PlayersController {
@@ -80,6 +85,21 @@ public class PlayersController {
         } catch (Exception e) {
             throw new InternalError(e.getMessage());
         }
+    }
+
+    @PostMapping("/tournament/{tournamentId}/players/upload")
+    public String uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file) {
+        try {
+            File uploadedFile = file.getResource().getFile();
+            Tournament tournament = tournamentDao.findById(tournamentId);
+            playersService.ImportPlayers(tournament, uploadedFile);
+            tournament = tournamentDao.findById(tournamentId);            
+        }
+        catch(Exception e) {
+
+        }
+
+        return "ok";
     }
 
 }

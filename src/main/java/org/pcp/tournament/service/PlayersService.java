@@ -1,8 +1,8 @@
 package org.pcp.tournament.service;
 
+import java.io.File;
 import java.io.Reader;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import com.opencsv.CSVReader;
 
@@ -22,10 +22,10 @@ public class PlayersService {
     @Autowired
     TournamentDao tournamentDao;
 
-    public void ImportPlayers(Tournament tournament, String csv) {
+    public void ImportPlayers(Tournament tournament, File csvFile) {
         try {
-            Reader reader = Files.newBufferedReader(Paths.get(csv));
-            CSVReader csvReader = new CSVReader(reader);
+            Reader reader = Files.newBufferedReader(csvFile.toPath());
+            CSVReader csvReader = new CSVReader(reader,';');
             String[] nextRecord;
             while ((nextRecord = csvReader.readNext()) != null) {
                 String name = nextRecord[0];
@@ -39,10 +39,11 @@ public class PlayersService {
                 tournament.addPlayer(player);
                 tournament = tournamentDao.save(tournament);
             }
+            csvReader.close();
         }
         catch (Exception e) {
             // TODO !
-        }
+        }        
     }
 
 }
