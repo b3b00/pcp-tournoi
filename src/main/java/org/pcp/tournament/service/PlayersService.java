@@ -1,7 +1,6 @@
 package org.pcp.tournament.service;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.Reader;
 import java.io.StringReader;
@@ -17,7 +16,6 @@ import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.Player;
 import org.pcp.tournament.model.Tournament;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 @Component
