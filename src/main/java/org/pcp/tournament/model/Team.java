@@ -149,10 +149,10 @@ public class Team implements IPingModel  {
 
     public void RemovePlayer(Player player) {
         if (player != null) {
-            if (player.getId() == player1.getId()) {
+            if (player1!= null && player.getId() == player1.getId()) {
                 player1 = null;
             }
-            if (player.getId() == player2.getId()) {
+            if (player2 != null && player.getId() == player2.getId()) {
                 player2 = null;
             }
         }

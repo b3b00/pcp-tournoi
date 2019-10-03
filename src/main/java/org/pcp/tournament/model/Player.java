@@ -21,7 +21,7 @@ public class Player implements IPingModel  {
     private Boolean isLicensed;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne //(cascade = CascadeType.)
     private Tournament tournament;
     
     public Player() {
