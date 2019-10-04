@@ -135,7 +135,7 @@ on:click={() => {openFile()}}
         <Player isNewPlayer={true} name="" id="" isLicensed="false" tournamentId={tournamentId} on:change={load}
             edited={false}></Player>
     </tr>
-    {#each players as p}
+    {#each players as p (p.id)}
 <tr>
     <Player {...p} tournamentId={tournamentId} on:change={load} isNewPlayer={false} edited={false}/>
 </tr>
