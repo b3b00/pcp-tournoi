@@ -44,12 +44,22 @@
     }
 
 
+    async function openFile() {
+
+        console.log("opening file");
+        const f = document.getElementById("filer");
+        f.click();
+        if (f !== null && f !== undefined && f.files.length > 0) {
+            await addedfile(f.files[0]);
+        }    
+    }
+
 
     async function countNotLicensees() {
         return players !== undefined ? players.length - countLic : 0;
 
     }
-    const addedfile = async file => {
+    async function addedfile (file) {
         console.log(file);
         const formData = new FormData();
 
@@ -60,10 +70,12 @@
             body: formData,
         };
 
-        const res = await fetch(`tournaments/${tournamentId}/playersUpload`, options);
+        const res = await fetch(`tournaments/${tournamentId}/players/upload`, options);
         if (res.status >= 200 && res.status <= 299) {
             tournament = await res.json();
             players = tournament.players;
+            countLic = await countLicensees();
+            countNonLic = await countNotLicensees()
         }
         else {
             body = await res.json();
@@ -71,8 +83,16 @@
         }
         
     }
+
+    function exportPlayers() {        
+        const downloader = document.getElementById("downloader");
+        downloader.src=`/tournaments/${tournamentId}/players/download`;
+    }
+
   const drop = event => console.log(event.target);
-  const init = () => console.log("dropzone init ! 😍");
+  const init = () => {;}
+
+
 
 </script>
 
@@ -83,6 +103,27 @@
 <p>{countLic + countNonLic} joueurs</p>
 <p>{countLic} confirm&eacute;s</p>
 <p>{countNonLic} d&eacute;butants</p>
+<span class="fa fa-download w3-xxlarge" style="cursor:pointer" 
+on:click={exportPlayers}>
+        &nbsp;
+        </span>
+        
+<iframe  id="downloader" style="display:none">&nbsp;</iframe>
+
+<hr/>
+<span class="fa fa-upload w3-xxlarge" style="cursor:pointer" 
+on:click={() => {openFile()}}
+>
+<input style="display:none" type="file" id="filer"/>
+        &nbsp;
+        </span>
+
+  
+
+
+  
+
+
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
     <tr>
         <th>Nom</th>
@@ -101,22 +142,11 @@
 </tr>
 
 {/each}
-
-<tr>
-    
-    <Dropzone
-  dropzoneClass="dropzoneClass"
-  hooveringClass="hooveringClass"
-  id="id"
-  dropzoneEvents={{ addedfile, drop, init }}
-  options={{ clickable: true, acceptedFiles: "text/plain,text/csv", maxFilesize: 256, init }}>
-  <td>
-  &nbsp;
-</td>
-</Dropzone>
-
-</tr>
 </table>
+
+<!-- </Dropzone> -->
+
+<hr/>
 
 
 

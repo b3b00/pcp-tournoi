@@ -80,4 +80,19 @@ public class PlayersService {
             ImportPlayers(tournament, new String(bytes));
     }
 
+    public String playersToCSV(Tournament tournament) {
+        StringBuilder builder = new StringBuilder();
+        for (Player player : tournament.getPlayers()) {
+            if (player != null) {
+                builder.append(player.getName());
+                builder.append(';');
+                if (player.getIsLicensed()) {
+                    builder.append("*");
+                }
+                builder.append("\n");
+            }
+        }
+        return builder.toString();
+    }
+
 }

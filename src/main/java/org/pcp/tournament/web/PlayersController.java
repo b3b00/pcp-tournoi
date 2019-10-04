@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -91,7 +92,7 @@ public class PlayersController {
         }
     }
 
-    @PostMapping("/tournaments/{tournamentId}/playersUpload")
+    @PostMapping("/tournaments/{tournamentId}/players/upload")
     public ResponseEntity<?> uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file) {
         try {
             byte[] bytes = file.getBytes();
@@ -110,7 +111,17 @@ public class PlayersController {
             .body(getErrorJSON("impossible de charger le fichier "+file.getOriginalFilename()));
             
         }
+    }
 
+    @GetMapping("/tournaments/{tournamentId}/players/download") 
+    public ResponseEntity<?> exportPlayers(@PathVariable int tournamentId) {
+        Tournament tournament = tournamentDao.findById(tournamentId);
+        String csv = playersService.playersToCSV(tournament);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type","text/csv");
+        return ResponseEntity.ok()        
+        .headers(responseHeaders)
+        .body(csv);
     }
 
     public String getErrorJSON(String message) {
