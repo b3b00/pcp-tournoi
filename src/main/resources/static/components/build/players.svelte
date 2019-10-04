@@ -45,12 +45,22 @@
 
 
     async function openFile() {
-
-        console.log("opening file");
         const f = document.getElementById("filer");
         f.click();
-        if (f !== null && f !== undefined && f.files.length > 0) {
-            await addedfile(f.files[0]);
+    }
+
+    async function changeFiles(event) {
+        const f = event.target;
+        if (f !== null && f !== undefined) {
+            if (f.files.length == 1) {
+                await addedfile(f.files[0]);
+                f.files = null;
+                f.value= null;
+            }
+            else if (f.files.length > 1) {                
+                f.files = null;
+                f.value = null;
+            }
         }    
     }
 
@@ -60,7 +70,6 @@
 
     }
     async function addedfile (file) {
-        console.log(file);
         const formData = new FormData();
 
         formData.append('file', file);
@@ -89,10 +98,6 @@
         downloader.src=`/tournaments/${tournamentId}/players/download`;
     }
 
-  const drop = event => console.log(event.target);
-  const init = () => {;}
-
-
 
 </script>
 
@@ -103,25 +108,19 @@
 <p>{countLic + countNonLic} joueurs</p>
 <p>{countLic} confirm&eacute;s</p>
 <p>{countNonLic} d&eacute;butants</p>
-<span class="fa fa-download w3-xxlarge" style="cursor:pointer" 
+<span tooltip="télécharger la liste des joueurs" class="fa fa-download w3-xxlarge" style="cursor:pointer" 
 on:click={exportPlayers}>
         &nbsp;
         </span>
         
 <iframe  id="downloader" style="display:none">&nbsp;</iframe>
 
-<hr/>
-<span class="fa fa-upload w3-xxlarge" style="cursor:pointer" 
+<span tooltip="envoyer la liste des joueurs" class="fa fa-upload w3-xxlarge" style="cursor:pointer" 
 on:click={() => {openFile()}}
 >
-<input style="display:none" type="file" id="filer"/>
+<input style="display:none" type="file" id="filer" on:change={changeFiles}/>
         &nbsp;
         </span>
-
-  
-
-
-  
 
 
 <table class="w3-table-all w3-centered w3-card-4 w3-small " style="width: 50%;margin: auto;">
