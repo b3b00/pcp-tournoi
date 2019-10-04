@@ -113,7 +113,7 @@ on:click={exportPlayers}>
         &nbsp;
         </span>
         
-<iframe  id="downloader" style="display:none">&nbsp;</iframe>
+<iframe title="downloader" id="downloader" style="display:none">&nbsp;</iframe>
 
 <span tooltip="envoyer la liste des joueurs" class="fa fa-upload w3-xxlarge" style="cursor:pointer" 
 on:click={() => {openFile()}}

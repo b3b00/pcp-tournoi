@@ -207,7 +207,13 @@ public class MatchRunTests {
         playRound(tournament, "consolante", 0);
 
         avail = runService.getAvailableTeams(tournament);
-        assertEquals(4, avail.size());
+        assertEquals(2, avail.size());
+
+        checkRound(tournament, "consolante", 1);
+        playRound(tournament, "consolante", 1);
+
+        avail = runService.getAvailableTeams(tournament);
+        assertEquals(6, avail.size());
 
     }
 
@@ -233,7 +239,7 @@ public class MatchRunTests {
         playRound(tournament, "tableau principal", 0);
 
         avail = runService.getAvailableTeams(tournament);
-        assertEquals(8, avail.size());
+        assertEquals(6, avail.size());
 
         List<Integer> teamsId = avail.stream().map(t -> t.getId()).collect(Collectors.toList());
         tournament = runService.buildBoardWithTeams(tournament, teamsId, "new board");
@@ -242,7 +248,7 @@ public class MatchRunTests {
         assertNotNull(board);
 
         List<Round> rounds = board.getRounds();
-        assertEquals(3, rounds.size());
+        assertEquals(2, rounds.size());
 
     }
 
