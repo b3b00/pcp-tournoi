@@ -7,10 +7,12 @@
             font-size: 0.5em;
         }
         li.selected {
-            background-color: lightgray;            
+            @extend .pcp-color1;         
+            @extend .header;
         }
-        li.unselected {
+        li.notselected {
             background-color: white;            
+            @extend .header;
         }
     </style>
 <script>
@@ -41,7 +43,7 @@
 
 </script>
 <ul class="w3-ul w3-border w3-card" on:drop={dropped} on:dragover={(e) => {e.preventDefault();}}>
-    <li class="{selected ? "w3-display-container pcp-color-1 header" :"w3-display-container w3-white header"}" on:click={selectItem} >{label != null ? label : "&nbsp;"}
+    <li class={selected ? "selected w3-display-container" :"notselected w3-display-container"} on:click={selectItem} >{label != null ? label : "&nbsp;"}
 
     </li>
     <slot></slot>

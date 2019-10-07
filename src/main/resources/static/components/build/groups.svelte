@@ -1,5 +1,14 @@
 <style type="text/scss">
     @import "../../styles/global.scss";
+
+    .selected {
+        @extend .pcp-color1;
+    }
+
+    .notselected {
+        background-color: white;
+    }
+
 </style>
 <script>
 
@@ -249,7 +258,7 @@
     <ul class="w3-ul w3-border w3-card">
         
         {#each ungroupedTeams as team (team.id)}
-        <li draggable=true on:dragstart={dragstart(team)}  on:click={() => {selectUngroupedTeam(team)}} style={team.selected ? "background-color:lightgray;" : "background-color:white"}>            
+        <li draggable=true on:dragstart={dragstart(team)}  on:click={() => {selectUngroupedTeam(team)}} class={team.selected ? "selected" : "notselected"}>            
             <span>{@html GroupDisplay.getTeamDisplayName(team,null)}<span>
         </li>
         {/each}       
