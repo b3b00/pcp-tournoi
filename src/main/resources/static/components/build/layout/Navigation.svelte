@@ -1,5 +1,8 @@
 
 <style type="text/scss">
+
+@import "../../../styles/global.scss";
+
 div.selected {	
 	font-weight: bold;
 	cursor: pointer;
@@ -8,6 +11,7 @@ button.notSelected {
 	font-weight: normal;
 	cursor: pointer;
 }
+
 </style>
 <script>
 	import { onMount } from 'svelte';

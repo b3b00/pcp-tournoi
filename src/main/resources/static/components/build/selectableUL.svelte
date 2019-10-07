@@ -1,4 +1,7 @@
 <style type="text/scss">
+
+    @import "../../styles/global.scss";
+
         li.header {
             cursor: pointer;
             font-size: 0.5em;

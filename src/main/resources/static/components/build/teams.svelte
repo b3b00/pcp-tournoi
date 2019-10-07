@@ -1,4 +1,6 @@
-
+<style type="text/scss">
+    @import "../../styles/global.scss";
+</style>
 <script>
 
     import Team from './team.svelte';

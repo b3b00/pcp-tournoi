@@ -1,3 +1,6 @@
+<style type="text/scss">
+    @import "../../styles/global.scss";
+</style>
 <script>
 
     import Group from './group.svelte';

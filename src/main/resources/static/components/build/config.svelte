@@ -1,4 +1,7 @@
 <style type="text/scss">
+
+    @import "../../styles/global.scss";
+
     div.startDialog {
         width: 30%;
         margin: auto;

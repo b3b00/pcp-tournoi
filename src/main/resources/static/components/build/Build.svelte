@@ -1,3 +1,7 @@
+
+<style type="text/scss">
+    @import "../../styles/global.scss";
+</style>
 <script>
 
     const states = {

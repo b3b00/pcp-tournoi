@@ -1,4 +1,5 @@
-<style>
+<style type="text/scss">
+    @import "../../styles/global.scss";
     button.hide {
         display:none;
         visibility:hidden;

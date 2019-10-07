@@ -1,4 +1,5 @@
 <style type="text/scss">
+    @import "styles/global.scss";
 	li.selected {
 		background-color: lightgray;
 	}
@@ -8,8 +9,8 @@
 	}
 </style>
 <script>
-	const notSelectedStyle = "w3-bar-item pcp-hover-color3";
-	const selectedStyle = "w3-bar-item pcp-color3 pcp-hover-color1";
+	const notSelectedStyle = "w3-bar-item pcp-hover-color1";
+	const selectedStyle = "w3-bar-item pcp-color1 pcp-hover-color3";
 
 	const STATE = {
 		BUILD: "build",
