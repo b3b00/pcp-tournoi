@@ -1,4 +1,4 @@
-<style>
+<style type="text/scss">
 .refresh {
   cursor:pointer;
   font-size: x-large;

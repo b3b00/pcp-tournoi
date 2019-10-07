@@ -1,4 +1,4 @@
-<style>
+<style type="text/scss">
 	li.selected {
 		background-color: lightgray;
 	}

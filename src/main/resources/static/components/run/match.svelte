@@ -2,7 +2,7 @@
 <!-- uses :
   - 0 
 -->
-<style>
+<style type="text/scss">
     td.teamName {
         font-weight: bold;
     }

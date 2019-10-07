@@ -1,9 +1,6 @@
 <style type="text/scss">
    
     @import "../../styles/common/colors.scss";
-
-    $color2 : cyan; 
-
     .bread-item {
         cursor:pointer;   
         float:left;     

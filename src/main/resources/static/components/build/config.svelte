@@ -1,4 +1,4 @@
-<style>
+<style type="text/scss">
     div.startDialog {
         width: 30%;
         margin: auto;

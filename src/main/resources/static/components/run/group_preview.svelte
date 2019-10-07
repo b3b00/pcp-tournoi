@@ -4,7 +4,7 @@
   - 0
 -->
 
-<style>
+<style type="text/scss">
   </style>
   
   <script>

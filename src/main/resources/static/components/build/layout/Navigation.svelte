@@ -1,5 +1,5 @@
 
-<style>
+<style type="text/scss">
 div.selected {	
 	font-weight: bold;
 	cursor: pointer;

@@ -1,4 +1,4 @@
-<style>
+<style type="text/scss">
         li.header {
             cursor: pointer;
             font-size: 0.5em;

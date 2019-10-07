@@ -6,7 +6,7 @@
   - group_preview 
 -->
 
-<style>
+<style type="text/scss">
   .match-margin {
     margin: 8px !important;
   }
