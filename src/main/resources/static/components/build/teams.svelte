@@ -1,5 +1,14 @@
 <style type="text/scss">
     @import "../../styles/global.scss";
+
+    .selected {
+        @extend .pcp-color1;
+    }
+
+    .notselected {
+        background-color: white;
+    }
+
 </style>
 <script>
 
@@ -301,7 +310,7 @@
                             on:drop={dropPlayerOnPlayer(player)} 
                             on:dragstart={dragstartPlayer(player)} 
                             on:click={() => {selectUnteamedPlayer(player)}} 
-                            style={player.selected ? "background-color:lightgray;" : "background-color:white"}>            
+                            class={player.selected ? "selected" : "notselected"}>
             <span>{player.name}<span><span class={player.isLicensed ? "fa fa-star w3-display-center" : ""}></span>
         </li>
         {/each}       
