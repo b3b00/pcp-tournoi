@@ -1,11 +1,15 @@
 <style type="text/scss">
    
+    @import "../../styles/common/colors.scss";
+
+    $color2 : cyan; 
+
     .bread-item {
         cursor:pointer;   
         float:left;     
     }
     .bread-item:hover {
-        background-color: cyan;
+        background-color:$color-2;
     }
 </style>
 
@@ -27,11 +31,11 @@
 
 </script>
 
-<div class="w3-cyan w3-bar">
-        <div class="w3-bar-item w3-teal w3-hover-cyan" style='font-weight:bold;cursor: pointer;'>Configuration</div>
+<div class="pcp-color2 w3-bar">
+        <div class="w3-bar-item pcp-color1 pcp-hover-color2" style='font-weight:bold;cursor: pointer;'>Configuration</div>
 {#each items as item,i}
 
-    <div class="w3-bar-item w3-cyan bread-item" on:click={() => {onClick(i)}}>
+    <div class="w3-bar-item pcp-color2 bread-item" on:click={() => {onClick(i)}}>
     <span class="fas fa-angle-right">&nbsp;</span>
     <span>{item.label}</span>
     </div>

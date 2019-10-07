@@ -216,7 +216,7 @@
 </div>
 </div>
 <br/>
-<button class="w3-button w3-section w3-teal w3-ripple" on:click={saveTournament} ><label>Enregistrer</label></button>
+<button class="w3-button w3-section pcp-color1 w3-ripple" on:click={saveTournament} ><label>Enregistrer</label></button>
 
 
 </div>

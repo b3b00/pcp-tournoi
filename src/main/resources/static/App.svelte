@@ -8,8 +8,8 @@
 	}
 </style>
 <script>
-	const notSelectedStyle = "w3-bar-item w3-hover-blue";
-	const selectedStyle = "w3-bar-item w3-blue w3-hover-teal";
+	const notSelectedStyle = "w3-bar-item pcp-hover-color3";
+	const selectedStyle = "w3-bar-item pcp-color3 pcp-hover-color1";
 
 	const STATE = {
 		BUILD: "build",
@@ -77,7 +77,7 @@
 
 </script>
 
-<div class="w3-bar w3-teal">		
+<div class="w3-bar pcp-color1">		
 		<div class={(state==STATE.HOME) ? selectedStyle : notSelectedStyle } on:click={()=>
 			changeState(STATE.HOME)}>Accueil</div>
 		<div class={(state==STATE.BUILD) ? selectedStyle : notSelectedStyle } on:click={()=>
@@ -109,7 +109,7 @@
 {/if}
 </ul>
 
-<span on:click={() => {setTournament(-1);}} class="w3-button w3-large w3-circle w3-xlarge w3-ripple w3-teal" title="nouveau tournoi" style="z-index:0;cursor:pointer" href="#">+</span>
+<span on:click={() => {setTournament(-1);}} class="w3-button w3-large w3-circle w3-xlarge w3-ripple pcp-color1" title="nouveau tournoi" style="z-index:0;cursor:pointer" href="#">+</span>
 
 {/if}
 

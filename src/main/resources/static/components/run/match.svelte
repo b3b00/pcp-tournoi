@@ -58,7 +58,7 @@
 
 </script>
 <div class="w3-modal-content">
-    <header class="w3-container w3-teal w3-padding-16 w3-large w3-center">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)} &nbsp;-&nbsp;{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}
+    <header class="w3-container pcp-color1 w3-padding-16 w3-large w3-center">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)} &nbsp;-&nbsp;{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}
         <span on:click={() => {close()}} class="w3-large" style="float:right;cursor:pointer">&times;</span></header>
     <table>
         <tr>
@@ -86,5 +86,5 @@
             {/if}
         </tr>
     </table>
-    <button style="margin-left:32px" class="w3-button w3-section w3-teal w3-ripple" on:click={save}>close</button>
+    <button style="margin-left:32px" class="w3-button w3-section pcp-color1 w3-ripple" on:click={save}>close</button>
 </div>

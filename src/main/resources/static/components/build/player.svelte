@@ -145,11 +145,11 @@
     <input class="w3-input"  type="checkbox" style="font-size:24px;height:24px;" bind:checked={isLicensed} on:click={() => {toggleLicensed();}}/>
 </td>
 <td>
-        <button class="w3-button w3-teal w3-ripple {trashClass}" on:click={onDelete} style="font-size:24px;">&nbsp;</button>
+        <button class="w3-button pcp-color1 w3-ripple {trashClass}" on:click={onDelete} style="font-size:24px;">&nbsp;</button>
 </td>
 
 <td  >
-        <button class="w3-button w3-teal w3-ripple {saveClass}" on:click={onSave} style="font-size:24px;">&nbsp;</button>
+        <button class="w3-button pcp-color1 w3-ripple {saveClass}" on:click={onSave} style="font-size:24px;">&nbsp;</button>
 </td>
 
 <td style="cursor: pointer;" >

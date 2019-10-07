@@ -1,7 +1,29 @@
+// $color-1 : teal;
+// $color-2 : cyan;
+// $color-3 : blue;
+
+@import "common/colors.scss";
+
 html, body {
 	position: relative;
 	width: 100%;
 	height: 100%;
+}
+
+.pcp-color1 ,.pcp-hover-color1:hover
+{
+	color:#fff!important;
+	background-color:$color-1!important
+}
+
+.pcp-color2,.pcp-hover-.pcp-color2{
+	color:#000!important;
+	background-color:$color-2!important
+}
+
+.pcp-color3,.pcp-hover-.pcp-color3{
+	color:#000!important;
+	background-color:$color-3!important
 }
 
 body {
