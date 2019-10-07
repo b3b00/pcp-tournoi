@@ -7,6 +7,7 @@
 -->
 
 <style type="text/scss">
+@import "../../styles/global.scss";
   .match-margin {
     margin: 8px !important;
   }

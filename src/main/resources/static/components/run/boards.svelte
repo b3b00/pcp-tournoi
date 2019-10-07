@@ -1,4 +1,5 @@
 <style type="text/scss">
+@import "../../styles/global.scss";
   .clickable {
     cursor:pointer;
   }

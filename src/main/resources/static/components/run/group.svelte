@@ -1,13 +1,6 @@
-<!-- view group matches and ranking -->
-<!-- matches and clickable for edit -->
-<!-- uses :
-  - match_preview
-    - match ?
-  - ranking
--->
-
-<!-- TODO -->
-
+<style type="text/scss">
+@import "../../styles/global.scss";
+</style>
 <script>
 
   import {tools} from './tools.js';

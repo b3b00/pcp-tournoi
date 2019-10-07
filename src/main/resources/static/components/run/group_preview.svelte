@@ -1,10 +1,5 @@
-<!-- preview group (ranked) in group phase view -->
-<!-- clickable : opens group detail -->
-<!-- uses :
-  - 0
--->
-
 <style type="text/scss">
+@import "../../styles/global.scss";
   </style>
   
   <script>

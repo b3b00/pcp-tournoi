@@ -1,8 +1,6 @@
-<!-- display ranked temas in a group -->
-<!-- uses :
-  - 0
--->
-
+<style type="text/scss">
+@import "../../styles/global.scss";
+</style>
 <script>
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';

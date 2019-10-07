@@ -3,6 +3,7 @@
   - 0 
 -->
 <style type="text/scss">
+@import "../../styles/global.scss";
     td.teamName {
         font-weight: bold;
     }

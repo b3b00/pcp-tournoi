@@ -1,10 +1,5 @@
 <style type="text/scss">
-.refresh {
-  cursor:pointer;
-  font-size: x-large;
-  padding-left: 16px;
-  padding-bottom: 16px;
-}
+@import "../../styles/global.scss";
 </style>
 <script>
 
