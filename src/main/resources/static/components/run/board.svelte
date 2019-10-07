@@ -50,7 +50,7 @@
 
 </script>
 <div class="w3-container" style="clear:both">
-<span style='' class='fa fa-refresh w3-display-center refresh' on:click={refresh}>&nbsp;</span>
+<span  class='fa fa-refresh w3-display-center refresh' on:click={refresh}>&nbsp;</span>
 </div>
 {#if (board.isDone)}
 <ol>
