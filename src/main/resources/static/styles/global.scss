@@ -68,6 +68,10 @@ input, button, select, textarea {
 	border-radius: 2px;
 }
 
+.awesome {
+	font-family: FontAwesome !important;
+}
+
 input:disabled {
 	color: #ccc;
 }

@@ -247,7 +247,7 @@
 <!-- action sur les équipes et joueurs -->
 <div class="w3-container w3-cell" style="width:10%">
    
-    <button on:click={buildGroup} class="fa fa-arrow-left">        
+    <button on:click={buildGroup} class="awesome fa fa-arrow-left">        
     </button>
 
 </div>
