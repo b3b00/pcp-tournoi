@@ -26,19 +26,19 @@
 
 
 
-    const save = "fa fa-check";
+    const save = "fa fa-check awesome";
     const nosave = "hide";
 
-    const cancel = "fa fa-close";
+    const cancel = "fa fa-close awesome";
     const nocancel = "hide";
 
-    const trash = "fa fa-trash";
+    const trash = "fa fa-trash awesome";
     const notrash = "hide";
 
 
-    let trashClass = "fa fa-trash";
-    let saveClass = "fa fa-check";
-    let cancelClass = "fa fa-close";
+    let trashClass = "fa fa-trash awesome";
+    let saveClass = "fa fa-check awesome";
+    let cancelClass = "fa fa-close awesome";
 
     
 
