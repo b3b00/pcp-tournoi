@@ -41,6 +41,8 @@ public class Tournament implements IPingModel  {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
+    private String Owner;
+
     public Tournament() {
         players = new ArrayList<Player>();
         teams = new ArrayList<Team>();
@@ -190,6 +192,20 @@ public class Tournament implements IPingModel  {
             this.groups = new ArrayList<Group>();
         }
         this.groups.addAll(groups);
+    }
+
+    /**
+     * @return the owner
+     */
+    public String getOwner() {
+        return Owner;
+    }
+
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(String owner) {
+        Owner = owner;
     }
 
 }

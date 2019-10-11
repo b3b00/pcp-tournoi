@@ -23,9 +23,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 @RestController
-public class PlayersController {
+public class PlayersController extends PCPController {
 
     @Autowired
     PlayerDao playerDao;
@@ -40,14 +41,15 @@ public class PlayersController {
     TeamDao teamDao;
 
     @GetMapping(value = "/tournament/{tournamentId}/players")
-    public List<Player> getAll(@PathVariable int tournamentId) {
+    public List<Player> getAll(@PathVariable int tournamentId, final Authentication authentication) {
+        checkIdentity(authentication);
         Tournament tournament = tournamentDao.findById(tournamentId);
         List<Player> players = tournament.getPlayers();
         return players;
     }
 
     @PostMapping(value = "/tournament/{tournamentId}/players")
-    public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player) {
+    public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player, final Authentication authentication) {
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
             player.setTournament(tournament);
@@ -62,7 +64,7 @@ public class PlayersController {
     }
 
     @PutMapping(value = "/tournament/{tournamentId}/players")
-    public Player updatePlayer(@PathVariable int tournamentId, @RequestBody Player player) {
+    public Player updatePlayer(@PathVariable int tournamentId, @RequestBody Player player, final Authentication authentication) {
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
             player.setTournament(tournament);
@@ -74,7 +76,7 @@ public class PlayersController {
     }
 
     @DeleteMapping("/tournament/{tournamentId}/players/{playerId}")
-    public void deletePlayer(@PathVariable int tournamentId, @PathVariable int playerId) {
+    public void deletePlayer(@PathVariable int tournamentId, @PathVariable int playerId, final Authentication authentication) {
         try {
             Player player = playerDao.findById(playerId);
             Tournament tournament = tournamentDao.findById(tournamentId);
@@ -93,7 +95,7 @@ public class PlayersController {
     }
 
     @PostMapping("/tournaments/{tournamentId}/players/upload")
-    public ResponseEntity<?> uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file, final Authentication authentication) {
         try {
             byte[] bytes = file.getBytes();
             String content = new String(bytes);
@@ -114,7 +116,7 @@ public class PlayersController {
     }
 
     @GetMapping("/tournaments/{tournamentId}/players/download") 
-    public ResponseEntity<?> exportPlayers(@PathVariable int tournamentId) {
+    public ResponseEntity<?> exportPlayers(@PathVariable int tournamentId, final Authentication authentication) {
         Tournament tournament = tournamentDao.findById(tournamentId);
         String csv = playersService.playersToCSV(tournament);
         HttpHeaders responseHeaders = new HttpHeaders();

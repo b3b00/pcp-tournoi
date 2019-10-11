@@ -18,13 +18,14 @@ import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.Options;
 import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TournamentController {
+public class TournamentController extends PCPController {
 
     @Autowired
     OptionsDao optionsDao;
@@ -48,13 +49,15 @@ public class TournamentController {
     RunService runService;
 
     @GetMapping(value = "/tournaments")
-    public List<Tournament> all() {
+    public List<Tournament> all(final Authentication authentication) {
+        checkIdentity(authentication);
         List<Tournament> tournaments = tournamentDao.findAll();
         return tournaments;
     }
 
     @GetMapping(value = "/tournaments/{id}")
-    public Tournament getTournament(@PathVariable int id) {
+    public Tournament getTournament(@PathVariable int id, final Authentication authentication) {
+        checkIdentity(authentication);
         Tournament tournament = tournamentDao.findById(id);
         runService.computeTeamReferenceLabels(tournament);
         if (tournament.getRun() != null && tournament.getRun().getGroupPhase() != null) {
@@ -81,7 +84,9 @@ public class TournamentController {
                            @PathParam("name")String name,
                            @PathParam("mode") String type,
                            @PathParam("play") boolean play,
-                           @PathParam("grpsize") int grpsize) {
+                           @PathParam("grpsize") int grpsize,
+                           final Authentication authentication) {
+        checkIdentity(authentication);
         Mode mode = type != null ? (type == "S" ? Mode.SINGLE : Mode.DOUBLE) : Mode.SINGLE;
         Options options = optionsDao.findByMode(mode);
         Options optionsreal = new Options();
@@ -105,19 +110,22 @@ public class TournamentController {
 
 
     @DeleteMapping("/tournaments/{tournamentId}/run")
-    public Tournament deleteRun(@PathVariable int tournamentId) {
+    public Tournament deleteRun(@PathVariable int tournamentId, final Authentication authentication) {
+        checkIdentity(authentication);
         runService.deleteRunForTournament(tournamentId);
         return tournamentDao.findById(tournamentId);
     }
 
     @DeleteMapping("/tournament/{tournamentId}")
-    public List<Tournament> deleteTournament(@PathVariable int tournamentId) {
+    public List<Tournament> deleteTournament(@PathVariable int tournamentId, final Authentication authentication) {
+        checkIdentity(authentication);
         tournamentDao.deleteById(tournamentId);
-        return all();
+        return all(authentication);
     }
 
     @GetMapping("/tournaments/deleteAll")
-    public void deleteAll() {
+    public void deleteAll(final Authentication authentication) {
+        checkIdentity(authentication);
         try {
             List<Team> teams = teamDao.findAll();
             teams.stream().forEach(t -> {
