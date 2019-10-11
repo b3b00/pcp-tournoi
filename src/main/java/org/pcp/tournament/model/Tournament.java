@@ -8,6 +8,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +42,8 @@ public class Tournament implements IPingModel  {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    private String Owner;
+    @JsonIgnore
+    private String owner;
 
     public Tournament() {
         players = new ArrayList<Player>();
@@ -198,14 +200,14 @@ public class Tournament implements IPingModel  {
      * @return the owner
      */
     public String getOwner() {
-        return Owner;
+        return owner;
     }
 
     /**
      * @param owner the owner to set
      */
     public void setOwner(String owner) {
-        Owner = owner;
+        this.owner = owner;
     }
 
 }

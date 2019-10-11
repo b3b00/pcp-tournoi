@@ -18,6 +18,8 @@ import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.Options;
 import org.pcp.tournament.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,16 +51,26 @@ public class TournamentController extends PCPController {
     RunService runService;
 
     @GetMapping(value = "/tournaments")
-    public List<Tournament> all(final Authentication authentication) {
-        checkIdentity(authentication);
-        List<Tournament> tournaments = tournamentDao.findAll();
-        return tournaments;
+    
+    public ResponseEntity<?> all(Authentication authentication) {
+        Identity identity = checkIdentity(authentication);checkIdentity(authentication);
+        if (identity == null || !identity.IsOk()) {
+            return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
+        }
+        List<Tournament> tournaments = tournamentDao.findByOwner(identity.getId());
+        return new ResponseEntity<List<Tournament>>(tournaments,HttpStatus.OK);
     }
 
     @GetMapping(value = "/tournaments/{id}")
-    public Tournament getTournament(@PathVariable int id, final Authentication authentication) {
-        checkIdentity(authentication);
+    public ResponseEntity<?> getTournament(@PathVariable int id, final Authentication authentication) {
+        Identity identity = checkIdentity(authentication);
+        if (identity == null || !identity.IsOk()) {
+            return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
+        }
         Tournament tournament = tournamentDao.findById(id);
+        if (!tournament.getOwner().equals(identity.getId())) {
+            return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
+        }
         runService.computeTeamReferenceLabels(tournament);
         if (tournament.getRun() != null && tournament.getRun().getGroupPhase() != null) {
             GroupPhase groupPhase = tournament.getRun().getGroupPhase();
@@ -76,7 +88,7 @@ public class TournamentController extends PCPController {
                 tournament = tournamentDao.findById(tournament.getId());
             }
         }
-        return tournament;
+        return new ResponseEntity<Tournament>(tournament,HttpStatus.OK);
     }
 
     @GetMapping(value="/tournaments/fake")
@@ -111,21 +123,27 @@ public class TournamentController extends PCPController {
 
     @DeleteMapping("/tournaments/{tournamentId}/run")
     public Tournament deleteRun(@PathVariable int tournamentId, final Authentication authentication) {
-        checkIdentity(authentication);
+        Identity identity = checkIdentity(authentication);
         runService.deleteRunForTournament(tournamentId);
         return tournamentDao.findById(tournamentId);
     }
 
     @DeleteMapping("/tournament/{tournamentId}")
-    public List<Tournament> deleteTournament(@PathVariable int tournamentId, final Authentication authentication) {
-        checkIdentity(authentication);
-        tournamentDao.deleteById(tournamentId);
+    public ResponseEntity<?> deleteTournament(@PathVariable int tournamentId, final Authentication authentication) {
+        
+        Identity identity = checkIdentity(authentication);
+        if (identity == null || !identity.IsOk()) {
+            return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
+        }
+        
+            tournamentDao.deleteById(tournamentId);
+        
         return all(authentication);
     }
 
     @GetMapping("/tournaments/deleteAll")
     public void deleteAll(final Authentication authentication) {
-        checkIdentity(authentication);
+        Identity identity = checkIdentity(authentication);
         try {
             List<Team> teams = teamDao.findAll();
             teams.stream().forEach(t -> {
