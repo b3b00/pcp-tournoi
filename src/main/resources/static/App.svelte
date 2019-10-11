@@ -86,7 +86,9 @@
 		<div class={(state==STATE.RUN) ? selectedStyle : notSelectedStyle } on:click={()=>
 			changeState(STATE.RUN)}>Jeu</div>
 			
-		<a  href="help/help.html" class="w3-bar-item fa fa-question-circle" style="font-size: 28px; margin-left:48px" >&nbsp;</a>
+		<a  href="help/help.html" class="w3-bar-item fa fa-question-circle" style="color:white;font-size: 28px; margin-left:48px" >&nbsp;</a>
+
+		<a  href="/logout" class="w3-bar-item fa fa-sign-out" style="color:white;font-size: 28px; margin-left:48px" >&nbsp;</a>
 	
 	
 </div>

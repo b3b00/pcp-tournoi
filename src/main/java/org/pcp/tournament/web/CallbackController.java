@@ -28,7 +28,7 @@ public class CallbackController {
 
     public CallbackController() {
         this.redirectOnFail = "/login";
-        this.redirectOnSuccess = "/login";
+        this.redirectOnSuccess = "/index.html";
     }
 
     @RequestMapping(value = "/callback", method = RequestMethod.GET)
