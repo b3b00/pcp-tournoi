@@ -87,5 +87,5 @@
             {/if}
         </tr>
     </table>
-    <button style="margin-left:32px" class="w3-button w3-section pcp-color1 w3-ripple" on:click={save}>close</button>
+    <button style="margin-left:32px" class="w3-button w3-section pcp-color1 w3-ripple" on:click={save}>OK</button>
 </div>
