@@ -11,6 +11,7 @@ import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.Options;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.dto.NameAndOptions;
+import org.pcp.tournament.web.exception.PCPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,11 +58,8 @@ public class OptionsController extends PCPController {
 
 
     @PostMapping(value = "/tournament/options")
-    public ResponseEntity<?> PostOptions(@RequestBody NameAndOptions nameAndOptions, final Authentication authentication) {
-        Identity identity = checkIdentity(authentication);
-        if (!identity.IsOk()) {
-            return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
-        }        
+    public ResponseEntity<?> PostOptions(@RequestBody NameAndOptions nameAndOptions, final Authentication authentication) throws PCPException {
+        Identity identity = checkIdentity(authentication);            
         try {
             Options choosedOptions = nameAndOptions.getOptions();
 
@@ -89,7 +87,8 @@ public class OptionsController extends PCPController {
    
 
     @PutMapping(value = "/tournament/{id}/options")
-    public ResponseEntity<?> PutOptions(@RequestBody NameAndOptions nameAndOptions, @PathVariable int id, final Authentication authentication) {
+    public ResponseEntity<?> PutOptions(@RequestBody NameAndOptions nameAndOptions, @PathVariable int id, final Authentication authentication) throws PCPException {
+        checkIdentity(authentication,id);
         try {
             Tournament tournament = tournamentDao.findById(id);
             if (tournament != null) {

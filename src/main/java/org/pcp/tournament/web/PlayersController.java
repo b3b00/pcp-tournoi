@@ -9,6 +9,8 @@ import org.pcp.tournament.model.Player;
 import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.service.PlayersService;
+import org.pcp.tournament.web.exception.PCPError;
+import org.pcp.tournament.web.exception.PCPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +43,7 @@ public class PlayersController extends PCPController {
     TeamDao teamDao;
 
     @GetMapping(value = "/tournament/{tournamentId}/players")
-    public List<Player> getAll(@PathVariable int tournamentId, final Authentication authentication) {
+    public List<Player> getAll(@PathVariable int tournamentId, final Authentication authentication) throws PCPException {
         checkIdentity(authentication);
         Tournament tournament = tournamentDao.findById(tournamentId);
         List<Player> players = tournament.getPlayers();
@@ -49,7 +51,8 @@ public class PlayersController extends PCPController {
     }
 
     @PostMapping(value = "/tournament/{tournamentId}/players")
-    public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player, final Authentication authentication) {
+    public Player addPlayer(@PathVariable int tournamentId, @RequestBody Player player, final Authentication authentication) throws PCPException {
+        checkIdentity(authentication, tournamentId);
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
             player.setTournament(tournament);
@@ -64,7 +67,8 @@ public class PlayersController extends PCPController {
     }
 
     @PutMapping(value = "/tournament/{tournamentId}/players")
-    public Player updatePlayer(@PathVariable int tournamentId, @RequestBody Player player, final Authentication authentication) {
+    public Player updatePlayer(@PathVariable int tournamentId, @RequestBody Player player, final Authentication authentication) throws PCPException {
+        checkIdentity(authentication,tournamentId);
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
             player.setTournament(tournament);
@@ -76,7 +80,8 @@ public class PlayersController extends PCPController {
     }
 
     @DeleteMapping("/tournament/{tournamentId}/players/{playerId}")
-    public void deletePlayer(@PathVariable int tournamentId, @PathVariable int playerId, final Authentication authentication) {
+    public void deletePlayer(@PathVariable int tournamentId, @PathVariable int playerId, final Authentication authentication) throws PCPException {
+        checkIdentity(authentication, tournamentId);
         try {
             Player player = playerDao.findById(playerId);
             Tournament tournament = tournamentDao.findById(tournamentId);
@@ -95,7 +100,8 @@ public class PlayersController extends PCPController {
     }
 
     @PostMapping("/tournaments/{tournamentId}/players/upload")
-    public ResponseEntity<?> uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file, final Authentication authentication) {
+    public ResponseEntity<?> uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file, final Authentication authentication) throws PCPException {
+        checkIdentity(authentication, tournamentId);
         try {
             byte[] bytes = file.getBytes();
             String content = new String(bytes);
@@ -105,18 +111,17 @@ public class PlayersController extends PCPController {
             return new ResponseEntity<Tournament>(tournament,HttpStatus.OK);
         }
         catch(DataIntegrityViolationException dive) {
-            return ResponseEntity.badRequest()
-            .body(getErrorJSON("impossible de charger le fichier "+file.getOriginalFilename()+" : mauvais format."));
+            throw new PCPException(PCPError.BAD_FILE,"impossible de charger le fichier "+file.getOriginalFilename()+" : mauvais format.");
         }
         catch(Exception e) {
-            return ResponseEntity.badRequest()
-            .body(getErrorJSON("impossible de charger le fichier "+file.getOriginalFilename()));
+            throw new PCPException(PCPError.BAD_FILE,"impossible de charger le fichier "+file.getOriginalFilename());
             
         }
     }
 
     @GetMapping("/tournaments/{tournamentId}/players/download") 
-    public ResponseEntity<?> exportPlayers(@PathVariable int tournamentId, final Authentication authentication) {
+    public ResponseEntity<?> exportPlayers(@PathVariable int tournamentId, final Authentication authentication)  throws PCPException {
+        checkIdentity(authentication, tournamentId);
         Tournament tournament = tournamentDao.findById(tournamentId);
         String csv = playersService.playersToCSV(tournament);
         HttpHeaders responseHeaders = new HttpHeaders();

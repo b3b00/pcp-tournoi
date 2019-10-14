@@ -17,6 +17,7 @@ import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.model.Options;
 import org.pcp.tournament.service.RunService;
+import org.pcp.tournament.web.exception.PCPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,21 +53,15 @@ public class TournamentController extends PCPController {
 
     @GetMapping(value = "/tournaments")
     
-    public ResponseEntity<?> all(Authentication authentication) {
-        Identity identity = checkIdentity(authentication);checkIdentity(authentication);
-        if (identity == null || !identity.IsOk()) {
-            return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> all(Authentication authentication) throws PCPException {
+        Identity identity = checkIdentity(authentication);
         List<Tournament> tournaments = tournamentDao.findByOwner(identity.getId());
         return new ResponseEntity<List<Tournament>>(tournaments,HttpStatus.OK);
     }
 
     @GetMapping(value = "/tournaments/{id}")
-    public ResponseEntity<?> getTournament(@PathVariable int id, final Authentication authentication) {
-        Identity identity = checkIdentity(authentication);
-        if (identity == null || !identity.IsOk()) {
-            return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<?> getTournament(@PathVariable int id, final Authentication authentication) throws PCPException {
+        Identity identity = checkIdentity(authentication,id);
         Tournament tournament = tournamentDao.findById(id);
         if (!tournament.getOwner().equals(identity.getId())) {
             return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
@@ -97,7 +92,7 @@ public class TournamentController extends PCPController {
                            @PathParam("mode") String type,
                            @PathParam("play") boolean play,
                            @PathParam("grpsize") int grpsize,
-                           final Authentication authentication) {
+                           final Authentication authentication) throws PCPException {
         checkIdentity(authentication);
         Mode mode = type != null ? (type == "S" ? Mode.SINGLE : Mode.DOUBLE) : Mode.SINGLE;
         Options options = optionsDao.findByMode(mode);
@@ -122,16 +117,16 @@ public class TournamentController extends PCPController {
 
 
     @DeleteMapping("/tournaments/{tournamentId}/run")
-    public Tournament deleteRun(@PathVariable int tournamentId, final Authentication authentication) {
-        Identity identity = checkIdentity(authentication);
+    public Tournament deleteRun(@PathVariable int tournamentId, final Authentication authentication) throws PCPException {
+        checkIdentity(authentication,tournamentId);
         runService.deleteRunForTournament(tournamentId);
         return tournamentDao.findById(tournamentId);
     }
 
     @DeleteMapping("/tournament/{tournamentId}")
-    public ResponseEntity<?> deleteTournament(@PathVariable int tournamentId, final Authentication authentication) {
+    public ResponseEntity<?> deleteTournament(@PathVariable int tournamentId, final Authentication authentication) throws PCPException  {
         
-        Identity identity = checkIdentity(authentication);
+        Identity identity = checkIdentity(authentication, tournamentId);
         if (identity == null || !identity.IsOk()) {
             return new ResponseEntity<String>("non authentitfié.", HttpStatus.FORBIDDEN);
         }
@@ -142,8 +137,8 @@ public class TournamentController extends PCPController {
     }
 
     @GetMapping("/tournaments/deleteAll")
-    public void deleteAll(final Authentication authentication) {
-        Identity identity = checkIdentity(authentication);
+    public void deleteAll(final Authentication authentication) throws PCPException {
+        checkIdentity(authentication);
         try {
             List<Team> teams = teamDao.findAll();
             teams.stream().forEach(t -> {
