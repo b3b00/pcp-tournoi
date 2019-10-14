@@ -58,33 +58,6 @@
         tournamentOptions.isPreset = false;
     }
 
-    function loadTournament(id) {
-        fetch(`/tournaments/${id}`,
-            {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: "GET"
-            })
-            .then(function (res) {
-                res.json().then(
-                    function (tournament) {
-                        tournamentId = tournament.id;
-                        const opt = tournament.options;
-                        tournamentOptions = opt;                        
-                        tournamentName = tournament.name;
-                        tournamentDate = tournament.date;
-                        dispatch("setTournament", { 'tournamentId': id })
-                    }
-                );
-
-            })
-            .catch(function (res) {
-                // TODO
-            })
-    }
-
     function saveTournament() {
             
         if (tournamentName.length === undefined || tournamentName == null || tournamentName.length == 0) {
