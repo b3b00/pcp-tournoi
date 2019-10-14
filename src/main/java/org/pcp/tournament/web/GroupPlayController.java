@@ -9,6 +9,7 @@ import org.pcp.tournament.dao.TournamentDao;
 import org.pcp.tournament.model.GroupPhase;
 import org.pcp.tournament.model.GroupPlay;
 import org.pcp.tournament.model.Tournament;
+import org.pcp.tournament.model.TournamentBoard;
 import org.pcp.tournament.model.dto.TeamRanking;
 import org.pcp.tournament.service.MatchService;
 import org.pcp.tournament.service.RunService;
@@ -59,19 +60,21 @@ public class GroupPlayController {
     @GetMapping(value = "/groupPhase/{groupPhaseId}")
     public ResponseEntity<?> getGroupPhase(@PathVariable int groupPhaseId) {
         GroupPhase groupPhase = groupPhaseDao.findById(groupPhaseId);
+
         if (groupPhase != null) {
             for (GroupPlay group : groupPhase.getGroups()) {
-                System.out.println("computing ranking for group "+group.getGroup().getName());
+                System.out.println("computing ranking for group " + group.getGroup().getName());
                 group.computeRanking();
                 System.out.println("ranking is ");
-                
-                for (TeamRanking    rank : group.getRankings()) {
+
+                for (TeamRanking rank : group.getRankings()) {
                     System.out.println(rank.toString());
                 }
             }
             return new ResponseEntity<GroupPhase>(groupPhase, HttpStatus.OK);
         }
-        return new ResponseEntity<String>("la phase de poule " + groupPhaseId + " n'existe pas.", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<String>("la phase de poule " + groupPhaseId + " n'existe pas.",
+                HttpStatus.BAD_REQUEST);
     }
 
     // endregion
@@ -83,8 +86,21 @@ public class GroupPlayController {
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             try {
+                
+
                 tournament = runService.buildGroupPhase(tournament);
-                                return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+                tournament = tournamentDao.findById(tournamentId);
+                TournamentBoard board = tournament.getRun().getBoard();
+                
+                if (board == null || board.getBoards() != null || board.getBoards().size() == 0) {
+                    
+                    runService.buildMainBoard(tournament);
+                    runService.buildSecondBoard(tournament);
+                    tournament = tournamentDao.findById(tournamentId);
+                }
+
+                return new ResponseEntity<Tournament>(tournament, HttpStatus.OK);
+
             } catch (Exception e) {
                 return new ResponseEntity<String>("error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
