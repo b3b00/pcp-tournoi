@@ -68,7 +68,12 @@
          refresh();
       }
       else {
-        window.alert('Vous devez nommer le nouveau tableau\net sélectionner un nombre puissance de 2 d\'équipes.');
+        alertMessage.update(alertMess => { return {
+                        "level" : LEVEL.WARN,
+                        "message" : 'Vous devez nommer le nouveau tableau\net sélectionner un nombre puissance de 2 d\'équipes.',
+                        "displayed" : true
+                        }
+                    });
       }
       
     }

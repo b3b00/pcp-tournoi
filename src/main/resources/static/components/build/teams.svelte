@@ -13,7 +13,7 @@
 <script>
 
     import Team from './team.svelte';
-    
+    import { alertMessage, LEVEL } from '../alertStore.js';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import {teamtools, modes} from './teams.js';
@@ -71,7 +71,12 @@
             }
             else {
                 if (!(tournament !== null && tournament !== undefined && tournament.players !== undefined && tournament.players.length > 0 && tournament.players.length % 2 == 0)) {
-                    window.alert("nombre de joueurs impair");
+                    alertMessage.update(alertMess => { return {
+                        "level" : LEVEL.WARN,
+                        "message" : `nombre de joueurs impair : ${tournament.players.length} `,
+                        "displayed" : true
+                        }
+                    });
                     possible = false;
                 }
             }

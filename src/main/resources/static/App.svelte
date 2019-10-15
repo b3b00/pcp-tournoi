@@ -25,7 +25,9 @@
 	import Build from './components/build/Build.svelte';
 	import Run from './components/run/run.svelte';
 	import { tools } from './components/run/tools.js';
-
+	import Toast  from './components/Toast.svelte';
+	import { alertMessage, LEVEL } from './components/alertStore.js';
+	
 
 	let tournamentId = -1;
 
@@ -90,8 +92,8 @@
 
 		<a  href="/logout" class="w3-bar-item fa fa-sign-out" style="color:white;font-size: 28px; margin-left:48px" >&nbsp;</a>
 	
-	
 </div>
+<Toast/>
 
 
 
