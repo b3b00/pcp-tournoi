@@ -14,7 +14,7 @@
 }
 
 .info {
-    background-color : blue;
+    background-color : green;
     color: white;
     display : block;
 }
@@ -39,18 +39,19 @@
 	const unsubscribe = alertMessage.subscribe(value => {
 		message = value.message;
         displayed = value.displayed;
+        const w3class = "w3-display-middle w3-display-container w3-button w3-half w3-center";
         if (!displayed) {
             toastClass = "hide";
         }
         else {
             if(value.level == LEVEL.INFO) {
-                    toastClass = "w3-container info ";
+                    toastClass = w3class+" info ";
                 }
                 else if(value.level == LEVEL.WARN) {
-                    toastClass = "w3-container warn";
+                    toastClass = w3class+" warn";
                 }
                 else if(value.level == LEVEL.ERROR) {
-                    toastClass = "w3-container error";
+                    toastClass = w3class+" error";
                 }
                 else {
                     toastClass = "info";
@@ -68,8 +69,9 @@
     }
 
 </script>
-
+<div class="w3-display-container">
 <div class={toastClass}>
     <span>{message}</span>
     <span on:click={() => {hideToast()}} class="w3-button w3-display-right">&times;</span>
+</div>
 </div>
