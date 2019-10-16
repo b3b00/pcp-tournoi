@@ -1,5 +1,5 @@
 import { createEventDispatcher } from "svelte";
-import { alertMessage, LEVEL } from '../alertStore.js';
+import { alertError } from '../alertStore.js';
 
 export const tools = {
   mover : function (dispatch) {
@@ -77,12 +77,7 @@ export const tools = {
     }
     else {
       const body = await res.body;
-      alertMessage.update(alertMess => { return {
-          "level" : LEVEL.WARN,
-          "message" : `Erreur lors de la création du tournoi : ${res.status}\n${body}`,
-          "displayed" : true
-        }
-      });
+      alertError(`Erreur lors de la création du tournoi : ${res.status}\n${body}`);
       
       return await this.fetchTournament(tournamentId);
     }

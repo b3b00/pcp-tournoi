@@ -26,8 +26,6 @@
 	import Run from './components/run/run.svelte';
 	import { tools } from './components/run/tools.js';
 	import Toast  from './components/Toast.svelte';
-	import { alertMessage, LEVEL } from './components/alertStore.js';
-	
 
 	let tournamentId = -1;
 

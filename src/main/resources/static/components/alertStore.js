@@ -11,3 +11,24 @@ export const alertMessage = writable({
     displayed:false,
     level:LEVEL.INFO
 });
+
+export function alert(level, message) {
+    alertMessage.update(alertMess => { return {
+        "level" : level,
+        "message" : message,
+        "displayed" : true
+        }
+        });
+}
+
+export function alertInfo(message) {
+   alert(LEVEL.INFO,message);
+}
+
+export function alertWarn(message) {
+    alert(LEVEL.WARN,message);
+ }
+
+ export function alertError(message) {
+    alert(LEVEL.ERROR,message);
+ }

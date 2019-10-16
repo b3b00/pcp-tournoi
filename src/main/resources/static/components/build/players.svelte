@@ -7,7 +7,7 @@
     import { createEventDispatcher } from 'svelte';
     import Player from './player.svelte';
     import Dropzone from "svelte-dropzone/dropzone.svelte";
-    import { alertMessage, LEVEL } from '../alertStore.js';
+    import { alertError } from '../alertStore.js';
 
     const dispatch = createEventDispatcher();
 
@@ -92,12 +92,7 @@
         }
         else {
             body = await res.json();
-            alertMessage.update(alertMess => { return {
-                "level" : LEVEL.WARN,
-                "message" : `Erreur lors de l'import : ${res.status}\n${body.message}`,
-                "displayed" : true
-            }
-            });
+            alertError(`Erreur lors de l'import : ${res.status}\n${body.message}`);
            
         }
         

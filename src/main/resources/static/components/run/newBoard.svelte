@@ -9,6 +9,7 @@
   import { createEventDispatcher } from 'svelte';
   import Team from '../build/team.svelte';
   import {teamtools, modes} from '../build/teams.js';
+  import { alertWarn } from '../alertStore.js';
 
 
   const dispatch = createEventDispatcher();
@@ -68,12 +69,7 @@
          refresh();
       }
       else {
-        alertMessage.update(alertMess => { return {
-                        "level" : LEVEL.WARN,
-                        "message" : 'Vous devez nommer le nouveau tableau\net sélectionner un nombre puissance de 2 d\'équipes.',
-                        "displayed" : true
-                        }
-                    });
+        alertWarn('Vous devez nommer le nouveau tableau\net sélectionner un nombre puissance de 2 d\'équipes.');
       }
       
     }
