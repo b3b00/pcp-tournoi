@@ -81,7 +81,7 @@
 {/each}
   
 <div class="clickable item " on:click={() => {moveMe("newboard", "nouveau tableau","board",-1);}}>
-  nouveau tableau
+  <span  class="w3-button w3-large w3-circle w3-xlarge w3-ripple pcp-color1" title="nouveau tournoi" style="z-index:0;cursor:pointer" href="#">+</span>
 </div>
 </div>
 <div class="column">
