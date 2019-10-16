@@ -22,6 +22,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { beforeUpdate, afterUpdate } from 'svelte';
 
+	import { alertError } from './components/alertStore.js';
 	import Build from './components/build/Build.svelte';
 	import Run from './components/run/run.svelte';
 	import { tools } from './components/run/tools.js';
@@ -42,7 +43,13 @@
 
 	async function fetchTournaments() {
 		const res = await fetch('/tournaments');
-		tournaments = await res.json();
+		if (res.status >= 200 && res.status <= 299) {
+			tournaments = await res.json();
+		}
+		else {
+			body = await res.json();
+			alertError(`erreur lors du chargement des tournois ${res.status}<br/>${body.message}`)
+		}
 	}
 
 	async function changeState(newState) {

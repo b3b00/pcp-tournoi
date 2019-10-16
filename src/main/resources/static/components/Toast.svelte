@@ -70,8 +70,8 @@
 
 </script>
 <div class="w3-display-container">
-<div class={toastClass}>
-    <span>{message}</span>
+<div class={toastClass} on:click={() => {hideToast()}}>
+    <span on:click={() => {hideToast()}}>{@html message}</span>
     <span on:click={() => {hideToast()}} class="w3-button w3-display-right">&times;</span>
 </div>
 </div>

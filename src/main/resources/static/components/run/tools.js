@@ -77,7 +77,7 @@ export const tools = {
     }
     else {
       const body = await res.body;
-      alertError(`Erreur lors de la création du tournoi : ${res.status}\n${body}`);
+      alertError(`Erreur lors de la création du tournoi : ${res.status}<br/>${body}`);
       
       return await this.fetchTournament(tournamentId);
     }

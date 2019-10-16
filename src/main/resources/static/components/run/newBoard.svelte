@@ -69,7 +69,7 @@
          refresh();
       }
       else {
-        alertWarn('Vous devez nommer le nouveau tableau\net sélectionner un nombre puissance de 2 d\'équipes.');
+        alertWarn('Vous devez nommer le nouveau tableau<br/>et sélectionner un nombre d\'équipes puissance de 2.');
       }
       
     }
