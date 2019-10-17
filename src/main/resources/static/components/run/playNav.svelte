@@ -27,11 +27,15 @@
 
   export let tournamentId;
 
-  //let moveMe;
+  let moveMe;
 
   onMount(async () => {
-    //moveMe = tools.mover(dispatch);    
+    moveMe = tools.mover(dispatch);    
   });
+
+  function openGroup(groupPlay) {     
+        moveMe("group", "poule "+groupPlay.group.name,"group",groupPlay.id);
+    }
 
 
   function openSection(id) {
@@ -55,7 +59,7 @@
   <div id="Groups" class="w3-container w3-hide">
     {#if tournament !== null && tournament !== undefined && tournament.run !== undefined && tournament.run.groupPhase !== undefined && tournament.run.groupPhase.groups !== undefined}
       {#each tournament.run.groupPhase.groups as group} 
-        <h4>poule {group.group.name} {@html getIsDoneflag(group)}</h4>
+        <h4 on:click={() => {openGroup(group)}}>poule {group.group.name} {@html getIsDoneflag(group)}</h4>
       {/each}
     {/if}
   </div> <!-- poules -->
@@ -79,7 +83,7 @@
     <div id="RunningBoards" class="w3-container w3-hide">
       {#each tournament.run.board.boards as board}
         {#if (!board.isDone)}
-          <h4>{board.name}</h4>
+          <h4 on:click={() => {moveMe("board", board.name,"board",board.id);}} style="cursor:pointer">{board.name}</h4>
         {/if}
       {/each}
     </div> <!-- tableaux en cours -->
@@ -88,7 +92,7 @@
     <div id="EndedBoards" class="w3-container w3-hide">
      {#each tournament.run.board.boards as board}
         {#if (board.isDone)}
-          <h4>{board.name}</h4>
+          <h4 on:click={() => {moveMe("board", board.name,"board",board.id);}} style="cursor:pointer" >{board.name}</h4>
         {/if}
       {/each}
     </div> <!-- tableaux finis -->

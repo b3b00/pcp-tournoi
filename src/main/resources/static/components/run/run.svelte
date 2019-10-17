@@ -119,11 +119,11 @@
 
 <div class="w3-display-container ">
 
-    <div class="w3-display-container w3-quarter w3-left">        
-        <PlayNav tournament={tournament}/>
+    <div class="w3-display-container w3-left" style="width:15%">        
+        <PlayNav tournament={tournament} on:move={moveScreen}/>
     </div>
 
-    <div class="w3-display-container w3-three-quarter w3-right">
+    <div class="w3-display-container  w3-right" style="width:85%">
         {#if currentItem != null && currentItem !== undefined}
             {#if (currentItem.name == "groupPhase")}
                 <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
