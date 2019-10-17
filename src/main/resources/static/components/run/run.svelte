@@ -25,7 +25,7 @@
             "path": path,
             "id": id
         };
-        currentBreadCrumb = [...currentBreadCrumb, s];
+        currentBreadCrumb = [s];
         currentItem = currentBreadCrumb[currentBreadCrumb.length - 1];
         navigator(null);
     }

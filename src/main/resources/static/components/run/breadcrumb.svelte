@@ -29,12 +29,12 @@
 </script>
 
 <div class="pcp-color2 w3-bar">
-{#each items as item,i}
+<!--{#each items as item,i}
 
     <div class="w3-bar-item pcp-color2 bread-item" on:click={() => {onClick(i)}}>
     <span class="fas fa-angle-right">&nbsp;</span>
     <span>{item.label}</span>
     </div>
 
-{/each}
+{/each}-->
 </div>
