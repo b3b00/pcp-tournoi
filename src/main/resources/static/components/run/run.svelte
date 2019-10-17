@@ -10,6 +10,7 @@
     import Boards from './boards.svelte';
     import Board from './board.svelte';
     import NewBoard from './newBoard.svelte';
+    import PlayNav from './playNav.svelte';
     import { tools } from './tools.js';
     import { onMount } from "svelte";
     import { createEventDispatcher } from "svelte";
@@ -116,35 +117,45 @@
 
 <BreadCrumb items={currentBreadCrumb} on:click={navigator}></BreadCrumb>
 
+<div class="w3-display-container ">
 
-{#if currentItem != null && currentItem !== undefined}
-    {#if (currentItem.name == "groupPhase")}
-        <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
-    {:else if (currentItem.name == "group")}
-        <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
-    {:else if (currentItem.name == "boards")}        
-        <hr>
-       <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
-    {:else if (currentItem.name == "board" && board !== undefined && board !== null)}   
-        <hr>     
-       <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen}></Board> 
-    {:else if (currentItem.name == "newboard" )}        
-       <NewBoard tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></NewBoard> 
-    {:else}
-        <div styyle="clear:both">
-            <ul>
-                <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
-                <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
-            </ul>
-        </div>
-    {/if}
-{:else}
+    <div class="w3-display-container w3-quarter w3-left">
+        <!-- <PlayNav tournament={tournament}/> -->
+        <PlayNav/>
+    </div>
 
-<div styyle="clear:both">
-    <ul>
-        <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
-        <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
-    </ul>
+    <div class="w3-display-container w3-three-quarter w3-right">
+        {#if currentItem != null && currentItem !== undefined}
+            {#if (currentItem.name == "groupPhase")}
+                <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
+            {:else if (currentItem.name == "group")}
+                <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
+            {:else if (currentItem.name == "boards")}        
+                <hr>
+            <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
+            {:else if (currentItem.name == "board" && board !== undefined && board !== null)}   
+                <hr>     
+            <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen}></Board> 
+            {:else if (currentItem.name == "newboard" )}        
+            <NewBoard tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></NewBoard> 
+            {:else}
+                <div style="clear:both">
+                    <ul>
+                        <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
+                        <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
+                    </ul>
+                </div>
+            {/if}
+        {:else}
+
+            <div styyle="clear:both">
+                <ul>
+                    <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
+                    <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
+                </ul>
+            </div>
+        {/if}
+    </div> <!-- content -->
 </div>
 
-{/if}
+
