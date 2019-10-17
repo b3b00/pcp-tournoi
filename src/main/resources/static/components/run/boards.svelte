@@ -71,7 +71,7 @@
   
   <div  class="column">
       <div class="w3-card item" style="font-weight:bold;">En cours :</div>
-      <div class="item">&nbsp;</div>
+      <div class="item" style="text-decoration: none;">&nbsp;</div>
 {#each tournament.run.board.boards as board}
   {#if (!board.isDone)}
     <div class="clickable item "  on:click={() => {moveMe("board", board.name,"board",board.id);}}>
@@ -86,7 +86,7 @@
 </div>
 <div class="column">
 <div class="w3-card item" style="font-weight: bold">Finis : </div>
-<div class="item">&nbsp;</div>
+<div class="item" style="text-decoration: none;">&nbsp;</div>
   {#each tournament.run.board.boards as board}
     {#if (board.isDone)}
       <div class="clickable item "   on:click={() => {moveMe("board", board.name,"board",board.id);}}>
