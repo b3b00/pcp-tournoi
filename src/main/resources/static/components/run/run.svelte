@@ -119,9 +119,8 @@
 
 <div class="w3-display-container ">
 
-    <div class="w3-display-container w3-quarter w3-left">
-        <!-- <PlayNav tournament={tournament}/> -->
-        <PlayNav/>
+    <div class="w3-display-container w3-quarter w3-left">        
+        <PlayNav tournament={tournament}/>
     </div>
 
     <div class="w3-display-container w3-three-quarter w3-right">
@@ -129,7 +128,7 @@
             {#if (currentItem.name == "groupPhase")}
                 <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
             {:else if (currentItem.name == "group")}
-                <Group groupPlay={group} tournament={tournament} on:move={moveScreen} ></Group>
+                <Group groupPlay={group} tournament={tournament} on:move={moveScreen}></Group>
             {:else if (currentItem.name == "boards")}        
                 <hr>
             <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
