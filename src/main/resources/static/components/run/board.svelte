@@ -49,9 +49,16 @@
   
 
 </script>
+
 <div class="w3-container" style="clear:both">
+  <div class="w3-quarter">
 <span class='fa fa-refresh w3-display-center refresh' on:click={refresh}>&nbsp;</span>
 </div>
+<div class="w3-three-quarter w3-xlarge">
+{board.name}
+</div>
+</div>
+
 {#if (board.isDone)}
 <ol>
   {#each getRanking() as r}

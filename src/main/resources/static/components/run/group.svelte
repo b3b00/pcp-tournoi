@@ -38,6 +38,18 @@
 
 </script>
 
+
+<div class="w3-container" style="clear:both">
+  <div class="w3-quarter">
+<span class='fa fa-refresh w3-display-center refresh' on:click={refresh}>&nbsp;</span>
+</div>
+<div class="w3-three-quarter w3-xlarge">  
+  {#if groupPlay !== undefined}
+ Poule {groupPlay.group.name} 
+ {/if}
+</div>
+</div>
+
 <div class="w3-half">
 {#if groupPlay !== undefined}
   {#each groupPlay.matches as match }
