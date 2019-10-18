@@ -219,7 +219,7 @@ public class Match implements IPingModel {
                     i++;
                     label = i+"ème";
                 }
-                label += " du groupe " + items[0];
+                label += " " + items[0];
             }            
             else if (reference.startsWith(roundPrefix)) {
                 label = "/ - /";
