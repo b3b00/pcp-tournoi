@@ -59,8 +59,11 @@
 
 </script>
 <div class="w3-modal-content">
-    <header class="w3-container pcp-color1 w3-padding-16 w3-large w3-center">{@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)} &nbsp;-&nbsp;{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}
-        <span on:click={() => {close()}} class="w3-large" style="float:right;cursor:pointer">&times;</span></header>
+    <header class="w3-container pcp-color1 w3-padding-16 w3-large w3-center">
+        <div class="w3-half">
+        {@html GroupDisplay.getTeamDisplayName(match.left,match.leftTeamReferenceLabel)}</div>
+        <div class="w3-half">{@html GroupDisplay.getTeamDisplayName(match.right,match.rightTeamReferenceLabel)}</div>
+        <span on:click={() => {close()}} class="w3-large" style="float:right;cursor:pointer;">&times;</span></header>
     <table>
         <tr>
             <td></td>
@@ -88,4 +91,5 @@
         </tr>
     </table>
     <button style="margin-left:32px" class="w3-button w3-section pcp-color1 w3-ripple" on:click={save}>OK</button>
+    <button style="margin-right:32px;align-self: auto;float:right" class="w3-button w3-section pcp-color1 w3-ripple" on:click={close}>Annuler</button>
 </div>
