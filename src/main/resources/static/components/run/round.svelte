@@ -48,7 +48,7 @@
     {#each round.matchGroups as group }
     <div class="w3-container w3-card">
       {#each group as g}
-        <MatchPreview match={g} tournament={tournament} on:move on:matchSaved={refresh}/>
+        <MatchPreview on:refreshTour match={g} tournament={tournament} on:move on:matchSaved={refresh}/>
       {/each}
   </div>
 

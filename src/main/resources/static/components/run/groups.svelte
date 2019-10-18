@@ -36,7 +36,7 @@
 {#if phase !== null && phase !== undefined}
 <div class="w3-container">
   {#each phase.groups as group} 
-      <GroupPreview groupPlay={group} on:move></GroupPreview>
+      <GroupPreview groupPlay={group} on:move on:refreshTour></GroupPreview>
   {/each}
 </div>
 {/if}

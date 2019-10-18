@@ -130,7 +130,7 @@
   </div>
 
 <div class="w3-modal w3-animate-zoom" id="match_{match.id}">
-    <Match match={match} tournament={tournament} on:close={() => {saveMatch(match)}}>
+    <Match on:refreshTour match={match} tournament={tournament} on:close={() => {saveMatch(match)}}>
     </Match>
 </div>
 

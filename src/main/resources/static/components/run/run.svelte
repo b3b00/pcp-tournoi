@@ -57,6 +57,7 @@
     });
 
     async function fetchTournament(id) {        
+        console.log("RUN : fetch tournament "+id);
         tournament = await tools.fetchTournament(id);
         tournamentId = tournament.id;
         if (tournament.run == null || tournament.run === undefined) {
@@ -85,6 +86,11 @@
         await navigator(currentBreadCrumb);
     }
 
+
+    async function onRefreshTour(data) {
+        console.log("RUN : refreshing tournament")
+        await fetchTournament(tournamentId);
+    }
     
 
     async function navigator(data) {
@@ -126,17 +132,17 @@
     <div class="w3-display-container  w3-right" style="width:85%">
         {#if currentItem != null && currentItem !== undefined}
             {#if (currentItem.name == "groupPhase")}
-                <GroupPhase phase={groupPhase} on:move={moveScreen}></GroupPhase>
+                <GroupPhase phase={groupPhase} on:move={moveScreen} on:refreshTour={onRefreshTour}></GroupPhase>
             {:else if (currentItem.name == "group")}
-                <Group groupPlay={group} tournament={tournament} on:move={moveScreen}></Group>
+                <Group groupPlay={group} tournament={tournament} on:move={moveScreen} on:refreshTour={onRefreshTour}></Group>
             {:else if (currentItem.name == "boards")}        
                 <hr>
-            <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></Boards> 
+            <Boards tournament={tournament} tournamentId={tournament.id} on:move={moveScreen} on:refreshTour={onRefreshTour}></Boards> 
             {:else if (currentItem.name == "board" && board !== undefined && board !== null)}   
                 <hr>     
-            <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen}></Board> 
+            <Board tournament={tournament} tournamentId={tournament.id} board={board} boardId={board.id} on:move={moveScreen} on:refreshTour={onRefreshTour}></Board> 
             {:else if (currentItem.name == "newboard" )}        
-            <NewBoard tournament={tournament} tournamentId={tournament.id} on:move={moveScreen}></NewBoard> 
+            <NewBoard tournament={tournament} tournamentId={tournament.id} on:move={moveScreen} on:refreshTour={onRefreshTour}></NewBoard> 
             {:else}
                 <div style="clear:both">
                     <ul>

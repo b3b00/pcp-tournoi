@@ -41,7 +41,7 @@
 <div class="w3-half">
 {#if groupPlay !== undefined}
   {#each groupPlay.matches as match }
-    <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
+    <MatchPreview on:refreshTour match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
   {/each}
 {/if}
 </div>
