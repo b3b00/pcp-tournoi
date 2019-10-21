@@ -51,17 +51,6 @@
         <MatchPreview on:refreshTour match={g} tournament={tournament} on:move on:matchSaved={refresh}/>
       {/each}
   </div>
-
-<!--     
-    {#if group.finale}
-    
-    <p>finale</p>
-    {/if}
-    {#if match.semiFinale}
-    <p>petite finale</p>
-    {/if}
-    <MatchPreview match={match} tournament={tournament} on:move on:matchSaved={refresh}/>
-     -->
   {/each}
   {/if}
 
