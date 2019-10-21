@@ -23,6 +23,7 @@
 	import { beforeUpdate, afterUpdate } from 'svelte';
 
 	import { alertError } from './components/alertStore.js';
+	import { tournament, setGlobalTournament } from './components/tournamentStore.js';
 	import Build from './components/build/Build.svelte';
 	import Run from './components/run/run.svelte';
 	import { tools } from './components/run/tools.js';
@@ -66,6 +67,7 @@
 				if (t.id == newTournamentId) {
 					t.selected = true;
 					t.class = selectedStyle;
+					setGlobalTournament(t);
 				}
 				else {
 					t.selected = false;
@@ -85,7 +87,7 @@
 
 </script>
 
-<div class="w3-bar pcp-color1">		
+<div class="w3-bar pcp-color1 w3-display-container">		
 		<div class={(state==STATE.HOME) ? selectedStyle : notSelectedStyle } on:click={()=>
 			changeState(STATE.HOME)}>Accueil</div>
 		<div class={(state==STATE.BUILD) ? selectedStyle : notSelectedStyle } on:click={()=>
@@ -93,7 +95,7 @@
 		<div class={(state==STATE.RUN) ? selectedStyle : notSelectedStyle } on:click={()=>
 			changeState(STATE.RUN)}>Jeu</div>
 		
-		<div></div>			
+		<div class="w3-xlarge w3-bar-item pcp-hover-color1 w3-center w3-display-middle">{#if ($tournament !== undefined && $tournament.name !== undefined)}{$tournament.name}{/if}</div>
 
 		<a  href="help/help.html" class="w3-bar-item fa fa-question-circle" style="color:white;font-size: 28px; margin-left:48px;float:right" >&nbsp;</a>
 
