@@ -97,6 +97,7 @@
 
 	async function deleteTournament(id) {
 		tournaments = await tools.deleteTournament(id);
+		setGlobalTournament(undefined);
 	}
 
 </script>

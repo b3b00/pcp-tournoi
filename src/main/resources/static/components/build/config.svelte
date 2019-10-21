@@ -14,6 +14,7 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import { beforeUpdate, afterUpdate } from 'svelte';    
+    import { setGlobalTournament } from '../tournamentStore.js';
 
     const dispatch = createEventDispatcher();
 
@@ -100,7 +101,7 @@
 
     async function openTournament (id) {
         tournamentId = id;
-        
+        await fetchTournament(id);
         dispatch("setTournament", { 'tournamentId': id })
     }
 
@@ -122,6 +123,7 @@
         tournamentName = tournament.name;
         tournamentDate = tournament.date;
         tournamentOptions = tournament.options;
+        setGlobalTournament(tournament);
     }
 
     onMount(async () => {
