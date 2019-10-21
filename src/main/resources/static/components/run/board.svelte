@@ -20,16 +20,27 @@
 
   export let boardId;
 
+  let displayedRounds;
+
   let moveMe;
 
   onMount(async () => {
     moveMe = tools.mover(dispatch);
+    computedisplayedRounds();
   });
 
   async function refresh(data) {
     let boardId = board.id;
     let newBoard = await tools.fetchBoard(tournamentId, boardId);
     board = newBoard;
+    computedisplayedRounds();
+  }
+
+  function computedisplayedRounds() {
+    console.log("computing displayed rounds");
+    const notDone = board.rounds.filter(r => !r.isDone);
+    console.log()
+    displayedRounds = notDone.slice(0, 3);
   }
 
   function getRanking() {
@@ -67,8 +78,8 @@
   </ol>
 {/if}
 <div class="w3-container">
-{#if board !== null && board!== undefined}
-{#each board.rounds as round}
+{#if displayedRounds !== null && displayedRounds!== undefined}
+{#each displayedRounds as round}
 <Round round={round} roundId={round.id} tournamentId={tournamentId} tournament={tournament} on:refresh={refresh}></Round>
 {/each} 
 {:else}
