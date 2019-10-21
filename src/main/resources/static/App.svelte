@@ -33,10 +33,13 @@
 
 	let tournaments = [];
 
+	let user = {};
+
 	let state = STATE.HOME;
 
 	onMount(async () => {
 		fetchTournaments();
+		fetchUser();
 		if (tournamentId !== undefined && tournamentId !== null && tournamentId != -1) {
 			fetchTournament(tournamentId);
 		}
@@ -50,6 +53,17 @@
 		else {
 			body = await res.json();
 			alertError(`erreur lors du chargement des tournois ${res.status}<br/>${body.message}`)
+		}
+	}
+
+	async function fetchUser() {
+		const res = await fetch('/user');
+		if (res.status >= 200 && res.status <= 299) {
+			user = await res.json();
+		}
+		else {
+			body = await res.json();
+			alertError(`erreur lors du chargement de l'utiliseur ${res.status}<br/>${body.message}`)
 		}
 	}
 
@@ -99,6 +113,7 @@
 
 		<a  href="help/help.html" class="w3-bar-item fa fa-question-circle" style="color:white;font-size: 28px; margin-left:48px;float:right" >&nbsp;</a>
 
+		<span class="w3-bar-item" style="float:right">{#if user!== undefined && user.name !== undefined}{user.name}{/if}</span>
 		<a  href="/logout" class="w3-bar-item fa fa-sign-out" style="color:white;font-size: 28px; margin-left:48px; float:right;" >&nbsp;</a>
 
 	
