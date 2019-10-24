@@ -29,6 +29,7 @@
 
   let moveMe;
 
+
   onMount(async () => {
     moveMe = tools.mover(dispatch);    
   });
@@ -67,7 +68,10 @@
   <button  on:click={()=> {openSection('Boards')}} class="pcp-color1 w3-btn w3-block w3-black w3-left-align">Tableaux</button>
   <div id="Boards" class="w3-container w3-hide">
 
-{#if (tournament !== undefined && 
+{#if (tools.guard(tournament,"run.board.boards"))}
+
+
+<!-- {#if (tournament !== undefined && 
   tournament !== null &&
   tournament.run !== undefined && 
   tournament.run !== null && 
@@ -75,7 +79,7 @@
   tournament.run.board !== null && 
   tournament.run.board.boards !== undefined &&
   tournament.run.board.boards !== null
-  )}
+  )} -->
 
 
 

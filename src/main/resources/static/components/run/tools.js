@@ -81,6 +81,85 @@ export const tools = {
       
       return await this.fetchTournament(tournamentId);
     }
+  },
+
+  notNullOrUndefined : function(o)  {
+    return o !== undefined && o !== null;
+  },
+
+  notEmpty: function(o) {
+    return Array.isArray(o)  && o.length > 0;
+  },
+
+  checkItem : function(root, path) {
+    const checkLength = path[path.length-1] == "#";
+    if (checkLength) {
+      path = path.slice(0,-1);
+    }
+    console.log("\tcheck item ["+path+"] length : ["+checkLength+"]");
+    console.log(root);
+    let ok = true;
+    let item = null;
+    if (root.hasOwnProperty(path)) {
+      item = this.getProp(root,path);
+      ok = this.notNullOrUndefined(item);
+      console.log(item);
+      if (ok) {
+        if (checkLength) {
+          ok = this.notEmpty(item);
+          console.log("\t  length check. "+ok);
+        }
+
+      }
+      else {
+        console.log("\t failed on not null or undefined.")
+      }
+    }
+    else {
+      console.log("\t failed on hasownproperty.")
+      ok = false;
+    }
+    console.log(`\t OK:[${ok}] - `)
+    return {
+      ok : ok,
+      item : item
+    };
+
+  },
+
+  getProp: function(root, item) {
+    console.log("GETPROP : ["+item+"]");
+    for (const key in root) {
+      console.log("\t comparing "+key+" - "+item);
+      if (root.hasOwnProperty(key) && key == item) {
+        const element = root[key];
+        return element;
+     }
+    }
+    return undefined;
+  },
+
+  guard : function(root, toBeGuarded) {
+    console.log("GUARD ["+toBeGuarded+"]");
+    console.log(root);
+    
+    if (this.notNullOrUndefined(root));
+    let items = toBeGuarded.split(".");
+    let ok = true;
+    let currentRoot = root;
+    for (let i =0 ; i < items.length; i++) {
+      if (!ok) {
+        return false;
+      }
+      console.log("----");
+      console.log(currentRoot);
+      console.log("----");
+      const currentCheck = this.checkItem(currentRoot,items[i]);
+       ok = ok && currentCheck.ok;
+       currentRoot = currentCheck.item;
+    }
+
+    return ok;
   }
 
 }
