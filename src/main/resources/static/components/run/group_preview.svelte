@@ -3,7 +3,7 @@
   </style>
   
   <script>
-    import {tools} from './tools.js';
+    import {tools} from '../tools.js';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import {GroupDisplay} from '../groupDisplay.js';
@@ -39,7 +39,7 @@
   </script>
   
 
-  {#if groupPlay != null && groupPlay.rankings != null}
+  {#if tools.guard(groupPlay,"rankings")}
 
   <div class="w3-container w3-quarter" on:click={openGroup} >
 

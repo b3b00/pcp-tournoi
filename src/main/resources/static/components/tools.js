@@ -1,5 +1,5 @@
 import { createEventDispatcher } from "svelte";
-import { alertError } from '../alertStore.js';
+import { alertError } from './alertStore.js';
 
 export const tools = {
   mover : function (dispatch) {

@@ -46,7 +46,6 @@
         let dial = document.getElementById(`match_${match.id}`);
         dial.style.display = 'none';
         dispatch("close", { 'tournamentId': tournament.id });
-        console.log("MACTH : dispath refreshTour "+tournament.id);
         dispatch("refreshTour", { 'tournamentId': tournament.id })
     }
 

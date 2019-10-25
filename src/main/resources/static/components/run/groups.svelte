@@ -7,7 +7,7 @@
 </style>
 <script>
 
-  import {tools} from './tools.js';
+  import {tools} from '../tools.js';
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 

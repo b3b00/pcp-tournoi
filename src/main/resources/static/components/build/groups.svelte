@@ -16,6 +16,7 @@
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import {GroupDisplay} from '../groupDisplay.js';
+    import {tools} from '../tools.js';
     import {teamtools, modes} from './teams.js';
 
 
@@ -230,7 +231,7 @@
 </div>
 
 <div class="w3-container w3-cell" style="width:60%">
-{#if (tournamentId != -1 && tournament.groups !==  undefined && tournament.groups !== null && tournament.groups.length > 0)} 
+{#if (tournamentId != -1 && tools.guard(tournament,"groups#"))} 
     <ul class="w3-ul w3-border w3-card">
     {#each tournament.groups as group}
             <li class="w3-display-container">        

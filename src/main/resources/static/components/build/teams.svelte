@@ -14,6 +14,7 @@
 
     import Team from './team.svelte';
     import { alertWarn } from '../alertStore.js';
+    import { tools } from '../tools.js';
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
     import {teamtools, modes} from './teams.js';
@@ -261,8 +262,7 @@
 </script>
 
 
-{#if (tournament !== null && tournament !== undefined &&
-    tournament.options !== null && tournament.options !== undefined && 
+{#if (tools.guard(tournament,"options") && 
     tournament.options.mode == "DOUBLE" && possible)}
 <br/>
 <hr/>
@@ -334,7 +334,7 @@
 <hr/>
 <div class="w3-container w3-cell" style="width:60%">
     <ul class="w3-ul w3-border w3-card">
-        {#if (tournamentId != -1 && tournament.teams !==  undefined && tournament.teams !== null && tournament.teams.length > 0)} 
+        {#if (tournamentId != -1 && tools.guard(tournament,"teams#"))} 
         {#each tournament.teams as team }
         <li>            
             <span>{team.name}</span>

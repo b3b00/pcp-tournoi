@@ -16,7 +16,7 @@
 </style>
 <script>
 
-  import { tools } from './tools.js';
+  import { tools } from '../tools.js';
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 
@@ -58,7 +58,7 @@
 
   <button  on:click={()=> {openSection('Groups'); moveMe("groupPhase","poules","groupPhase",null)}} class="pcp-color1 w3-btn w3-block w3-black w3-left-align">Poules</button>
   <div id="Groups" class="w3-container w3-hide">
-    {#if tournament !== null && tournament !== undefined && tournament.run !== undefined && tournament.run.groupPhase !== undefined && tournament.run.groupPhase.groups !== undefined}
+    {#if tools.guard(tournament,"run.groupPhase.groups")}
       {#each tournament.run.groupPhase.groups as group} 
         <h6  class="pcp-hover-color2" on:click={() => {openGroup(group)}}>poule {group.group.name} {@html getIsDoneflag(group)}</h6>
       {/each}
@@ -69,19 +69,6 @@
   <div id="Boards" class="w3-container w3-hide">
 
 {#if (tools.guard(tournament,"run.board.boards"))}
-
-
-<!-- {#if (tournament !== undefined && 
-  tournament !== null &&
-  tournament.run !== undefined && 
-  tournament.run !== null && 
-  tournament.run.board !== undefined && 
-  tournament.run.board !== null && 
-  tournament.run.board.boards !== undefined &&
-  tournament.run.board.boards !== null
-  )} -->
-
-
 
     <button   on:click={()=> {openSection('RunningBoards')}} class="pcp-color1 w3-btn w3-block w3-black w3-left-align">Tableaux en cours</button>
     <div id="RunningBoards" class="w3-container w3-hide">

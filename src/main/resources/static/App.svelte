@@ -26,7 +26,7 @@
 	import { tournament, setGlobalTournament } from './components/tournamentStore.js';
 	import Build from './components/build/Build.svelte';
 	import Run from './components/run/run.svelte';
-	import { tools } from './components/run/tools.js';
+	import { tools } from './components/tools.js';
 	import Toast  from './components/Toast.svelte';
 
 	let tournamentId = -1;
@@ -114,7 +114,7 @@
 
 		<a  href="help/help.html" class="w3-bar-item fa fa-question-circle" style="color:white;font-size: 28px; margin-left:48px;float:right" >&nbsp;</a>
 
-		<span class="w3-bar-item" style="float:right">{#if user!== undefined && user.name !== undefined}{user.name}{/if}</span>
+		<span class="w3-bar-item" style="float:right">{#if tools.guard(user,"name")}{user.name}{/if}</span>
 		<a  href="/logout" class="w3-bar-item fa fa-sign-out" style="color:white;font-size: 28px; margin-left:48px; float:right;" >&nbsp;</a>
 
 	

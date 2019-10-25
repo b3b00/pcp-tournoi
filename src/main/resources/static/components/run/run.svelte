@@ -11,7 +11,7 @@
     import Board from './board.svelte';
     import NewBoard from './newBoard.svelte';
     import PlayNav from './playNav.svelte';
-    import { tools } from './tools.js';
+    import { tools } from '../tools.js';
     import { onMount } from "svelte";
     import { createEventDispatcher } from "svelte";
 
@@ -57,7 +57,6 @@
     });
 
     async function fetchTournament(id) {        
-        console.log("RUN : fetch tournament "+id);
         tournament = await tools.fetchTournament(id);
         tournamentId = tournament.id;
         if (tournament.run == null || tournament.run === undefined) {
@@ -88,7 +87,6 @@
 
 
     async function onRefreshTour(data) {
-        console.log("RUN : refreshing tournament")
         await fetchTournament(tournamentId);
     }
     
