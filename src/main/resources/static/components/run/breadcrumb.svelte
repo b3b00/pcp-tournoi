@@ -19,10 +19,7 @@
     export let items = {}
 
     function onClick(index) {
-        // let newCrumb = items;
-        // if (index > 0) {
-            let newCrumb = items.slice(0,index+1);
-        // }
+        let newCrumb = items.slice(0,index+1);
         dispatch("click", { 'items': newCrumb });
     }
 

@@ -18,7 +18,6 @@
     const dispatch = createEventDispatcher();
 
     function moveMe(name, label, path, id) {
-        //const dispatch = createEventDispatcher();
         let s = {
             "name": name,
             "label": label,
@@ -119,7 +118,7 @@
 
 </script>
 
-<BreadCrumb items={currentBreadCrumb} on:click={navigator}></BreadCrumb>
+<!-- <BreadCrumb items={currentBreadCrumb} on:click={navigator}></BreadCrumb> -->
 
 <div class="w3-display-container ">
 
