@@ -60,11 +60,14 @@
 </div>
 
 {#if (board.isDone)}
-<ol>
-  {#each getRanking() as r}
-  <li>{r.name}</li>
-  {/each}
-  </ol>
+
+<ul>
+  <li class='fas fa-medal' style='color:gold;display: block;padding-bottom: 16px;'>{getRanking()[0].name}</li>
+  
+  <li class='fas fa-medal' style='color:silver;display:block;padding-bottom: 16px;'>{getRanking()[1].name}</li>
+  <li class='fas fa-medal' style='color:#CD7F32;display: block;padding-bottom: 16px;'>{getRanking()[2].name}</li>
+  <li class='fas fa-medal' style='color:chocolate;display: block;padding-bottom: 16px;'>{getRanking()[3].name}</li>  
+</ul>
 {/if}
 <div class="w3-container">
 {#if board !== null && board!== undefined}
