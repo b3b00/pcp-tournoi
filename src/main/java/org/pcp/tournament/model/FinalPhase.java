@@ -87,4 +87,19 @@ public class FinalPhase implements IPingModel{
     public boolean getIsDone() {
         return getRounds().stream().map(r -> r.isDone()).reduce(true, (x,y) -> x && y);
     }
+
+    public List<Team> getRanking() {
+        List<Team>  ranking = null;
+        if (getIsDone()) {
+            ranking = new ArrayList<Team>();
+            Round lastRound = this.rounds.get(this.rounds.size()-1);
+            Match finale = lastRound.getMatches().stream().filter((Match m) -> m.isFinale()).findFirst().get();
+            Match smallfinale = lastRound.getMatches().stream().filter((Match m) -> m.isSmallFinale()).findFirst().get();
+            ranking.add(finale.getWinner());
+            ranking.add(finale.getLoser());
+            ranking.add(smallfinale.getWinner());
+            ranking.add(smallfinale.getLoser());
+        }
+        return ranking;
+    }
 }

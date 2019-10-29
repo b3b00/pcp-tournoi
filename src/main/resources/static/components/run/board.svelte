@@ -31,22 +31,7 @@
     let newBoard = await tools.fetchBoard(tournamentId, boardId);
     board = newBoard;
   }
-
-  function getRanking() {
-    let last = board.rounds[board.rounds.length-1];
-    if (last.matches.length == 2) {
-      let ranking = [null,null,null,null];
-      let f = last.matches.filter(m => m.finale)[0];
-      ranking[0] = f.winner;
-      ranking[1] = f.left.id == f.winner.id ? f.right : f.left;
-      let sf = last.matches.filter(m => m.smallFinale)[0];
-      ranking[2] = sf.winner;
-      ranking[3] = sf.left.id == sf.winner.id ? sf.right : sf.left;
-      return ranking;
-    }
-    return [];
-  }
-  
+ 
 
 </script>
 
@@ -62,11 +47,11 @@
 {#if (board.isDone)}
 
 <ul>
-  <li class='fas fa-medal' style='color:gold;display: block;padding-bottom: 16px;'>{getRanking()[0].name}</li>
+  <li class='fas fa-medal' style='color:gold;display: block;padding-bottom: 16px;'>{board.ranking[0].name}</li>
   
-  <li class='fas fa-medal' style='color:silver;display:block;padding-bottom: 16px;'>{getRanking()[1].name}</li>
-  <li class='fas fa-medal' style='color:#CD7F32;display: block;padding-bottom: 16px;'>{getRanking()[2].name}</li>
-  <li class='fas fa-medal' style='color:chocolate;display: block;padding-bottom: 16px;'>{getRanking()[3].name}</li>  
+  <li class='fas fa-medal' style='color:silver;display:block;padding-bottom: 16px;'>{board.ranking[1].name}</li>
+  <li class='fas fa-medal' style='color:#CD7F32;display: block;padding-bottom: 16px;'>{board.ranking[2].name}</li>
+  <li class='fas fa-medal' style='color:chocolate;display: block;padding-bottom: 16px;'>{board.ranking[3].name}</li>  
 </ul>
 {/if}
 <div class="w3-container">
