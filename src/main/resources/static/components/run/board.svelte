@@ -7,6 +7,7 @@
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
   import Round from './round.svelte';
+  import Podium from './podium.svelte';
 
 
 
@@ -44,16 +45,8 @@
 </div>
 </div>
 
-{#if (board.isDone)}
+<Podium board={board} boardId={boardId} tournament={tournament} tournamentId={tournamentId}/>
 
-<ul>
-  <li class='fas fa-medal' style='color:gold;display: block;padding-bottom: 16px;'>{board.ranking[0].name}</li>
-  
-  <li class='fas fa-medal' style='color:silver;display:block;padding-bottom: 16px;'>{board.ranking[1].name}</li>
-  <li class='fas fa-medal' style='color:#CD7F32;display: block;padding-bottom: 16px;'>{board.ranking[2].name}</li>
-  <li class='fas fa-medal' style='color:chocolate;display: block;padding-bottom: 16px;'>{board.ranking[3].name}</li>  
-</ul>
-{/if}
 <div class="w3-container">
 {#if board !== null && board!== undefined}
 {#each board.rounds as round}
