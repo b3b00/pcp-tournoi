@@ -31,8 +31,9 @@ public class LoginController {
         }
         redirectUri += "/callback";
         String authorizeUrl = controller.buildAuthorizeUrl(req, redirectUri)
-                .withAudience(String.format("https://%s/userinfo", appConfig.getDomain()))
-                .withScope("openid profile email")
+                .withParameter("ui_locales","fr")
+                .withAudience(String.format("https://%s/userinfo", appConfig.getDomain()))                
+                .withScope("openid profile email")                
                 .build();
         return "redirect:" + authorizeUrl;
     }
