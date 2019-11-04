@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 public class BoardController extends PCPController {
 
@@ -37,7 +40,9 @@ public class BoardController extends PCPController {
     @Autowired
     FinalPhaseDao boardDao;
 
-    @PostMapping("/tournaments/{tournamentId}/board/$create")
+    
+    @ApiOperation(value = "create the group pahse of a tournament", response = Tournament.class)
+    @PostMapping("/tournaments/{tournamentId}/board/$create")    
     public ResponseEntity<?> createGroupPhase(@PathVariable int tournamentId, final Authentication authentication) throws PCPException {
         checkIdentity(authentication,tournamentId);
         try {
@@ -56,8 +61,9 @@ public class BoardController extends PCPController {
         }
     }
 
+    @ApiOperation(value = "get a round from a board", response = Round.class)  
     @GetMapping("/tournament/{tournamentId}/round/{roundId}")
-    public ResponseEntity<?> getRound(@PathVariable int tournamentId, @PathVariable int roundId, final Authentication authentication) throws PCPException {
+    public ResponseEntity<?> getRound(@ApiParam("tournament id")@PathVariable int tournamentId, @ApiParam("round id")@PathVariable int roundId, final Authentication authentication) throws PCPException {
         checkIdentity(authentication,tournamentId);
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
@@ -79,8 +85,9 @@ public class BoardController extends PCPController {
 
     }
 
+    @ApiOperation(value = "get a board from a tournament", response = Round.class)  
     @GetMapping("/tournament/{tournamentId}/board/{boardId}")
-    public ResponseEntity<?> getBoard(@PathVariable int tournamentId, @PathVariable int boardId, final Authentication authentication) throws PCPException {
+    public ResponseEntity<?> getBoard(@ApiParam("tournament id")@PathVariable int tournamentId, @ApiParam("board id")@PathVariable int boardId, final Authentication authentication) throws PCPException {
         checkIdentity(authentication,tournamentId);
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
@@ -99,8 +106,9 @@ public class BoardController extends PCPController {
 
     }
 
+    @ApiOperation(value = "get available teams", response = Round.class)  
     @GetMapping("/tournament/{tournamentId}/availableTeams")
-    public ResponseEntity<?> getAvailableTeams(@PathVariable int tournamentId, final Authentication authentication) throws PCPException {
+    public ResponseEntity<?> getAvailableTeams(@ApiParam("tournament ID")@PathVariable int tournamentId, final Authentication authentication) throws PCPException {
         checkIdentity(authentication,tournamentId);
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
@@ -113,8 +121,9 @@ public class BoardController extends PCPController {
     }
     
 
+    @ApiOperation(value = "create a board", response = Tournament.class)  
     @PostMapping("/tournament/{tournamentId}/$createBoard")
-    public ResponseEntity<?> createBoard(@PathVariable int tournamentId,@RequestBody List<Integer> teamsId,@RequestParam("name") String boardName, final Authentication authentication) throws PCPException
+    public ResponseEntity<?> createBoard(@ApiParam("tournament ID")@PathVariable int tournamentId,@ApiParam("a list of teams id")@RequestBody List<Integer> teamsId,@ApiParam("board name")@RequestParam("name") String boardName, final Authentication authentication) throws PCPException
     {
         checkIdentity(authentication,tournamentId);
         try {
