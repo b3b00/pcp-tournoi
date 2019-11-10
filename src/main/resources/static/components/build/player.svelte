@@ -9,6 +9,8 @@
 
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
+    import { alertError } from '../alertStore.js';
+    import {tools} from '../tools.js';
 
     const dispatch = createEventDispatcher();
 
@@ -78,7 +80,7 @@
         }
 
         let httpMethod = isNewPlayer ? "POST" : "PUT";
-        const res = fetch(`/tournament/${tournamentId}/players`,
+        const res = await fetch(`/tournament/${tournamentId}/players`,
             {
                 headers: {
                     'Accept': 'application/json',
@@ -86,20 +88,21 @@
                 },
                 method: httpMethod,
                 body: JSON.stringify(data)
-            }).then(function (res) {
-                res.json().then(                    
-                    function (data) {
-                        name = "";
-                        isLicensed = data.isLicensed;
-                        edited = false;
-                        computeStyles();
-                        dispatch("change", { 'tournamentId': tournamentId })
-                    }
-                );
-            })
-            .catch(function (res) {
-                // TODO
             });
+        if (res.status >= 200 && res.status <= 299) {
+            data = await res.json();
+            name = "";
+            isLicensed = data.isLicensed;
+            edited = false;
+            computeStyles();
+            dispatch("change", { 'tournamentId': tournamentId });
+        }
+        else {
+            const body = await res.json();
+            if (tools.notNullOrUndefined(body)) {
+                alertError(`Erreur : ${body.message}`);
+            }
+        }            
     }
 
     async function onDelete() {

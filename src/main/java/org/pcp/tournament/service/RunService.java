@@ -188,9 +188,7 @@ public class RunService {
 
             if (checkNominalMainBoard(tournament, startingRound)) {
                 buildMainBoardNominal(tournament, startingRound);
-            } else {
-                // TODO later if really needed
-            }
+            } 
             InjectTeams(tournament);
             computeTeamReferenceLabels(tournament);
         }

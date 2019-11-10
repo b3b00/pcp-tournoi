@@ -55,14 +55,23 @@ public class PlayersController extends PCPController {
         checkIdentity(authentication, tournamentId);
         try {
             Tournament tournament = tournamentDao.findById(tournamentId);
-            player.setTournament(tournament);
-            Player newPlayer = playerDao.save(player);
-            
-            tournament.getPlayers().add(newPlayer);
-            tournamentDao.save(tournament);
-            return newPlayer;
+            boolean alreadyExists = tournament.getPlayers().stream().filter(p ->  p.getName().equals(player.getName())).findFirst().isPresent();
+            if (!alreadyExists) {
+                player.setTournament(tournament);
+                Player newPlayer = playerDao.save(player);
+                
+                tournament.getPlayers().add(newPlayer);
+                tournamentDao.save(tournament);
+                return player;
+            }
+            else {
+                throw new PCPException(PCPError.BAD_REQUEST,"le joueur "+player.getName()+" existe déjà.");
+            }
         } catch (Exception e) {
-            throw new InternalError(e.getMessage());
+            if (e instanceof PCPException) {
+                throw e;
+            }
+            throw new PCPException(PCPError.INTERNAL_ERROR, e.getMessage());
         }
     }
 
