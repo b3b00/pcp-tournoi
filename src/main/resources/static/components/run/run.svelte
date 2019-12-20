@@ -141,21 +141,21 @@
             {:else if (currentItem.name == "newboard" )}        
             <NewBoard tournament={tournament} tournamentId={tournament.id} on:move={moveScreen} on:refreshTour={onRefreshTour}></NewBoard> 
             {:else}
-                <div style="clear:both">
+                <!-- <div style="clear:both">
                     <ul>
                         <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
                         <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
                     </ul>
-                </div>
+                </div> -->
             {/if}
         {:else}
 
-            <div styyle="clear:both">
+            <!-- <div styyle="clear:both">
                 <ul>
                     <li style="cursor:pointer" on:click={() => {moveMe("groupPhase","poules","groupPhase",null)}}>poules</li>
                     <li style="cursor:pointer" on:click={() => {moveMe("boards","tableaux","boards",null)}}>tableaux</li>
                 </ul>
-            </div>
+            </div> -->
         {/if}
     </div> <!-- content -->
 </div>

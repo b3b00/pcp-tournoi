@@ -65,7 +65,7 @@
     {/if}
   </div> <!-- poules -->
 
-  <button  on:click={()=> {openSection('Boards')}} class="pcp-color1 w3-btn w3-block w3-black w3-left-align">Tableaux</button>
+  <button  on:click={()=> {openSection('Boards'); moveMe("boards","tableaux","boards",null)}} class="pcp-color1 w3-btn w3-block w3-black w3-left-align">Tableaux</button>
   <div id="Boards" class="w3-container w3-hide">
 
 {#if (tools.guard(tournament,"run.board.boards"))}
