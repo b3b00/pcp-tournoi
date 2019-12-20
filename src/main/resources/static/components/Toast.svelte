@@ -71,7 +71,7 @@
 </script>
 <div class="w3-display-container">
 <div class={toastClass} on:click={() => {hideToast()}}>
-    <span >{@html message}</span>
+    <span style="float:left;font-weight:bold">{@html message}</span>
     <span class="{toastClass} w3-button w3-display-right">&times;</span>
 </div>
 </div>
