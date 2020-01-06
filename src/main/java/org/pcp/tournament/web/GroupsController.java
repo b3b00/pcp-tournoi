@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class GroupsController {
+public class GroupsController extends PCPController {
 
     @Autowired
     TournamentDao tournamentDao;
@@ -133,6 +133,8 @@ public class GroupsController {
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     }
 
-//endregion    
+//endregion
+
+
 
 }

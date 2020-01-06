@@ -257,6 +257,58 @@
     }
 
 
+    async function openFile() {
+        const f = document.getElementById("filer");
+        f.click();
+    }
+
+    async function changeFiles(event) {
+        const f = event.target;
+        if (f !== null && f !== undefined) {
+            if (f.files.length == 1) {
+                await addedfile(f.files[0]);
+                f.files = null;
+                f.value= null;
+            }
+            else if (f.files.length > 1) {                
+                f.files = null;
+                f.value = null;
+            }
+        }    
+    }
+
+    async function addedfile (file) {
+        console.log("added file");
+        const formData = new FormData();
+        console.log(file);
+        formData.append('file', file);
+
+        const options = {
+            method: 'POST',
+            body: formData,
+        };
+
+        const res = await fetch(`tournaments/${tournamentId}/teams/upload`, options);
+        console.log("status "+res.status);
+        if (res.status >= 200 && res.status <= 299) {
+            tournament = await res.json();
+            console.log("Okay!");
+            console.log(tournament);
+            console.log("start updating");
+            players = tournament.players;
+            countLic = await countLicensees();
+            countNonLic = await countNotLicensees()            
+            unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
+            console.log("update done");
+        }
+        else {
+            body = await res.json();
+            alertError(`Erreur lors de l'import : ${res.status}\n${body.message}`);
+           
+        }
+        
+    }
+
 
 
 </script>
@@ -264,6 +316,13 @@
 
 {#if (tools.guard(tournament,"options") && 
     tournament.options.mode == "DOUBLE" && possible)}
+
+    <span tooltip="envoyer la liste des équipes" class="fa fa-upload w3-xxlarge" style="cursor:pointer" 
+on:click={() => {openFile()}}
+>
+<input style="display:none" type="file" id="filer" on:change={changeFiles}/>
+        &nbsp;
+        </span>
 <br/>
 <hr/>
 <br/>

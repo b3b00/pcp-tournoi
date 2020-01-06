@@ -12,9 +12,14 @@ import org.pcp.tournament.model.Team;
 import org.pcp.tournament.model.Tournament;
 import org.pcp.tournament.service.TeamStrategies;
 import org.pcp.tournament.service.TeamStrategiesEnum;
+import org.pcp.tournament.service.TeamsService;
+import org.pcp.tournament.web.exception.PCPError;
+import org.pcp.tournament.web.exception.PCPException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +28,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-public class TeamsController {
+public class TeamsController extends PCPController {
 
     @Autowired
     TournamentDao tournamentDao;
@@ -35,6 +41,9 @@ public class TeamsController {
 
     @Autowired
     TeamDao teamDao;
+
+    @Autowired
+    TeamsService teamsService;
 
     @Autowired
     TeamStrategies strategies;
@@ -198,7 +207,7 @@ public class TeamsController {
     @DeleteMapping("/tournaments/{tournamentId}/teams")
     public ResponseEntity<?> clearTeams(@PathVariable int tournamentId) {
 
-//endregion        
+
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
             List<Integer> teams = tournament.getTeams().stream().map(t -> t.getId()).collect(Collectors.toList());
@@ -221,5 +230,43 @@ public class TeamsController {
         return new ResponseEntity<String>("le tournoi " + tournamentId + " n'existe pas.", HttpStatus.BAD_REQUEST);
     }
 
+//endregion
+
+    //region [UPLOAD/DOWNLOAD]
+
+    @PostMapping("/tournaments/{tournamentId}/teams/upload")
+    public ResponseEntity<?> uploadPlayers(@PathVariable int tournamentId, @RequestParam("file") MultipartFile file, final Authentication authentication) throws PCPException {
+        checkIdentity(authentication, tournamentId);
+        try {
+            byte[] bytes = file.getBytes();
+            String content = new String(bytes);
+            Tournament tournament = tournamentDao.findById(tournamentId);
+            teamsService.importTeams(tournament, content);
+            tournament = tournamentDao.findById(tournamentId);
+            return new ResponseEntity<Tournament>(tournament,HttpStatus.OK);
+        }
+        catch(DataIntegrityViolationException dive) {
+            throw new PCPException(PCPError.BAD_FILE,"impossible de charger le fichier "+file.getOriginalFilename()+" : mauvais format.");
+        }
+        catch(Exception e) {
+            throw new PCPException(PCPError.BAD_FILE,"impossible de charger le fichier "+file.getOriginalFilename());
+        }
+    }
+/*
+    @GetMapping("/tournaments/{tournamentId}/teams/download")
+    public ResponseEntity<?> exportPlayers(@PathVariable int tournamentId, final Authentication authentication)  throws PCPException {
+        checkIdentity(authentication, tournamentId);
+        Tournament tournament = tournamentDao.findById(tournamentId);
+        String csv = playersService.playersToCSV(tournament);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type","text/csv");
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(csv);
+    }
+    */
+
+
+//endregion
     
 }
