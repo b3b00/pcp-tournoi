@@ -2,19 +2,10 @@ package org.pcp.tournament;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
 import java.io.File;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.List;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
 import org.pcp.tournament.dao.OptionsDao;
 import org.pcp.tournament.dao.PlayerDao;
