@@ -17,6 +17,7 @@ import org.pcp.tournament.web.exception.PCPError;
 import org.pcp.tournament.web.exception.PCPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -90,10 +91,7 @@ public class TeamsController extends PCPController {
         List<Team> teams = new ArrayList<Team>();
         Tournament tournament = tournamentDao.findById(tournamentId);
         if (tournament != null) {
-            List<Player> players = tournament.getPlayers();
-            if (!tournament.getTeams().isEmpty()) {
-                clearTeams(tournamentId);
-            }
+            List<Player> players = tournament.getUnteamedPlayers();
             if (mode == TeamStrategiesEnum.SINGLE) {
                 teams = strategies.single(players,  tournament);
                 tournament.setTeams(teams);
@@ -252,19 +250,19 @@ public class TeamsController extends PCPController {
             throw new PCPException(PCPError.BAD_FILE,"impossible de charger le fichier "+file.getOriginalFilename());
         }
     }
-/*
+
     @GetMapping("/tournaments/{tournamentId}/teams/download")
     public ResponseEntity<?> exportPlayers(@PathVariable int tournamentId, final Authentication authentication)  throws PCPException {
         checkIdentity(authentication, tournamentId);
         Tournament tournament = tournamentDao.findById(tournamentId);
-        String csv = playersService.playersToCSV(tournament);
+        String csv = teamsService.teamsToCSV(tournament);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type","text/csv");
         return ResponseEntity.ok()
                 .headers(responseHeaders)
                 .body(csv);
     }
-    */
+    
 
 
 //endregion

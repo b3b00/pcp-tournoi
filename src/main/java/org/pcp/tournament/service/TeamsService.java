@@ -61,6 +61,7 @@ public class TeamsService {
 
                     if (player1.isPresent() && player2.isPresent()) {
                         Team team = new Team(player1.get(),player2.get());
+                        tournament.addTeam(team);
                         team.setTournament(tournament);
                         team = teamDao.save(team);
                     }
@@ -85,24 +86,22 @@ public class TeamsService {
         } 
     }
 
-    public void ImportGroups(Tournament tournament, File csvFile) throws Exception {
+    public void importTeams(Tournament tournament, File csvFile) throws Exception {
             byte[] bytes = Files.readAllBytes(Paths.get(csvFile.getPath()));
             importTeams(tournament, new String(bytes));
     }
 
-    /*public String groupsToCSV(Tournament tournament) {
+    public String teamsToCSV(Tournament tournament) {
         StringBuilder builder = new StringBuilder();
-        for (Player player : tournament.getPlayers()) {
-            if (player != null) {
-                builder.append(player.getName());
+        for (Team team : tournament.getTeams()) {
+            if (team != null) {
+                builder.append(team.getPlayer1().getName());
                 builder.append(';');
-                if (player.getIsLicensed()) {
-                    builder.append("*");
-                }
+                builder.append(team.getPlayer2().getName());
                 builder.append("\n");
             }
         }
         return builder.toString();
-    }*/
+    }
 
 }

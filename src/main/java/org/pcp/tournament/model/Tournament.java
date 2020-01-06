@@ -6,13 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
+import static java.util.stream.Collectors.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
 
 @Entity
 public class Tournament implements IPingModel  {
@@ -118,6 +119,12 @@ public class Tournament implements IPingModel  {
         return players;
     }
    
+    public List<Player> getUnteamedPlayers() {
+        List<Player> teamedPlayers = teams.stream().map(x -> x.getPlayer1()).collect(toList());
+        teamedPlayers.addAll(teams.stream().map(x -> x.getPlayer2()).collect(toList()));
+        List<Player> unteamed = players.stream().filter(x -> !teamedPlayers.contains(x)).collect(toList());
+        return unteamed;
+    }
 
     /**
      * @param players the players to set

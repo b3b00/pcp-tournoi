@@ -302,6 +302,10 @@
         
     }
 
+    function exportTeams() {        
+        const downloader = document.getElementById("downloader");
+        downloader.src=`/tournaments/${tournamentId}/teams/download`;
+    }
 
 
 </script>
@@ -309,6 +313,16 @@
 
 {#if (tools.guard(tournament,"options") && 
     tournament.options.mode == "DOUBLE" && possible)}
+
+    <br>
+    <br>
+    <span tooltip="télécharger la liste des équipes" class="fa fa-download w3-xxlarge" style="cursor:pointer" 
+    on:click={exportTeams}>
+            &nbsp;
+            </span>
+            
+    <iframe title="downloader" id="downloader" style="display:none">&nbsp;</iframe>
+
 
     <span tooltip="envoyer la liste des équipes" class="fa fa-upload w3-xxlarge" style="cursor:pointer" 
 on:click={() => {openFile()}}

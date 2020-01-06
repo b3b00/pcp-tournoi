@@ -75,11 +75,13 @@ public class TeamStrategies {
      * @return
      */
     public List<Team> mixLicensees(List<Player> players, Tournament tournament) {
+        
         List<Player> licensees = players.stream().filter((Player p) -> p.getIsLicensed()).collect(Collectors.toList());
         List<Player> notLicensees = players.stream().filter((Player p) -> !p.getIsLicensed()).collect(Collectors.toList());
 
         int countMix = Math.min(licensees.size(),notLicensees.size());
         List<Team> teams = new ArrayList<Team>();
+        teams.addAll(tournament.getTeams());
         Random rnd = new Random();
         for (int i = 0; i < countMix; i++) {
             int f = rnd.nextInt(licensees.size());
