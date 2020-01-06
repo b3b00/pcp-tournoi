@@ -107,19 +107,19 @@ export const tools = {
       if (ok) {
         if (checkLength) {
           ok = this.notEmpty(item);
-          console.log("\t  length check. "+ok);
+          //console.log("\t  length check. "+ok);
         }
 
       }
       else {
-        console.log("\t failed on not null or undefined.")
+        //console.log("\t failed on not null or undefined.")
       }
     }
     else {
-      console.log("\t failed on hasownproperty.")
+      //console.log("\t failed on hasownproperty.")
       ok = false;
     }
-    console.log(`\t OK:[${ok}] - `)
+    //console.log(`\t OK:[${ok}] - `)
     return {
       ok : ok,
       item : item
@@ -140,7 +140,7 @@ export const tools = {
   },
 
   guard : function(root, toBeGuarded) {
-    console.log("GUARD ["+toBeGuarded+"]");
+    // console.log("GUARD ["+toBeGuarded+"]");
     console.log(root);
     
     if (this.notNullOrUndefined(root));
@@ -151,9 +151,9 @@ export const tools = {
       if (!ok) {
         return false;
       }
-      console.log("----");
-      console.log(currentRoot);
-      console.log("----");
+      // console.log("----");
+      // console.log(currentRoot);
+      // console.log("----");
       const currentCheck = this.checkItem(currentRoot,items[i]);
        ok = ok && currentCheck.ok;
        currentRoot = currentCheck.item;

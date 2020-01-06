@@ -70,8 +70,8 @@
             if (tournament.options.mode == "SINGLE" && (tournament.teams === undefined || tournament.teams === null || tournament.teams.length == 0)) {
                 single();
             }
-            else {
-                if (!(tournament !== null && tournament !== undefined && tournament.players !== undefined && tournament.players.length > 0 && tournament.players.length % 2 == 0)) {                 
+            else {                
+                if (!(tools.guard(tournament,"players#") && tournament !== null && tournament !== undefined && tournament.players !== undefined && tournament.players.length > 0 && tournament.players.length % 2 == 0)) {                 
                     alertWarn(`nombre de joueurs impair : ${tournament.players.length} `);
                     possible = false;
                 }
@@ -291,15 +291,8 @@
         const res = await fetch(`tournaments/${tournamentId}/teams/upload`, options);
         console.log("status "+res.status);
         if (res.status >= 200 && res.status <= 299) {
-            tournament = await res.json();
-            console.log("Okay!");
-            console.log(tournament);
-            console.log("start updating");
-            players = tournament.players;
-            countLic = await countLicensees();
-            countNonLic = await countNotLicensees()            
+            tournament = await res.json();            
             unTeamedPlayers = teamtools.computeUnTeamedPlayers(tournament);
-            console.log("update done");
         }
         else {
             body = await res.json();
