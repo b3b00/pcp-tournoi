@@ -119,11 +119,14 @@ public class Tournament implements IPingModel  {
         return players;
     }
    
-    public List<Player> getUnteamedPlayers() {
-        List<Player> teamedPlayers = teams.stream().map(x -> x.getPlayer1()).collect(toList());
-        teamedPlayers.addAll(teams.stream().map(x -> x.getPlayer2()).collect(toList()));
-        List<Player> unteamed = players.stream().filter(x -> !teamedPlayers.contains(x)).collect(toList());
-        return unteamed;
+    public List<Player> getUnteamedPlayers() {                
+        if (teams != null) {
+            List<Player> teamedPlayers = teams.stream().map(x -> x.getPlayer1()).collect(toList());
+            teamedPlayers.addAll(teams.stream().map(x -> x.getPlayer2()).collect(toList()));
+            List<Player> unteamed = players.stream().filter(x -> !teamedPlayers.contains(x)).collect(toList());
+            return unteamed;
+        }                
+        return players;
     }
 
     /**
